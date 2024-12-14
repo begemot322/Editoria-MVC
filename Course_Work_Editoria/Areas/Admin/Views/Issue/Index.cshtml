@@ -1,0 +1,44 @@
+﻿@model IEnumerable<Issue>
+
+<div class="container">
+    <div class="row pt-3 pb-2">
+        <div class="col-6">
+            <h2 class="text-primary">Список выпусков</h2>
+        </div>
+        <div class="col-6 text-end">
+            <a asp-controller="Issue" asp-action="Upsert" class="btn btn-primary">
+                <i class="bi bi-plus-circle"></i> Добавить выпуск
+            </a>
+        </div>
+    </div>
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Газета</th> 
+                <th>Дата публикации</th> 
+                <th>Содержание</th> 
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var issue in Model)
+            {
+                <tr>
+                    <td>@issue.Newspaper.Name</td> 
+                    <td>@issue.PublicationDate.ToShortDateString()</td> 
+                    <td>@issue.Content</td> 
+                    <td>
+                        <div class="btn-group">
+                            <a asp-controller="Issue" asp-action="Upsert" asp-route-issueId="@issue.IssueId" class="btn btn-primary mx-2">
+                                <i class="bi bi-pencil-square"></i> Изменить
+                            </a>
+                            <a asp-controller="Issue" asp-action="Delete" asp-route-issueId="@issue.IssueId" class="btn btn-danger mx-2">
+                                <i class="bi bi-trash-fill"></i> Удалить
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

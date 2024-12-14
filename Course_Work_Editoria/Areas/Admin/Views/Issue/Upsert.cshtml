@@ -1,0 +1,39 @@
+﻿@model IssueVM
+
+<form method="post">
+    <input asp-for="Issue.IssueId" hidden />
+    <div class="border p-3 mt-4">
+        <div class="row pb-2">
+            <h2 class="text-primary">@((Model.Issue.IssueId != 0) ? "Обновить выпуск" : "Добавить выпуск")</h2>
+            <hr />
+        </div>
+        <div class="mb-3 row p-1">
+            <label asp-for="Issue.PublicationDate" class="p-0">Дата публикации</label>
+            <input asp-for="Issue.PublicationDate" type="date" class="form-control" />
+            <span asp-validation-for="Issue.PublicationDate" class="text-danger"></span>
+        </div>
+        <div class="mb-3 row p-1">
+            <label asp-for="Issue.NewspaperId" class="p-0">Газета</label>
+            <select asp-for="Issue.NewspaperId" asp-items="Model.Newspapers" class="form-control">
+                <option disabled selected>-- Выберите газету --</option>
+            </select>
+            <span asp-validation-for="Issue.NewspaperId" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3 row p-1">
+            <label asp-for="Issue.Content" class="p-0">Содержание</label>
+            <textarea asp-for="Issue.Content" class="form-control" rows="5"></textarea>
+        </div>
+
+        <div class="row">
+            <div class="col-3">
+                <button type="submit" class="btn btn-primary form-control">
+                    @((Model.Issue.IssueId != 0) ? "Обновить" : "Добавить")
+                </button>
+            </div>
+            <div class="col-3">
+                <a asp-controller="Issue" asp-action="Index" class="btn btn-outline-secondary form-control">Вернуться назад</a>
+            </div>
+        </div>
+    </div>
+</form>

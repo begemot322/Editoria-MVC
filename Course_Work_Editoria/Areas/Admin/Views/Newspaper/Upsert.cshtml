@@ -1,0 +1,65 @@
+﻿@model NewspaperVM
+
+<form method="post">
+    <input asp-for=Newspaper.NewspaperId hidden />
+    <div class="border p-3 mt-4">
+        <div class="row pb-2">
+            <h2 class="text-primary">@(Model.Newspaper.NewspaperId!=0?"Update":"Create") newspaper</h2>
+            <hr />
+        </div>
+
+        @if (!ViewData.ModelState.IsValid)
+        {
+            <div class="alert alert-danger">
+                @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                {
+                    <p>@error.ErrorMessage</p>
+                }
+            </div>
+        }
+        <div class="mb-3 row p-1">
+            <label asp-for="Newspaper.Name" class="p-0"></label>
+            <input asp-for="Newspaper.Name" type="text" class="form-control" />
+            <span asp-validation-for="Newspaper.Name" class="text-danger"></span>
+        </div>
+        <div class="mb-3 row p-1">
+            <label asp-for="Newspaper.Circulation" class="p-0"></label>
+            <input asp-for="Newspaper.Circulation" type="number" class="form-control" />
+            <span asp-validation-for="Newspaper.Circulation" class="text-danger"></span>
+        </div>
+        <div class="mb-3 row p-1">
+            <label asp-for="Newspaper.Type" class="p-0"></label>
+            <input asp-for="Newspaper.Type" type="text" class="form-control" />
+            <span asp-validation-for="Newspaper.Type" class="text-danger"></span>
+        </div>
+        <div class="mb-3 row p-1">
+            <label asp-for="Newspaper.Region" class="p-0"></label>
+            <input asp-for="Newspaper.Region" type="text" class="form-control" />
+            <span asp-validation-for="Newspaper.Region" class="text-danger"></span>
+        </div>
+        <div class="mb-3 row p-1">
+            <select asp-for="@Model.Newspaper.EditorId" asp-items="@Model.Editors" class="form-control">
+                 <option disabled selected>-- Выберите редактора --</option>
+            </select>
+            <span asp-validation-for="Newspaper.EditorId" class="text-danger"></span>
+        </div>
+
+        <div class="row">
+            <div class="col-3">
+                @if(Model.Newspaper.NewspaperId!=0){
+                    <button type="submit" class="btn btn-primary form-control">Update</button>
+                }
+                else{
+                    <button type="submit" class="btn btn-primary form-control">Create</button>
+                }
+            </div>
+            <div class="col-3">
+                <a asp-controller="Newspaper" asp-action="Index" class="btn btn-outline-secondary form-control">Вернуться назад</a>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

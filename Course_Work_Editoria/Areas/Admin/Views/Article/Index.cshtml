@@ -1,0 +1,50 @@
+﻿@model IEnumerable<Article>
+
+<div class="container">
+    <div class="row pt-3 pb-2">
+        <div class="col-6">
+            <h2 class="text-primary">Список статей</h2>
+        </div>
+        <div class="col-6 text-end">
+            <a asp-controller="Article" asp-action="Upsert" class="btn btn-primary">
+                <i class="bi bi-plus-circle"></i> Добавить статью
+            </a>
+        </div>
+    </div>
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Заголовок</th>
+                <th>Текст</th>
+                <th>Дата публикации</th>
+                <th>Выпуск Id</th>
+                <th>Категория</th>
+                <th>Автор</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var article in Model)
+            {
+                    <tr>
+                        <td>@article.Title</td>
+                        <td>@article.Text</td> 
+                        <td>@article.PublicationDate.ToString("dd.MM.yyyy")</td>
+                        <td>@article.Issue.IssueId</td>
+                        <td>@article.Category.Name</td>
+                        <td>@article.Author.Name @article.Author.Surname</td>
+                        <td>
+                            <div class="btn-group">
+                                <a asp-controller="Article" asp-action="Upsert" asp-route-articleId="@article.ArticleId" class="btn btn-primary mx-2">
+                                    <i class="bi bi-pencil-square"></i> Изменить
+                                </a>
+                                <a asp-controller="Article" asp-action="Delete" asp-route-articleId="@article.ArticleId" class="btn btn-danger mx-2">
+                                    <i class="bi bi-trash-fill"></i> Удалить
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+            }
+        </tbody>
+    </table>
+</div>

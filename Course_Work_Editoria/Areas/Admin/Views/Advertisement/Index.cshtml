@@ -1,0 +1,71 @@
+﻿@model AdvertisementFilterVM
+
+<div class="container">
+    <div class="row pt-3 pb-2">
+        <div class="col-7">
+            <h2 class="text-primary">Список рекламных объявлений</h2>
+        </div>
+        <div class="col-5 text-end">
+            <a asp-controller="Advertisement" asp-action="Upsert" class="btn btn-primary">
+                <i class="bi bi-plus-circle"></i> Добавить объявление
+            </a>
+        </div>
+    </div>
+    <form method="get" asp-action="Index" class="mb-3">
+        <div class="row mb-3">
+            <div class="col-md-5">
+                <input type="text" name="typeFilter" value="@Model.TypeFilter" class="form-control" placeholder="Фильтр по типу объявления" />
+            </div>
+            <div class="col-md-5">
+                <select name="issueFilter" class="form-select">
+                    <option value="">Все выпуски</option>
+                    @foreach (var issue in Model.IssueSelectList)
+                    {
+                        <option value="@issue.Value" selected="@(issue.Value == Model.IssueFilter?.ToString() ? "selected" : null)">
+                            @issue.Text
+                        </option>
+                    }
+                </select>
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-primary mt-1">
+                    <i class="bi bi-filter-circle"></i> Фильтровать
+                </button>
+            </div>
+        </div>
+    </form>
+
+    <!-- Таблица -->
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Тип</th>
+                <th>Текст</th>
+                <th>Стоимость</th>
+                <th>Выпуск</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var advertisement in Model.Advertisements)
+            {
+                <tr>
+                    <td>@advertisement.Type</td>
+                    <td>@advertisement.Text</td>
+                    <td>@advertisement.Cost</td>
+                    <td>@advertisement.Issue.IssueId</td>
+                    <td>
+                        <div class="btn-group">
+                            <a asp-controller="Advertisement" asp-action="Upsert" asp-route-advertisementId="@advertisement.AdvertisementId" class="btn btn-primary mx-2">
+                                <i class="bi bi-pencil-square"></i> Изменить
+                            </a>
+                            <a asp-controller="Advertisement" asp-action="Delete" asp-route-advertisementId="@advertisement.AdvertisementId" class="btn btn-danger mx-2">
+                                <i class="bi bi-trash-fill"></i> Удалить
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

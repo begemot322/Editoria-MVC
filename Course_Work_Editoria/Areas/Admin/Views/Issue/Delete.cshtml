@@ -1,0 +1,36 @@
+﻿@model Issue
+
+<form method="post">
+    <input asp-for="IssueId" hidden />
+    <div class="border p-3 mt-4">
+        <div class="row pb-2">
+            <h2 class="text-primary">Удалить выпуск</h2>
+            <hr />
+        </div>
+        <div class="mb-3 row p-1">
+            <label asp-for="PublicationDate" class="p-0">Дата публикации</label>
+            <input asp-for="PublicationDate" disabled type="date" class="form-control" />
+        </div>
+        <div class="mb-3 row p-1">
+            <label asp-for="Newspaper.Name" class="p-0">Газета</label>
+            <input asp-for="Newspaper.Name" disabled type="text" class="form-control" />
+        </div>
+        <div class="mb-3 row p-1">
+            <label asp-for="Content" class="p-0">Содержание</label>
+            <textarea asp-for="Content" disabled class="form-control" rows="5"></textarea>
+        </div>
+
+        <div class="row">
+            <div class="col-3">
+                <button type="submit" class="btn btn-danger form-control">Удалить</button>
+            </div>
+            <div class="col-3">
+                <a asp-controller="Issue" asp-action="Index" class="btn btn-outline-secondary form-control">Вернуться назад</a>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

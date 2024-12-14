@@ -1,0 +1,48 @@
+﻿@model IEnumerable<Newspaper>
+
+<div class="container">
+    <div class="row pt-3 pb-2">
+        <div class="col-6">
+            <h2 class="text-primary">Список газет</h2>
+        </div>
+        <div class="col-6 text-end">
+            <a asp-controller="Newspaper" asp-action="Upsert" class="btn btn-primary">
+                <i class="bi bi-plus-circle"></i> Добавить газету
+            </a>
+        </div>
+    </div>
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Название</th>
+                <th>Тираж</th>
+                <th>Тип</th>
+                <th>Регион</th>
+                <th>Редактор</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var newspaper in Model)
+            {
+                <tr>
+                    <td>@newspaper.Name</td>
+                    <td>@newspaper.Circulation</td>
+                    <td>@newspaper.Type</td>
+                    <td>@newspaper.Region</td>
+                    <td>@newspaper.Editor.Name @newspaper.Editor.Surname</td>
+                    <td>
+                        <div class="btn-group">
+                            <a asp-controller="Newspaper" asp-action="Upsert" asp-route-newspaperId="@newspaper.NewspaperId" class="btn btn-primary mx-2">
+                                <i class="bi bi-pencil-square"></i> Изменить
+                            </a>
+                            <a asp-controller="Newspaper" asp-action="Delete" asp-route-newspaperId="@newspaper.NewspaperId" class="btn btn-danger mx-2">
+                                <i class="bi bi-trash-fill"></i> Удалить
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
