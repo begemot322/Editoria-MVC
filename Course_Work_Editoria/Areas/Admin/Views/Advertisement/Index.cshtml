@@ -17,14 +17,8 @@
                 <input type="text" name="typeFilter" value="@Model.TypeFilter" class="form-control" placeholder="Фильтр по типу объявления" />
             </div>
             <div class="col-md-5">
-                <select name="issueFilter" class="form-select">
+                <select asp-for="IssueFilter" asp-items="Model.IssueSelectList" class="form-select">
                     <option value="">Все выпуски</option>
-                    @foreach (var issue in Model.IssueSelectList)
-                    {
-                        <option value="@issue.Value" selected="@(issue.Value == Model.IssueFilter?.ToString() ? "selected" : null)">
-                            @issue.Text
-                        </option>
-                    }
                 </select>
             </div>
             <div class="col-md-2">
@@ -35,7 +29,6 @@
         </div>
     </form>
 
-    <!-- Таблица -->
     <table class="table table-bordered table-striped">
         <thead>
             <tr>
