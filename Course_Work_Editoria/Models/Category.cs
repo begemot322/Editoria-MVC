@@ -18,6 +18,6 @@ namespace Course_Work_Editoria.Models
 
         // Связь со статьями
         [ValidateNever]
-        public List<Article> Articles { get; set; }
+        public ICollection<Article> Articles { get; set; }
     }
 }

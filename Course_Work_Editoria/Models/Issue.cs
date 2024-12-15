@@ -20,11 +20,11 @@ namespace Course_Work_Editoria.Models
 
         // Связь со статьями
         [ValidateNever]
-        public List<Article> Articles { get; set; }
+        public ICollection<Article> Articles { get; set; }
 
         //Связь с рекламами 
         [ValidateNever]
-        public List<Advertisement> Advertisements { get; set; }
+        public ICollection<Advertisement> Advertisements { get; set; }
 
     }
 }

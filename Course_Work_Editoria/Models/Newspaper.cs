@@ -19,6 +19,6 @@ namespace Course_Work_Editoria.Models
 
         // Связь с выпусками
         [ValidateNever]
-        public List<Issue> Issues { get; set; }
+        public ICollection<Issue> Issues { get; set; }
     }
 }
