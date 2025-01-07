@@ -16,6 +16,10 @@ builder.Services.AddDbContext<ApplicationDbContext>(options=> options.UseSqlServ
 builder.Services.AddScoped<IAdvertisementRepository, AdvertisementRepository>();
 builder.Services.AddScoped<IArticleRepository, ArticleRepository>();
 builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<IEditorRepository, EditorRepository>();
+builder.Services.AddScoped<IIssueRepository, IssueRepository>();
+builder.Services.AddScoped<INewspaperRepository, NewspaperRepository>();
 
 var app = builder.Build();
 
