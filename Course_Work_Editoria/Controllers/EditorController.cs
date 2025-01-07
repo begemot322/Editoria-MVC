@@ -1,4 +1,5 @@
 ﻿using Editoria.Data.Context;
+using Editoria.Data.Repository.IRepository;
 using Editoria.Models;
 using Editoria.Models.ViewModel;
 using Microsoft.AspNetCore.Mvc;
@@ -7,26 +8,16 @@ namespace Course_Work_Editoria.Controllers
 {
     public class EditorController : Controller
     {
-        private readonly ApplicationDbContext _db;
+        private readonly IEditorRepository _editorRepository;
 
-        public EditorController(ApplicationDbContext db)
+        public EditorController(IEditorRepository editorRepository)
         {
-            _db = db;
+            _editorRepository = editorRepository;
         }
 
         public IActionResult Index(string name, string email)
         {
-            IQueryable<Editor> editors = _db.Editors;
-
-            if (!string.IsNullOrEmpty(name))
-            {
-                editors = editors.Where(e => e.Name.Contains(name));
-            }
-
-            if (!string.IsNullOrEmpty(email))
-            {
-                editors = editors.Where(e => e.Email.Contains(email));
-            }
+            var editors = _editorRepository.GetFilteredEditors(name, email);
 
             EditorListViewModel viewModel = new EditorListViewModel
             {
@@ -38,79 +29,55 @@ namespace Course_Work_Editoria.Controllers
             return View(viewModel);
         }
 
-        public IActionResult Create()
+        public IActionResult Upsert(int? editorId)
         {
-            return View();
+            var editor = editorId.HasValue ?
+                _editorRepository.GetEditorById(editorId.Value) : new Editor();
+
+            if(editorId.HasValue && editor == null)
+            {
+                return NotFound();
+            }
+            return View(editor);
         }
 
         [HttpPost]
-        public IActionResult Create(Editor editor)
+        public IActionResult Upsert(Editor editor)
         {
             if (ModelState.IsValid)
             {
-                _db.Editors.Add(editor);
-                _db.SaveChanges();
-                TempData["success"] = "Редактор успешно добавлен";
+                if (editor.EditorId == 0)
+                {
+                    _editorRepository.AddEditor(editor);
+                    TempData["success"] = "Редактор успешно добавлен!";
+                }
+                else
+                {
+                    _editorRepository.UpdateEditor(editor);
+                    TempData["success"] = "Редактор успешно обновлён!";
+                }
                 return RedirectToAction("Index");
             }
             return View(editor);
         }
 
-        public IActionResult Edit(int editorId)
-        {
-            if (editorId == 0)
-            {
-                return NotFound();
-            }
-
-            var editorFromDb = _db.Editors.FirstOrDefault(e => e.EditorId == editorId);
-            if (editorFromDb == null)
-            {
-                return NotFound();
-            }
-            return View(editorFromDb);
-        }
-
-        [HttpPost]
-        public IActionResult Edit(Editor editor)
-        {
-            if (ModelState.IsValid)
-            {
-                _db.Editors.Update(editor);
-                _db.SaveChanges();
-                TempData["success"] = "Редактор успешно обновлён";
-                return RedirectToAction("Index");
-            }
-            return View(editor);
-        }
 
         public IActionResult Delete(int editorId)
         {
-            if (editorId == 0)
-            {
-                return NotFound();
-            }
-
-            var editorFromDb = _db.Editors.FirstOrDefault(e => e.EditorId == editorId);
-            if (editorFromDb == null)
-            {
-                return NotFound();
-            }
-            return View(editorFromDb);
-        }
-
-        [HttpPost, ActionName("Delete")]
-        public IActionResult DeletePOST(int editorId)
-        {
-            var editor = _db.Editors.FirstOrDefault(e => e.EditorId == editorId);
+            var editor = _editorRepository.GetEditorById(editorId);
 
             if (editor == null)
             {
                 return NotFound();
             }
+            return View(editor);
+        }
 
-            _db.Editors.Remove(editor);
-            _db.SaveChanges();
+        [HttpPost, ActionName("Delete")]
+        public IActionResult DeletePOST(int editorId)
+        {
+            _editorRepository.DeleteEditor(editorId);
+
             TempData["success"] = "Редактор успешно удалён";
             return RedirectToAction("Index");
         }

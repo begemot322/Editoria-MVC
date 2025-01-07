@@ -1,4 +1,5 @@
 ﻿using Editoria.Data.Context;
+using Editoria.Data.Repository.IRepository;
 using Editoria.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -6,82 +7,66 @@ namespace Course_Work_Editoria.Controllers
 {
     public class CategoryController : Controller
     {
-        private readonly ApplicationDbContext _db;
-        public CategoryController(ApplicationDbContext db)
+        private readonly ICategoryRepository _categoryRepository;
+        public CategoryController(ICategoryRepository categoryRepository)
         {
-            _db = db;
+            _categoryRepository = categoryRepository;
         }
         public IActionResult Index()
         {
-            var CategoryList = _db.Categories.ToList();
-            return View(CategoryList);
+            var categoryList = _categoryRepository.GetAllCategories();
+            return View(categoryList);
         }
-        public IActionResult Create()
+        public IActionResult Upsert(int? categoryId)
         {
-            return View();
+            var category = categoryId.HasValue ?
+                _categoryRepository.GetCategoryById(categoryId.Value) : new Category();
+
+            if (categoryId.HasValue && category == null)
+            {
+                return NotFound();
+            }
+
+            return View(category);
         }
+
         [HttpPost]
-        public IActionResult Create(Category category)
+        public IActionResult Upsert(Category category)
         {
             if (ModelState.IsValid)
             {
-                _db.Categories.Add(category);
-                _db.SaveChanges();
-                TempData["success"] = "Категория создалась успешно";
+                if (category.CategoryId == 0)
+                {
+                    _categoryRepository.AddCategory(category);
+                    TempData["success"] = "Категория создана успешно!";
+                }
+                else
+                {
+                    _categoryRepository.UpdateCategory(category);
+                    TempData["success"] = "Категория обновлена успешно!";
+                }
                 return RedirectToAction("Index");
             }
-            return View();
+            return View(category);
         }
-        public IActionResult Edit(int CategoryId)
+
+        public IActionResult Delete(int categoryId)
         {
-            if (CategoryId == 0)
+            var category = _categoryRepository.GetCategoryById(categoryId);
+
+            if (category == null)
             {
                 return NotFound();
             }
-            Category categoryFromDb = _db.Categories.FirstOrDefault(c => c.CategoryId == CategoryId);
-            if (categoryFromDb == null)
-            {
-                return NotFound();
-            }
-            return View(categoryFromDb);
-        }
-        [HttpPost]
-        public IActionResult Edit(Category category)
-        {
-            if (ModelState.IsValid)
-            {
-                _db.Categories.Update(category);
-                _db.SaveChanges();
-                TempData["success"] = "Категория изменилась успешно";
-                return RedirectToAction("Index");
-            }
-            return View();
-        }
-        public IActionResult Delete(int CategoryId)
-        {
-            if (CategoryId == 0)
-            {
-                return NotFound();
-            }
-            Category categoryFromDb = _db.Categories.FirstOrDefault(c => c.CategoryId == CategoryId);
-            if (categoryFromDb == null)
-            {
-                return NotFound();
-            }
-            return View(categoryFromDb);
+
+            return View(category);
         }
         [HttpPost, ActionName("Delete")]
-        public IActionResult DeletePOST(int CategoryId)
+        public IActionResult DeletePOST(int categoryId)
         {
-            Category obj = _db.Categories.FirstOrDefault(c => c.CategoryId == CategoryId);
+            _categoryRepository.DeleteCategory(categoryId);
 
-            if (obj == null)
-            {
-                return NotFound();
-            }
-            _db.Categories.Remove(obj);
-            _db.SaveChanges();
-            TempData["success"] = "Категория удалилась успешно";
+            TempData["success"] = "Категория удалена успешно!";
             return RedirectToAction("Index");
         }
     }

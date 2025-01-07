@@ -4,23 +4,22 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Editoria.Models.ViewModel;
 using Editoria.Data.Context;
+using Editoria.Data.Repository.IRepository;
 
 namespace Course_Work_Editoria.Controllers
 {
     public class IssueController : Controller
     {
-        private readonly ApplicationDbContext _db;
+        private readonly IIssueRepository _issueRepository;
 
-        public IssueController(ApplicationDbContext db)
+        public IssueController(IIssueRepository issueRepository)
         {
-            _db = db;
+            _issueRepository = issueRepository;
         }
 
         public IActionResult Index()
         {
-            var issueList = _db.Issues
-                .Include(i => i.Newspaper)
-                .ToList();
+            var issueList = _issueRepository.GetAllIssues();
             return View(issueList);
         }
 
@@ -28,29 +27,16 @@ namespace Course_Work_Editoria.Controllers
         {
             var viewModel = new IssueVM
             {
-                Newspapers = _db.Newspapers.ToList().Select(n => new SelectListItem
-                {
-                    Text = n.Name,
-                    Value = n.NewspaperId.ToString()
-                }),
-                Issue = new Issue()
+                Newspapers = _issueRepository.GetNewspaperList(),
+                Issue = issueId.HasValue ?
+                    _issueRepository.GetIssueById(issueId.Value) : new Issue() 
             };
 
-            if (issueId == null || issueId == 0)
+            if (issueId.HasValue && viewModel.Issue == null)
             {
-                // Create
-                return View(viewModel);
+                return NotFound();
             }
-            else
-            {
-                // Update
-                viewModel.Issue = _db.Issues.FirstOrDefault(i => i.IssueId == issueId);
-                if (viewModel.Issue == null)
-                {
-                    return NotFound();
-                }
-                return View(viewModel);
-            }
+            return View(viewModel);
         }
 
         [HttpPost]
@@ -58,62 +44,41 @@ namespace Course_Work_Editoria.Controllers
         {
             if (ModelState.IsValid)
             {
-                try
+                if (viewModel.Issue.IssueId == 0)
                 {
-                    if (viewModel.Issue.IssueId == 0)
-                    {
-                        _db.Issues.Add(viewModel.Issue);
-                        TempData["success"] = "Выпуск успешно добавлен";
-                        _db.SaveChanges();
-                    }
-                    else
-                    {
-                        _db.Issues.Update(viewModel.Issue);
-                        TempData["success"] = "Выпуск успешно обновлён";
-                        _db.SaveChanges();
-                    }
-                    return RedirectToAction("Index");
+                    _issueRepository.AddIssue(viewModel.Issue);
+                    TempData["success"] = "Выпуск успешно добавлен";
                 }
-                catch (DbUpdateException ex)
+                else
                 {
-                    ModelState.AddModelError(string.Empty, "Ошибка при сохранении данных. Нарушена связь с газетой.");
+                    _issueRepository.UpdateIssue(viewModel.Issue);
+                    TempData["success"] = "Выпуск успешно обновлён";
                 }
-                catch (Exception ex)
-                {
-                    ModelState.AddModelError(string.Empty, "Произошла неизвестная ошибка: " + ex.Message);
-                }
+                return RedirectToAction("Index");
             }
 
-            viewModel.Newspapers = _db.Newspapers.ToList().Select(n => new SelectListItem
-            {
-                Text = n.Name,
-                Value = n.NewspaperId.ToString()
-            });
+            viewModel.Newspapers = _issueRepository.GetNewspaperList();
             return View(viewModel);
         }
 
 
         public IActionResult Delete(int issueId)
         {
-            var issueFromDb = _db.Issues.Include(i => i.Newspaper).FirstOrDefault(i => i.IssueId == issueId);
-            if (issueFromDb == null)
-            {
-                return NotFound();
-            }
-            return View(issueFromDb);
-        }
+            var issue = _issueRepository.GetIssueById(issueId);
 
-        [HttpPost, ActionName("Delete")]
-        public IActionResult DeletePOST(int issueId)
-        {
-            var issue = _db.Issues.FirstOrDefault(i => i.IssueId == issueId);
             if (issue == null)
             {
                 return NotFound();
             }
 
-            _db.Issues.Remove(issue);
-            _db.SaveChanges();
+            return View(issue);
+        }
+
+        [HttpPost, ActionName("Delete")]
+        public IActionResult DeletePOST(int issueId)
+        {
+            _issueRepository.DeleteIssue(issueId);
+
             TempData["success"] = "Выпуск успешно удалён";
             return RedirectToAction("Index");
         }

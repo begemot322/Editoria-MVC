@@ -1,4 +1,5 @@
 ﻿using Editoria.Data.Context;
+using Editoria.Data.Repository.IRepository;
 using Editoria.Models;
 using Editoria.Models.ViewModel ;
 using Microsoft.AspNetCore.Mvc;
@@ -9,19 +10,15 @@ namespace Course_Work_Editoria.Controllers
 {
     public class NewspaperController : Controller
     {
-
-        private readonly ApplicationDbContext _db;
-
-        public NewspaperController(ApplicationDbContext db)
+        private readonly INewspaperRepository _newspaperRepository;
+        public NewspaperController(INewspaperRepository newspaperRepository)
         {
-            _db = db;
+            _newspaperRepository = newspaperRepository;
         }
 
         public IActionResult Index()
         {
-            var newspaperList = _db.Newspapers
-             .Include(n => n.Editor)
-             .ToList();
+            var newspaperList = _newspaperRepository.GetAllNewspapers();
             return View(newspaperList);
         }
 
@@ -29,24 +26,16 @@ namespace Course_Work_Editoria.Controllers
         {
             var viewModel = new NewspaperVM
             {
-                Editors = _db.Editors.ToList().Select(e => new SelectListItem
-                {
-                    Text = $"{e.Name} {e.Surname}",
-                    Value = e.EditorId.ToString()
-                }),
-                Newspaper = new Newspaper()
+                Editors = _newspaperRepository.GetEditorsList(),
+                Newspaper = newspaperId.HasValue ? 
+                    _newspaperRepository.GetNewspaperById(newspaperId.Value) : new Newspaper()
             };
-            if (newspaperId == null || newspaperId == 0)
+
+            if(newspaperId.HasValue && viewModel.Newspaper == null)
             {
-                //create
-                return View(viewModel);
+                return NotFound();
             }
-            else
-            {
-                //update
-                viewModel.Newspaper = _db.Newspapers.FirstOrDefault(n => n.NewspaperId == newspaperId);
-                return View(viewModel);
-            }
+            return View(viewModel); 
         }
 
         [HttpPost]
@@ -58,14 +47,12 @@ namespace Course_Work_Editoria.Controllers
                 {
                     if (viewModel.Newspaper.NewspaperId == 0)
                     {
-                        _db.Newspapers.Add(viewModel.Newspaper);
-                        _db.SaveChanges();
+                        _newspaperRepository.AddNewspaper(viewModel.Newspaper);
                         TempData["success"] = "Газета успешно добавлена";
                     }
                     else
                     {
-                        _db.Newspapers.Update(viewModel.Newspaper);
-                        _db.SaveChanges();
+                        _newspaperRepository.UpdateNewspaper(viewModel.Newspaper);
                         TempData["success"] = "Газета успешно обновлена";
                     }
                     return RedirectToAction("Index");
@@ -80,41 +67,27 @@ namespace Course_Work_Editoria.Controllers
                 }
             }
 
-            viewModel.Editors = _db.Editors.ToList().Select(e => new SelectListItem
-            {
-                Text = $"{e.Name} {e.Surname}",
-                Value = e.EditorId.ToString()
-            });
+            viewModel.Editors = _newspaperRepository.GetEditorsList();
             return View(viewModel);
         }
 
         public IActionResult Delete(int newspaperId)
         {
-            if (newspaperId == 0)
-            {
-                return NotFound();
-            }
-
-            var newspaperFromDb = _db.Newspapers.Include(n => n.Editor).FirstOrDefault(n => n.NewspaperId == newspaperId);
-            if (newspaperFromDb == null)
-            {
-                return NotFound();
-            }
-            return View(newspaperFromDb);
-        }
-
-        [HttpPost, ActionName("Delete")]
-        public IActionResult DeletePOST(int newspaperId)
-        {
-            var newspaper = _db.Newspapers.FirstOrDefault(n => n.NewspaperId == newspaperId);
+            var newspaper = _newspaperRepository.GetNewspaperById(newspaperId);
 
             if (newspaper == null)
             {
                 return NotFound();
             }
 
-            _db.Newspapers.Remove(newspaper);
-            _db.SaveChanges();
+            return View(newspaper);
+        }
+
+        [HttpPost, ActionName("Delete")]
+        public IActionResult DeletePOST(int newspaperId)
+        {
+            _newspaperRepository.DeleteNewspaper(newspaperId);
+
             TempData["success"] = "Газета успешно удалена";
             return RedirectToAction("Index");
         }
