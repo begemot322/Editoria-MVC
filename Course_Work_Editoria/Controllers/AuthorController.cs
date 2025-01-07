@@ -25,7 +25,7 @@ namespace Course_Work_Editoria.Controllers
             var author = authorId.HasValue?
                 _authorRepository.GetAuthorById(authorId.Value) : new Author();
 
-            if (authorId.HasValue && author.AuthorId == 0)
+            if (authorId.HasValue && author == null)
             {
                 return NotFound();
             }
