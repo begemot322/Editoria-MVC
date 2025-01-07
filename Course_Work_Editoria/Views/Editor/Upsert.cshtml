@@ -1,0 +1,42 @@
+﻿@model Editor
+
+<form asp-action="Upsert" method="post">
+    <input asp-for="EditorId" hidden />
+    <div class="border p-3 mt-4">
+        <h2 class="text-primary">@((Model.EditorId != 0) ? "Обновить редактора" : "Добавить редактора")</h2>
+        <hr />
+
+        <div class="mb-3">
+            <label asp-for="Name" class="form-label">Имя</label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Surname" class="form-label">Фамилия</label>
+            <input asp-for="Surname" class="form-control" />
+            <span asp-validation-for="Surname" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Email" class="form-label"></label>
+            <input asp-for="Email" class="form-control" type="email" />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+
+        <div class="row">
+            <div class="col-3">
+                <button type="submit" class="btn btn-primary form-control">
+                    @((Model.EditorId != 0) ? "Обновить" : "Создать")
+                </button>
+            </div>
+            <div class="col-3">
+                <a asp-action="Index" class="btn btn-outline-secondary form-control">Вернуться назад</a>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

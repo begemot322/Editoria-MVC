@@ -4,10 +4,9 @@
     <input asp-for=Newspaper.NewspaperId hidden />
     <div class="border p-3 mt-4">
         <div class="row pb-2">
-            <h2 class="text-primary">@(Model.Newspaper.NewspaperId!=0?"Update":"Create") newspaper</h2>
+            <h2 class="text-primary">@(Model.Newspaper.NewspaperId!=0?"Обновить":"Создать") газету</h2>
             <hr />
         </div>
-
         @if (!ViewData.ModelState.IsValid)
         {
             <div class="alert alert-danger">
@@ -18,22 +17,22 @@
             </div>
         }
         <div class="mb-3 row p-1">
-            <label asp-for="Newspaper.Name" class="p-0"></label>
+            <label asp-for="Newspaper.Name" class="p-0">Название</label>
             <input asp-for="Newspaper.Name" type="text" class="form-control" />
             <span asp-validation-for="Newspaper.Name" class="text-danger"></span>
         </div>
         <div class="mb-3 row p-1">
-            <label asp-for="Newspaper.Circulation" class="p-0"></label>
+            <label asp-for="Newspaper.Circulation" class="p-0">Тираж</label>
             <input asp-for="Newspaper.Circulation" type="number" class="form-control" />
             <span asp-validation-for="Newspaper.Circulation" class="text-danger"></span>
         </div>
         <div class="mb-3 row p-1">
-            <label asp-for="Newspaper.Type" class="p-0"></label>
+            <label asp-for="Newspaper.Type" class="p-0">Тип</label>
             <input asp-for="Newspaper.Type" type="text" class="form-control" />
             <span asp-validation-for="Newspaper.Type" class="text-danger"></span>
         </div>
         <div class="mb-3 row p-1">
-            <label asp-for="Newspaper.Region" class="p-0"></label>
+            <label asp-for="Newspaper.Region" class="p-0">Регион</label>
             <input asp-for="Newspaper.Region" type="text" class="form-control" />
             <span asp-validation-for="Newspaper.Region" class="text-danger"></span>
         </div>
@@ -46,12 +45,9 @@
 
         <div class="row">
             <div class="col-3">
-                @if(Model.Newspaper.NewspaperId!=0){
-                    <button type="submit" class="btn btn-primary form-control">Update</button>
-                }
-                else{
-                    <button type="submit" class="btn btn-primary form-control">Create</button>
-                }
+                <button type="submit" class="btn btn-primary form-control">
+                    @((Model.Newspaper.NewspaperId != 0) ? "Обновить" : "Добавить")
+                </button>
             </div>
             <div class="col-3">
                 <a asp-controller="Newspaper" asp-action="Index" class="btn btn-outline-secondary form-control">Вернуться назад</a>
