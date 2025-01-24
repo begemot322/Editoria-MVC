@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace Editoria.Models
+namespace Editoria.Models.Entities
 {
     public class Author
     {
@@ -28,6 +28,6 @@ namespace Editoria.Models
 
         // Связь со статьями
         [ValidateNever]
-        public ICollection<Article> Articles { get; set; } 
+        public ICollection<Article> Articles { get; set; }
     }
 }

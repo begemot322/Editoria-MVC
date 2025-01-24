@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using System.ComponentModel.DataAnnotations;
 
-namespace Editoria.Models
+namespace Editoria.Models.Entities
 {
     public class Article
     {
@@ -32,6 +32,6 @@ namespace Editoria.Models
         // Связь с автором
         public int AuthorId { get; set; }
         [ValidateNever]
-        public Author Author { get; set; } 
+        public Author Author { get; set; }
     }
 }

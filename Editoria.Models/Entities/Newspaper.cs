@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using System.ComponentModel.DataAnnotations;
 
-namespace Editoria.Models
+namespace Editoria.Models.Entities
 {
     public class Newspaper
     {
         [Key]
-        public int NewspaperId { get; set; } 
+        public int NewspaperId { get; set; }
         public string Name { get; set; }
         public int Circulation { get; set; }
         public string Type { get; set; }

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Editoria.Models.Entities;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Editoria.Models.ViewModel
 {

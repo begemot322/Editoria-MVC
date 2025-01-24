@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using System.ComponentModel.DataAnnotations;
 
-namespace Editoria.Models
+namespace Editoria.Models.Entities
 {
     public class Issue
     {

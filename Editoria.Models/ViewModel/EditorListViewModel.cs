@@ -1,4 +1,4 @@
-﻿using Editoria.Models;
+﻿using Editoria.Models.Entities;
 
 namespace Editoria.Models.ViewModel
 {

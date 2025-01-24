@@ -1,4 +1,4 @@
-namespace Editoria.Models
+namespace Editoria.Models.ViewModel
 {
     public class ErrorViewModel
     {
