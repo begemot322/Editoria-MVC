@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Editoria.Models.ViewModel;
 using Editoria.Data.Context;
 using Editoria.Data.Repository.IRepository;
+using Editoria.Models.Entities;
 
 namespace Course_Work_Editoria.Controllers
 {

@@ -1,5 +1,5 @@
 using System.Diagnostics;
-using Editoria.Models;
+using Editoria.Models.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Course_Work_Editoria.Controllers

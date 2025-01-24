@@ -1,10 +1,12 @@
 ﻿using Editoria.Data.Context;
 using Editoria.Data.Repository.IRepository;
-using Editoria.Models;
+using Editoria.Models.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Course_Work_Editoria.Controllers
 {
+    [Authorize]
     public class AuthorController : Controller
     {
 
@@ -14,6 +16,7 @@ namespace Course_Work_Editoria.Controllers
             _authorRepository = authorRepository;
         }
 
+        [Authorize]
         public IActionResult Index()
         {
             var authorList = _authorRepository.GetAllAuthors();
