@@ -1,6 +1,6 @@
 ﻿using Editoria.Data.Context;
 using Editoria.Data.Repository.IRepository;
-using Editoria.Models;
+using Editoria.Models.Entities;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System;
