@@ -1,4 +1,4 @@
-﻿using Editoria.Models;
+﻿using Editoria.Models.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Editoria.Data.Context
@@ -14,8 +14,8 @@ namespace Editoria.Data.Context
         public DbSet<Editor> Editors { get; set; }
         public DbSet<Issue> Issues { get; set; }
         public DbSet<Newspaper> Newspapers { get; set; }
-        public DbSet<Author> Authors { get; set; } 
-
+        public DbSet<Author> Authors { get; set; }
+        public DbSet<User> Users { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Editor>()

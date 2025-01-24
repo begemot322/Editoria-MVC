@@ -4,6 +4,7 @@ using Editoria.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Editoria.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250118195607_addTableAndSeedData")]
+    partial class addTableAndSeedData
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -22,7 +25,7 @@ namespace Editoria.Data.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Editoria.Models.Entities.Advertisement", b =>
+            modelBuilder.Entity("Editoria.Models.Advertisement", b =>
                 {
                     b.Property<int>("AdvertisementId")
                         .ValueGeneratedOnAdd()
@@ -111,7 +114,7 @@ namespace Editoria.Data.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Editoria.Models.Entities.Article", b =>
+            modelBuilder.Entity("Editoria.Models.Article", b =>
                 {
                     b.Property<int>("ArticleId")
                         .ValueGeneratedOnAdd()
@@ -223,7 +226,7 @@ namespace Editoria.Data.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Editoria.Models.Entities.Author", b =>
+            modelBuilder.Entity("Editoria.Models.Author", b =>
                 {
                     b.Property<int>("AuthorId")
                         .ValueGeneratedOnAdd()
@@ -312,7 +315,7 @@ namespace Editoria.Data.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Editoria.Models.Entities.Category", b =>
+            modelBuilder.Entity("Editoria.Models.Category", b =>
                 {
                     b.Property<int>("CategoryId")
                         .ValueGeneratedOnAdd()
@@ -379,7 +382,7 @@ namespace Editoria.Data.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Editoria.Models.Entities.Editor", b =>
+            modelBuilder.Entity("Editoria.Models.Editor", b =>
                 {
                     b.Property<int>("EditorId")
                         .ValueGeneratedOnAdd()
@@ -458,7 +461,7 @@ namespace Editoria.Data.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Editoria.Models.Entities.Issue", b =>
+            modelBuilder.Entity("Editoria.Models.Issue", b =>
                 {
                     b.Property<int>("IssueId")
                         .ValueGeneratedOnAdd()
@@ -535,7 +538,7 @@ namespace Editoria.Data.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Editoria.Models.Entities.Newspaper", b =>
+            modelBuilder.Entity("Editoria.Models.Newspaper", b =>
                 {
                     b.Property<int>("NewspaperId")
                         .ValueGeneratedOnAdd()
@@ -634,7 +637,7 @@ namespace Editoria.Data.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Editoria.Models.Entities.User", b =>
+            modelBuilder.Entity("Editoria.Models.User", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -644,14 +647,7 @@ namespace Editoria.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ImageUrl")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("PasswordHash")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhoneNumber")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -664,9 +660,9 @@ namespace Editoria.Data.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("Editoria.Models.Entities.Advertisement", b =>
+            modelBuilder.Entity("Editoria.Models.Advertisement", b =>
                 {
-                    b.HasOne("Editoria.Models.Entities.Issue", "Issue")
+                    b.HasOne("Editoria.Models.Issue", "Issue")
                         .WithMany("Advertisements")
                         .HasForeignKey("IssueId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -675,21 +671,21 @@ namespace Editoria.Data.Migrations
                     b.Navigation("Issue");
                 });
 
-            modelBuilder.Entity("Editoria.Models.Entities.Article", b =>
+            modelBuilder.Entity("Editoria.Models.Article", b =>
                 {
-                    b.HasOne("Editoria.Models.Entities.Author", "Author")
+                    b.HasOne("Editoria.Models.Author", "Author")
                         .WithMany("Articles")
                         .HasForeignKey("AuthorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Editoria.Models.Entities.Category", "Category")
+                    b.HasOne("Editoria.Models.Category", "Category")
                         .WithMany("Articles")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Editoria.Models.Entities.Issue", "Issue")
+                    b.HasOne("Editoria.Models.Issue", "Issue")
                         .WithMany("Articles")
                         .HasForeignKey("IssueId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -702,9 +698,9 @@ namespace Editoria.Data.Migrations
                     b.Navigation("Issue");
                 });
 
-            modelBuilder.Entity("Editoria.Models.Entities.Issue", b =>
+            modelBuilder.Entity("Editoria.Models.Issue", b =>
                 {
-                    b.HasOne("Editoria.Models.Entities.Newspaper", "Newspaper")
+                    b.HasOne("Editoria.Models.Newspaper", "Newspaper")
                         .WithMany("Issues")
                         .HasForeignKey("NewspaperId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -713,41 +709,41 @@ namespace Editoria.Data.Migrations
                     b.Navigation("Newspaper");
                 });
 
-            modelBuilder.Entity("Editoria.Models.Entities.Newspaper", b =>
+            modelBuilder.Entity("Editoria.Models.Newspaper", b =>
                 {
-                    b.HasOne("Editoria.Models.Entities.Editor", "Editor")
+                    b.HasOne("Editoria.Models.Editor", "Editor")
                         .WithOne("Newspaper")
-                        .HasForeignKey("Editoria.Models.Entities.Newspaper", "EditorId")
+                        .HasForeignKey("Editoria.Models.Newspaper", "EditorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Editor");
                 });
 
-            modelBuilder.Entity("Editoria.Models.Entities.Author", b =>
+            modelBuilder.Entity("Editoria.Models.Author", b =>
                 {
                     b.Navigation("Articles");
                 });
 
-            modelBuilder.Entity("Editoria.Models.Entities.Category", b =>
+            modelBuilder.Entity("Editoria.Models.Category", b =>
                 {
                     b.Navigation("Articles");
                 });
 
-            modelBuilder.Entity("Editoria.Models.Entities.Editor", b =>
+            modelBuilder.Entity("Editoria.Models.Editor", b =>
                 {
                     b.Navigation("Newspaper")
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Editoria.Models.Entities.Issue", b =>
+            modelBuilder.Entity("Editoria.Models.Issue", b =>
                 {
                     b.Navigation("Advertisements");
 
                     b.Navigation("Articles");
                 });
 
-            modelBuilder.Entity("Editoria.Models.Entities.Newspaper", b =>
+            modelBuilder.Entity("Editoria.Models.Newspaper", b =>
                 {
                     b.Navigation("Issues");
                 });
