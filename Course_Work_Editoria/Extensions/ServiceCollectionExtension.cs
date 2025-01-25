@@ -32,6 +32,7 @@ namespace Course_Work_Editoria.Extensions
             builder.Services.AddScoped<IIssueRepository, IssueRepository>();
             builder.Services.AddScoped<INewspaperRepository, NewspaperRepository>();
             builder.Services.AddScoped<IUserRepository, UserRepository>();
+            builder.Services.AddScoped<ITagRepository, TagRepository>();
 
             return builder;
         }
