@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Editoria.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250123080654_addColumtToUser")]
-    partial class addColumtToUser
+    [Migration("20250125081132_addAndSeedTables")]
+    partial class addAndSeedTables
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -61,56 +61,56 @@ namespace Editoria.Data.Migrations
                             AdvertisementId = 1,
                             Cost = 100.50m,
                             IssueId = 1,
-                            Text = "This is a banner advertisement.",
-                            Type = "Banner"
+                            Text = "Скидка 50% на все товары! Только сегодня.",
+                            Type = "Баннер"
                         },
                         new
                         {
                             AdvertisementId = 2,
                             Cost = 200.00m,
                             IssueId = 1,
-                            Text = "This is a popup advertisement.",
-                            Type = "Popup"
+                            Text = "Подпишитесь на нашу рассылку и получите подарок!",
+                            Type = "Всплывающее окно"
                         },
                         new
                         {
                             AdvertisementId = 3,
                             Cost = 500.00m,
                             IssueId = 2,
-                            Text = "This is a video advertisement.",
-                            Type = "Video"
+                            Text = "Откройте для себя мир новых возможностей с нашим продуктом.",
+                            Type = "Видео"
                         },
                         new
                         {
                             AdvertisementId = 4,
                             Cost = 50.00m,
                             IssueId = 2,
-                            Text = "This is a text advertisement.",
-                            Type = "Text"
+                            Text = "Купите сейчас и получите бесплатную доставку.",
+                            Type = "Текст"
                         },
                         new
                         {
                             AdvertisementId = 5,
                             Cost = 120.00m,
                             IssueId = 3,
-                            Text = "This is a sidebar advertisement.",
-                            Type = "Sidebar"
+                            Text = "Лучшие предложения дня — не пропустите!",
+                            Type = "Боковая панель"
                         },
                         new
                         {
                             AdvertisementId = 6,
                             Cost = 1000.00m,
                             IssueId = 3,
-                            Text = "This is a full-page advertisement.",
-                            Type = "Full-page"
+                            Text = "Эксклюзивное предложение! Только для первых 100 клиентов.",
+                            Type = "На всю страницу"
                         },
                         new
                         {
                             AdvertisementId = 7,
                             Cost = 150.75m,
                             IssueId = 4,
-                            Text = "Another banner advertisement.",
-                            Type = "Banner"
+                            Text = "Успейте купить! Акция заканчивается через 3 дня.",
+                            Type = "Баннер"
                         });
                 });
 
@@ -161,8 +161,8 @@ namespace Editoria.Data.Migrations
                             CategoryId = 1,
                             IssueId = 1,
                             PublicationDate = new DateTime(2024, 12, 13, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Text = "Text of article 1",
-                            Title = "Article 1"
+                            Text = "Dota 2 — это одна из самых популярных многопользовательских онлайн-игр, разработанная и выпущенная компанией Valve. Игра является продолжением модификации Defense of the Ancients (DotA) для Warcraft III, которая в свою очередь была создана фанатами. В Dota 2 игроки управляют героями с уникальными способностями, сражаясь друг с другом в командных боях на аренах. С момента своего выпуска в 2013 году, игра приобрела огромную популярность благодаря своим глубоко проработанным механикам, регулярным обновлениям и мировой киберспортивной сцене. Чемпионаты, такие как The International, привлекли внимание зрителей со всего мира и сделали Dota 2 одной из самых зрелищных и высокооплачиваемых игр в истории киберспорта.",
+                            Title = "Dota 2: История и эволюция игры"
                         },
                         new
                         {
@@ -171,8 +171,8 @@ namespace Editoria.Data.Migrations
                             CategoryId = 2,
                             IssueId = 1,
                             PublicationDate = new DateTime(2024, 12, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Text = "Text of article 2",
-                            Title = "Article 2"
+                            Text = "Наруто — это культовое японское аниме, которое стало знаковым не только для поклонников японской культуры, но и для широкой аудитории по всему миру. История рассказывает о мальчике по имени Наруто Узумаке, который мечтает стать Хокаге, сильнейшим ниндзя своей деревни. Сюжет не только захватывает своим экшеном, но и затрагивает важные философские вопросы, такие как борьба за признание, ценность дружбы и преданности, а также то, что настоящая сила заключается не в физической мощи, а в решимости идти вперёд, несмотря на трудности. Аниме также прекрасно сочетает элементы боевых искусств и магии, что делает его одним из самых успешных проектов в истории японской анимации.",
+                            Title = "Наруто: Путь Ниндзя и философия силы"
                         },
                         new
                         {
@@ -181,8 +181,8 @@ namespace Editoria.Data.Migrations
                             CategoryId = 3,
                             IssueId = 2,
                             PublicationDate = new DateTime(2024, 12, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Text = "Text of article 3",
-                            Title = "Article 3"
+                            Text = "C# (C-Sharp) — это объектно-ориентированный язык программирования, разработанный компанией Microsoft. Он является частью .NET Framework и используется для разработки различных приложений: от десктопных до мобильных и веб-приложений. C# сочетает в себе простоту и мощь, что делает его отличным выбором как для новичков, так и для опытных разработчиков. Основные особенности языка — это строгая типизация, поддержка параллельных вычислений, обработка исключений и богатая стандартная библиотека. C# активно используется в разработке игр (через Unity), а также в построении масштабируемых веб-приложений с использованием ASP.NET Core.",
+                            Title = "C# для начинающих: Основы языка программирования"
                         },
                         new
                         {
@@ -191,8 +191,8 @@ namespace Editoria.Data.Migrations
                             CategoryId = 1,
                             IssueId = 2,
                             PublicationDate = new DateTime(2024, 12, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Text = "Text of article 4",
-                            Title = "Article 4"
+                            Text = "React — это библиотека JavaScript, разработанная Facebook для создания пользовательских интерфейсов. Она позволяет строить веб-приложения с динамическими и интерактивными интерфейсами, обновляя только те части страницы, которые изменяются. React использует концепцию виртуального DOM, что позволяет значительно улучшить производительность при изменении данных. Библиотека также поддерживает компонентный подход, где каждый элемент интерфейса является независимым компонентом, который можно повторно использовать и тестировать. React является популярным выбором для разработки сложных одностраничных приложений (SPA), и используется в таких крупных проектах, как Facebook, Instagram и WhatsApp.",
+                            Title = "React: Введение в библиотеку для создания интерфейсов"
                         },
                         new
                         {
@@ -201,18 +201,18 @@ namespace Editoria.Data.Migrations
                             CategoryId = 2,
                             IssueId = 3,
                             PublicationDate = new DateTime(2024, 12, 17, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Text = "Text of article 5",
-                            Title = "Article 5"
+                            Text = "Unity — это одна из самых популярных платформ для разработки игр. С её помощью можно создавать игры как для мобильных устройств, так и для ПК, консолей и VR-устройств. Unity имеет мощный визуальный редактор, позволяющий быстро прототипировать игровые механики, а также использовать готовые ассеты и ресурсы из Unity Asset Store. Для создания игры не нужно быть опытным программистом — базовые знания о том, как работают игровые движки, и понимание принципов геймдизайна будут полезны для начала. Unity поддерживает множество языков программирования, но C# является основным для разработки в этом движке, что делает его отличным выбором для начинающих разработчиков игр.",
+                            Title = "Как сделать свою первую игру с использованием Unity"
                         },
                         new
                         {
                             ArticleId = 6,
                             AuthorId = 6,
-                            CategoryId = 3,
+                            CategoryId = 1,
                             IssueId = 3,
                             PublicationDate = new DateTime(2024, 12, 18, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Text = "Text of article 6",
-                            Title = "Article 6"
+                            Text = "Counter-Strike 2 — это продолжение культовой серии шутеров от первого лица, которая оказала значительное влияние на жанр многопользовательских игр. В новой версии, выпущенной после успешной первой игры и её многочисленных обновлений, игроки снова встают на одну из сторон — террористов или антитеррористов — и сражаются друг с другом в напряженных матчах. Главным новшеством является улучшенная графика и физика игры, а также новые карты, оружие и режимы. Counter-Strike 2 продолжает поддерживать активное сообщество игроков и киберспортивные турниры, такие как ESL и BLAST Premier, привлекая игроков со всего мира. Игра сочетает в себе динамичность, тактический подход и командную работу, что делает её одной из самых популярных многопользовательских игр в истории.",
+                            Title = "Counter-Strike 2: Революция в игровом процессе"
                         },
                         new
                         {
@@ -221,8 +221,70 @@ namespace Editoria.Data.Migrations
                             CategoryId = 1,
                             IssueId = 4,
                             PublicationDate = new DateTime(2024, 12, 19, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Text = "Text of article 7",
-                            Title = "Article 7"
+                            Text = "Detroit: Become Human — это интерактивная драма и приключенческая игра, разработанная студией Quantic Dream. Игра разворачивается в будущем, где андроиды начинают обретать сознание и задаваться вопросами о своей роли в обществе. История фокусируется на трёх персонажах: андроиде-слуге Каре, андроиде-полицейском Конноре и андроиде-революционере Маркусе, которые оказываются втянутыми в борьбу за свободу и равенство. В игре принимаются важнейшие моральные решения, которые влияют на развитие событий, что делает каждый проход уникальным. Визуальный стиль игры впечатляет, а сюжет задаёт вопросы о природе человечности, моральных дилеммах и том, как мы относимся к технологиям, которые создаём.",
+                            Title = "Detroit: Become Human — наше будущее будущее"
+                        });
+                });
+
+            modelBuilder.Entity("Editoria.Models.Entities.ArticleTag", b =>
+                {
+                    b.Property<int>("ArticleId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TagId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ArticleId", "TagId");
+
+                    b.HasIndex("TagId");
+
+                    b.ToTable("ArticleTags");
+
+                    b.HasData(
+                        new
+                        {
+                            ArticleId = 1,
+                            TagId = 1
+                        },
+                        new
+                        {
+                            ArticleId = 1,
+                            TagId = 2
+                        },
+                        new
+                        {
+                            ArticleId = 2,
+                            TagId = 3
+                        },
+                        new
+                        {
+                            ArticleId = 3,
+                            TagId = 4
+                        },
+                        new
+                        {
+                            ArticleId = 4,
+                            TagId = 1
+                        },
+                        new
+                        {
+                            ArticleId = 4,
+                            TagId = 5
+                        },
+                        new
+                        {
+                            ArticleId = 5,
+                            TagId = 3
+                        },
+                        new
+                        {
+                            ArticleId = 6,
+                            TagId = 2
+                        },
+                        new
+                        {
+                            ArticleId = 7,
+                            TagId = 4
                         });
                 });
 
@@ -637,6 +699,59 @@ namespace Editoria.Data.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Editoria.Models.Entities.Tag", b =>
+                {
+                    b.Property<int>("TagId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TagId"));
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("TagId");
+
+                    b.ToTable("Tags");
+
+                    b.HasData(
+                        new
+                        {
+                            TagId = 1,
+                            Description = "Все, что связано с кодированием, языками программирования и разработкой ПО",
+                            Name = "Программирование"
+                        },
+                        new
+                        {
+                            TagId = 2,
+                            Description = "Научные достижения, открытия и исследования",
+                            Name = "Наука"
+                        },
+                        new
+                        {
+                            TagId = 3,
+                            Description = "Советы по здоровью, медицина и здоровый образ жизни",
+                            Name = "Здоровье"
+                        },
+                        new
+                        {
+                            TagId = 4,
+                            Description = "Предпринимательство, управление и финансы",
+                            Name = "Бизнес"
+                        },
+                        new
+                        {
+                            TagId = 5,
+                            Description = "Учеба, курсы, саморазвитие и обучение",
+                            Name = "Образование"
+                        });
+                });
+
             modelBuilder.Entity("Editoria.Models.Entities.User", b =>
                 {
                     b.Property<Guid>("Id")
@@ -645,6 +760,9 @@ namespace Editoria.Data.Migrations
 
                     b.Property<string>("Email")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImageUrl")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PasswordHash")
@@ -702,6 +820,25 @@ namespace Editoria.Data.Migrations
                     b.Navigation("Issue");
                 });
 
+            modelBuilder.Entity("Editoria.Models.Entities.ArticleTag", b =>
+                {
+                    b.HasOne("Editoria.Models.Entities.Article", "Article")
+                        .WithMany("ArticleTags")
+                        .HasForeignKey("ArticleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Editoria.Models.Entities.Tag", "Tag")
+                        .WithMany("ArticleTags")
+                        .HasForeignKey("TagId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Article");
+
+                    b.Navigation("Tag");
+                });
+
             modelBuilder.Entity("Editoria.Models.Entities.Issue", b =>
                 {
                     b.HasOne("Editoria.Models.Entities.Newspaper", "Newspaper")
@@ -722,6 +859,11 @@ namespace Editoria.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Editor");
+                });
+
+            modelBuilder.Entity("Editoria.Models.Entities.Article", b =>
+                {
+                    b.Navigation("ArticleTags");
                 });
 
             modelBuilder.Entity("Editoria.Models.Entities.Author", b =>
@@ -750,6 +892,11 @@ namespace Editoria.Data.Migrations
             modelBuilder.Entity("Editoria.Models.Entities.Newspaper", b =>
                 {
                     b.Navigation("Issues");
+                });
+
+            modelBuilder.Entity("Editoria.Models.Entities.Tag", b =>
+                {
+                    b.Navigation("ArticleTags");
                 });
 #pragma warning restore 612, 618
         }

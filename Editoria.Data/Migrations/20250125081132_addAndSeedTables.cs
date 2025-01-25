@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Editoria.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class addTableAndSeedData : Migration
+    public partial class addAndSeedTables : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -59,13 +59,29 @@ namespace Editoria.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Tags",
+                columns: table => new
+                {
+                    TagId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Tags", x => x.TagId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -174,6 +190,30 @@ namespace Editoria.Data.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "ArticleTags",
+                columns: table => new
+                {
+                    ArticleId = table.Column<int>(type: "int", nullable: false),
+                    TagId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ArticleTags", x => new { x.ArticleId, x.TagId });
+                    table.ForeignKey(
+                        name: "FK_ArticleTags_Articles_ArticleId",
+                        column: x => x.ArticleId,
+                        principalTable: "Articles",
+                        principalColumn: "ArticleId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ArticleTags_Tags_TagId",
+                        column: x => x.TagId,
+                        principalTable: "Tags",
+                        principalColumn: "TagId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.InsertData(
                 table: "Authors",
                 columns: new[] { "AuthorId", "Email", "Name", "Phone", "Surname" },
@@ -217,6 +257,18 @@ namespace Editoria.Data.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "Tags",
+                columns: new[] { "TagId", "Description", "Name" },
+                values: new object[,]
+                {
+                    { 1, "Все, что связано с кодированием, языками программирования и разработкой ПО", "Программирование" },
+                    { 2, "Научные достижения, открытия и исследования", "Наука" },
+                    { 3, "Советы по здоровью, медицина и здоровый образ жизни", "Здоровье" },
+                    { 4, "Предпринимательство, управление и финансы", "Бизнес" },
+                    { 5, "Учеба, курсы, саморазвитие и обучение", "Образование" }
+                });
+
+            migrationBuilder.InsertData(
                 table: "Newspapers",
                 columns: new[] { "NewspaperId", "Circulation", "EditorId", "Name", "Region", "Type" },
                 values: new object[,]
@@ -249,13 +301,13 @@ namespace Editoria.Data.Migrations
                 columns: new[] { "AdvertisementId", "Cost", "IssueId", "Text", "Type" },
                 values: new object[,]
                 {
-                    { 1, 100.50m, 1, "This is a banner advertisement.", "Banner" },
-                    { 2, 200.00m, 1, "This is a popup advertisement.", "Popup" },
-                    { 3, 500.00m, 2, "This is a video advertisement.", "Video" },
-                    { 4, 50.00m, 2, "This is a text advertisement.", "Text" },
-                    { 5, 120.00m, 3, "This is a sidebar advertisement.", "Sidebar" },
-                    { 6, 1000.00m, 3, "This is a full-page advertisement.", "Full-page" },
-                    { 7, 150.75m, 4, "Another banner advertisement.", "Banner" }
+                    { 1, 100.50m, 1, "Скидка 50% на все товары! Только сегодня.", "Баннер" },
+                    { 2, 200.00m, 1, "Подпишитесь на нашу рассылку и получите подарок!", "Всплывающее окно" },
+                    { 3, 500.00m, 2, "Откройте для себя мир новых возможностей с нашим продуктом.", "Видео" },
+                    { 4, 50.00m, 2, "Купите сейчас и получите бесплатную доставку.", "Текст" },
+                    { 5, 120.00m, 3, "Лучшие предложения дня — не пропустите!", "Боковая панель" },
+                    { 6, 1000.00m, 3, "Эксклюзивное предложение! Только для первых 100 клиентов.", "На всю страницу" },
+                    { 7, 150.75m, 4, "Успейте купить! Акция заканчивается через 3 дня.", "Баннер" }
                 });
 
             migrationBuilder.InsertData(
@@ -263,13 +315,29 @@ namespace Editoria.Data.Migrations
                 columns: new[] { "ArticleId", "AuthorId", "CategoryId", "IssueId", "PublicationDate", "Text", "Title" },
                 values: new object[,]
                 {
-                    { 1, 1, 1, 1, new DateTime(2024, 12, 13, 0, 0, 0, 0, DateTimeKind.Unspecified), "Text of article 1", "Article 1" },
-                    { 2, 2, 2, 1, new DateTime(2024, 12, 14, 0, 0, 0, 0, DateTimeKind.Unspecified), "Text of article 2", "Article 2" },
-                    { 3, 3, 3, 2, new DateTime(2024, 12, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "Text of article 3", "Article 3" },
-                    { 4, 4, 1, 2, new DateTime(2024, 12, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), "Text of article 4", "Article 4" },
-                    { 5, 5, 2, 3, new DateTime(2024, 12, 17, 0, 0, 0, 0, DateTimeKind.Unspecified), "Text of article 5", "Article 5" },
-                    { 6, 6, 3, 3, new DateTime(2024, 12, 18, 0, 0, 0, 0, DateTimeKind.Unspecified), "Text of article 6", "Article 6" },
-                    { 7, 7, 1, 4, new DateTime(2024, 12, 19, 0, 0, 0, 0, DateTimeKind.Unspecified), "Text of article 7", "Article 7" }
+                    { 1, 1, 1, 1, new DateTime(2024, 12, 13, 0, 0, 0, 0, DateTimeKind.Unspecified), "Dota 2 — это одна из самых популярных многопользовательских онлайн-игр, разработанная и выпущенная компанией Valve. Игра является продолжением модификации Defense of the Ancients (DotA) для Warcraft III, которая в свою очередь была создана фанатами. В Dota 2 игроки управляют героями с уникальными способностями, сражаясь друг с другом в командных боях на аренах. С момента своего выпуска в 2013 году, игра приобрела огромную популярность благодаря своим глубоко проработанным механикам, регулярным обновлениям и мировой киберспортивной сцене. Чемпионаты, такие как The International, привлекли внимание зрителей со всего мира и сделали Dota 2 одной из самых зрелищных и высокооплачиваемых игр в истории киберспорта.", "Dota 2: История и эволюция игры" },
+                    { 2, 2, 2, 1, new DateTime(2024, 12, 14, 0, 0, 0, 0, DateTimeKind.Unspecified), "Наруто — это культовое японское аниме, которое стало знаковым не только для поклонников японской культуры, но и для широкой аудитории по всему миру. История рассказывает о мальчике по имени Наруто Узумаке, который мечтает стать Хокаге, сильнейшим ниндзя своей деревни. Сюжет не только захватывает своим экшеном, но и затрагивает важные философские вопросы, такие как борьба за признание, ценность дружбы и преданности, а также то, что настоящая сила заключается не в физической мощи, а в решимости идти вперёд, несмотря на трудности. Аниме также прекрасно сочетает элементы боевых искусств и магии, что делает его одним из самых успешных проектов в истории японской анимации.", "Наруто: Путь Ниндзя и философия силы" },
+                    { 3, 3, 3, 2, new DateTime(2024, 12, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "C# (C-Sharp) — это объектно-ориентированный язык программирования, разработанный компанией Microsoft. Он является частью .NET Framework и используется для разработки различных приложений: от десктопных до мобильных и веб-приложений. C# сочетает в себе простоту и мощь, что делает его отличным выбором как для новичков, так и для опытных разработчиков. Основные особенности языка — это строгая типизация, поддержка параллельных вычислений, обработка исключений и богатая стандартная библиотека. C# активно используется в разработке игр (через Unity), а также в построении масштабируемых веб-приложений с использованием ASP.NET Core.", "C# для начинающих: Основы языка программирования" },
+                    { 4, 4, 1, 2, new DateTime(2024, 12, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), "React — это библиотека JavaScript, разработанная Facebook для создания пользовательских интерфейсов. Она позволяет строить веб-приложения с динамическими и интерактивными интерфейсами, обновляя только те части страницы, которые изменяются. React использует концепцию виртуального DOM, что позволяет значительно улучшить производительность при изменении данных. Библиотека также поддерживает компонентный подход, где каждый элемент интерфейса является независимым компонентом, который можно повторно использовать и тестировать. React является популярным выбором для разработки сложных одностраничных приложений (SPA), и используется в таких крупных проектах, как Facebook, Instagram и WhatsApp.", "React: Введение в библиотеку для создания интерфейсов" },
+                    { 5, 5, 2, 3, new DateTime(2024, 12, 17, 0, 0, 0, 0, DateTimeKind.Unspecified), "Unity — это одна из самых популярных платформ для разработки игр. С её помощью можно создавать игры как для мобильных устройств, так и для ПК, консолей и VR-устройств. Unity имеет мощный визуальный редактор, позволяющий быстро прототипировать игровые механики, а также использовать готовые ассеты и ресурсы из Unity Asset Store. Для создания игры не нужно быть опытным программистом — базовые знания о том, как работают игровые движки, и понимание принципов геймдизайна будут полезны для начала. Unity поддерживает множество языков программирования, но C# является основным для разработки в этом движке, что делает его отличным выбором для начинающих разработчиков игр.", "Как сделать свою первую игру с использованием Unity" },
+                    { 6, 6, 1, 3, new DateTime(2024, 12, 18, 0, 0, 0, 0, DateTimeKind.Unspecified), "Counter-Strike 2 — это продолжение культовой серии шутеров от первого лица, которая оказала значительное влияние на жанр многопользовательских игр. В новой версии, выпущенной после успешной первой игры и её многочисленных обновлений, игроки снова встают на одну из сторон — террористов или антитеррористов — и сражаются друг с другом в напряженных матчах. Главным новшеством является улучшенная графика и физика игры, а также новые карты, оружие и режимы. Counter-Strike 2 продолжает поддерживать активное сообщество игроков и киберспортивные турниры, такие как ESL и BLAST Premier, привлекая игроков со всего мира. Игра сочетает в себе динамичность, тактический подход и командную работу, что делает её одной из самых популярных многопользовательских игр в истории.", "Counter-Strike 2: Революция в игровом процессе" },
+                    { 7, 7, 1, 4, new DateTime(2024, 12, 19, 0, 0, 0, 0, DateTimeKind.Unspecified), "Detroit: Become Human — это интерактивная драма и приключенческая игра, разработанная студией Quantic Dream. Игра разворачивается в будущем, где андроиды начинают обретать сознание и задаваться вопросами о своей роли в обществе. История фокусируется на трёх персонажах: андроиде-слуге Каре, андроиде-полицейском Конноре и андроиде-революционере Маркусе, которые оказываются втянутыми в борьбу за свободу и равенство. В игре принимаются важнейшие моральные решения, которые влияют на развитие событий, что делает каждый проход уникальным. Визуальный стиль игры впечатляет, а сюжет задаёт вопросы о природе человечности, моральных дилеммах и том, как мы относимся к технологиям, которые создаём.", "Detroit: Become Human — наше будущее будущее" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "ArticleTags",
+                columns: new[] { "ArticleId", "TagId" },
+                values: new object[,]
+                {
+                    { 1, 1 },
+                    { 1, 2 },
+                    { 2, 3 },
+                    { 3, 4 },
+                    { 4, 1 },
+                    { 4, 5 },
+                    { 5, 3 },
+                    { 6, 2 },
+                    { 7, 4 }
                 });
 
             migrationBuilder.CreateIndex(
@@ -293,6 +361,11 @@ namespace Editoria.Data.Migrations
                 column: "IssueId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ArticleTags_TagId",
+                table: "ArticleTags",
+                column: "TagId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Issues_NewspaperId",
                 table: "Issues",
                 column: "NewspaperId");
@@ -311,10 +384,16 @@ namespace Editoria.Data.Migrations
                 name: "Advertisements");
 
             migrationBuilder.DropTable(
-                name: "Articles");
+                name: "ArticleTags");
 
             migrationBuilder.DropTable(
                 name: "Users");
+
+            migrationBuilder.DropTable(
+                name: "Articles");
+
+            migrationBuilder.DropTable(
+                name: "Tags");
 
             migrationBuilder.DropTable(
                 name: "Authors");
