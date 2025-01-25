@@ -18,9 +18,18 @@ namespace Editoria.Data.Repository
         {
             _db = db;
         }
-        public void AddArticle(Article article)
+        public void AddArticle(Article article, List<int> tagIds)
         {
             _db.Articles.Add(article);
+            _db.SaveChanges();
+
+            var articleTag = tagIds.Select(tagId => new ArticleTag
+            {
+                ArticleId = article.ArticleId,
+                TagId = tagId
+            }).ToList();
+
+            _db.ArticleTags.AddRange(articleTag);
             _db.SaveChanges();
         }
 
@@ -40,6 +49,8 @@ namespace Editoria.Data.Repository
                 .Include(a => a.Issue)
                 .Include(a => a.Category)
                 .Include(a => a.Author)
+                .Include(a => a.ArticleTags) 
+                    .ThenInclude(at => at.Tag) 
                 .ToList();
         }
 
@@ -49,6 +60,8 @@ namespace Editoria.Data.Repository
                 .Include(a => a.Issue)
                 .Include(a => a.Category)
                 .Include(a => a.Author)
+                .Include(a => a.ArticleTags)
+                    .ThenInclude(at => at.Tag)
                 .FirstOrDefault(a => a.ArticleId == articleId);
 
             return article;
@@ -82,10 +95,31 @@ namespace Editoria.Data.Repository
             }).ToList();
         }
 
-        public void UpdateArticle(Article article)
+        public List<SelectListItem> GetTagSelectList()
+        {
+            return _db.Tags.Select(t => new SelectListItem
+            {
+                Text = t.Name,
+                Value = t.TagId.ToString()
+            }).ToList();
+        }
+
+        public void UpdateArticle(Article article, List<int> tagIds)
         {
             _db.Articles.Update(article);
             _db.SaveChanges();
+
+            var existingTags = _db.ArticleTags.Where(at => at.ArticleId == article.ArticleId).ToList();
+            _db.ArticleTags.RemoveRange(existingTags);
+
+            var newTags = tagIds.Select(tagId => new ArticleTag
+            {
+                ArticleId = article.ArticleId,
+                TagId = tagId
+            }).ToList();
+
+            _db.ArticleTags.AddRange(newTags);
+            _db.SaveChanges(); 
         }
     }
 }
