@@ -49,6 +49,13 @@
             <span asp-validation-for="Article.AuthorId" class="text-danger"></span>
         </div>
 
+        <div class="mb-3 row p-1">
+            <label asp-for="SelectedTags" class="p-0">Теги</label>
+            <select asp-for="SelectedTags" asp-items="Model.Tags" class="form-control" multiple>
+            </select>
+            <span asp-validation-for="SelectedTags" class="text-danger"></span>
+        </div>
+
         <div class="row">
             <div class="col-3">
                 <button type="submit" class="btn btn-primary form-control">

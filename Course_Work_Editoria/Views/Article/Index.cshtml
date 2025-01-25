@@ -15,11 +15,11 @@
         <thead>
             <tr>
                 <th>Заголовок</th>
-                <th>Текст</th>
                 <th>Дата публикации</th>
                 <th>Выпуск Id</th>
                 <th>Категория</th>
                 <th>Автор</th>
+                <th>Теги</th>
                 <th></th>
             </tr>
         </thead>
@@ -27,12 +27,18 @@
             @foreach (var article in Model)
             {
                     <tr>
-                        <td>@article.Title</td>
-                        <td>@article.Text</td> 
-                        <td>@article.PublicationDate.ToString("dd.MM.yyyy")</td>
+                    <td>
+                        <a asp-controller="Article" asp-action="Details" asp-route-articleId="@article.ArticleId" class="text-decoration-underline text-primary">
+                            @article.Title
+                        </a>
+                    </td>
+                    <td>@article.PublicationDate.ToString("dd.MM.yyyy")</td>
                         <td>@article.Issue.IssueId</td>
                         <td>@article.Category.Name</td>
                         <td>@article.Author.Name @article.Author.Surname</td>
+                        <td>
+                            @string.Join(", ", article.ArticleTags.Select(at => at.Tag.Name))
+                        </td>
                         <td>
                             <div class="btn-group">
                                 <a asp-controller="Article" asp-action="Upsert" asp-route-articleId="@article.ArticleId" class="btn btn-primary mx-2">

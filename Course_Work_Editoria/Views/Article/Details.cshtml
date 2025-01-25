@@ -1,0 +1,20 @@
+﻿@model Article
+
+<div class="border p-3 mt-4">
+    <div class="row pb-2">
+        <h2 class="text-primary">
+            <i class="bi bi-book"></i> Содержание статьи
+        </h2>
+        <hr />
+    </div>
+
+    <div class="mb-3 row p-1">
+        <label asp-for="Text" class="p-0">Текст</label>
+        <textarea asp-for="Text" disabled class="form-control" rows="5"></textarea>
+    </div>
+
+    <a asp-controller="Article" asp-action="Index" class="btn btn-secondary border border-dark">
+        <i class="bi bi-arrow-left"></i> Назад
+    </a>
+
+</div>
