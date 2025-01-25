@@ -13,5 +13,9 @@ namespace Editoria.Models.ViewModel
         public List<SelectListItem> Categories { get; set; }
         [ValidateNever]
         public List<SelectListItem> Authors { get; set; }
+        [ValidateNever]
+        public List<SelectListItem> Tags { get; set; }
+        public List<int> SelectedTags { get; set; }
+
     }
 }
