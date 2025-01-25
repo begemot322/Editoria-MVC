@@ -12,11 +12,12 @@ namespace Editoria.Data.Repository.IRepository
     {
         IEnumerable<Article> GetAllArticles();
         Article GetArticleById(int articleId);
-        void AddArticle(Article article);
-        void UpdateArticle(Article article);
+        void AddArticle(Article article, List<int> tagIds);
+        void UpdateArticle(Article article, List<int> tagIds);
         void DeleteArticle(int articleId);
         List<SelectListItem> GetIssueSelectList();
         List<SelectListItem> GetCategorySelectList();
         List<SelectListItem> GetAuthorSelectList();
+        List<SelectListItem> GetTagSelectList();
     }
 }
