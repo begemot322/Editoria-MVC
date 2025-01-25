@@ -33,5 +33,9 @@ namespace Editoria.Models.Entities
         public int AuthorId { get; set; }
         [ValidateNever]
         public Author Author { get; set; }
+
+        // Связь многие-ко-многим с тегами
+        [ValidateNever]
+        public ICollection<ArticleTag> ArticleTags { get; set; }
     }
 }
