@@ -1,5 +1,4 @@
-﻿using Editoria.Data.Context;
-using Editoria.Data.Repository.IRepository;
+﻿using Editoria.Data.Repository.IRepository;
 using Editoria.Models.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

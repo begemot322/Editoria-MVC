@@ -23,6 +23,15 @@ namespace Course_Work_Editoria.Controllers
             var articles = _articleRepository.GetAllArticles();
             return View(articles);
         }
+        public IActionResult Details(int articleId)
+        {
+            var article = _articleRepository.GetArticleById(articleId);
+            if (article == null)
+            {
+                return NotFound();
+            }
+            return View(article);
+        }
 
         public IActionResult Upsert(int? articleId)
         {
@@ -32,7 +41,11 @@ namespace Course_Work_Editoria.Controllers
                 Categories = _articleRepository.GetCategorySelectList(),
                 Authors = _articleRepository.GetAuthorSelectList(),
                 Article = articleId.HasValue?
-                _articleRepository.GetArticleById(articleId.Value):new Article()
+                    _articleRepository.GetArticleById(articleId.Value):new Article(),
+                Tags = _articleRepository.GetTagSelectList(),
+                SelectedTags = articleId.HasValue?
+                    _articleRepository.GetArticleById(articleId.Value)
+                    .ArticleTags.Select(at=>at.TagId).ToList(): new List<int>()
             };
 
             if (articleId.HasValue && viewModel.Article == null)
@@ -49,12 +62,12 @@ namespace Course_Work_Editoria.Controllers
             {
                 if (viewModel.Article.ArticleId == 0)
                 {
-                    _articleRepository.AddArticle(viewModel.Article);
+                    _articleRepository.AddArticle(viewModel.Article, viewModel.SelectedTags);
                     TempData["success"] = "Статья успешно добавлена";
                 }
                 else
                 {
-                    _articleRepository.UpdateArticle(viewModel.Article);
+                    _articleRepository.UpdateArticle(viewModel.Article, viewModel.SelectedTags);
                     TempData["success"] = "Статья успешно обновлена";
                 }
                 return RedirectToAction("Index");
@@ -63,6 +76,7 @@ namespace Course_Work_Editoria.Controllers
             viewModel.Issues = _articleRepository.GetIssueSelectList();
             viewModel.Categories = _articleRepository.GetCategorySelectList();
             viewModel.Authors = _articleRepository.GetAuthorSelectList();
+            viewModel.Tags = _articleRepository.GetTagSelectList();
 
             return View(viewModel);
         }
@@ -85,5 +99,6 @@ namespace Course_Work_Editoria.Controllers
             TempData["success"] = "Статья успешно удалена";
             return RedirectToAction("Index");
         }
+
     }
 }
