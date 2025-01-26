@@ -2,7 +2,7 @@
 
 namespace Editoria.Models.ViewModel
 {
-    public class EditorListViewModel
+    public class EditorFilterVM
     {
         public IEnumerable<Editor> Editors { get; set; }
         public string Name { get; set; }
