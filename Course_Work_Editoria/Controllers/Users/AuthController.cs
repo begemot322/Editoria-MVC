@@ -1,5 +1,6 @@
 ﻿using Course_Work_Editoria.Authentication.Services;
 using Editoria.Models.Requests;
+using Editoria.Models.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Course_Work_Editoria.Controllers.Users
@@ -16,20 +17,30 @@ namespace Course_Work_Editoria.Controllers.Users
         [HttpGet]
         public IActionResult Register()
         {
-            return View();
+            var roles = _userService.GetRoles();
+
+            var registerRequest = new RegisterUserRequestVM
+            {
+                RegisterUserRequest = new RegisterUserRequest(),
+                Roles = roles,
+            };
+            return View(registerRequest);
         }
 
         [HttpPost]
-        public IActionResult Register(RegisterUserRequest request, IFormFile? imageFile)
+        public IActionResult Register(RegisterUserRequestVM viewModel, IFormFile? imageFile)
         {
             if (ModelState.IsValid)
             {
-                _userService.Register(request.UserName, request.Email, request.Password, request.PhoneNumber, imageFile);
+                var request = viewModel.RegisterUserRequest;
+                _userService.Register(request.UserName, request.Email, request.Password, request.PhoneNumber, request.Role, imageFile);
+
                 TempData["success"] = "Вы успешно зарегистрировались";
                 return RedirectToAction("Index", "Home");
             }
 
-            return View(request);
+            viewModel.Roles = _userService.GetRoles();
+            return View(viewModel);
         }
 
         [HttpGet]
