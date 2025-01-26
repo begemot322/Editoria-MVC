@@ -21,7 +21,7 @@ namespace Course_Work_Editoria.Controllers
         {
             var editors = _editorRepository.GetFilteredEditors(name, email);
 
-            EditorListViewModel viewModel = new EditorListViewModel
+            EditorFilterVM viewModel = new EditorFilterVM
             {
                 Editors = editors.ToList(),
                 Name = name,
