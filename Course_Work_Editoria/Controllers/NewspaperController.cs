@@ -3,6 +3,7 @@ using Editoria.Data.Repository.IRepository;
 using Editoria.Models;
 using Editoria.Models.Entities;
 using Editoria.Models.ViewModel ;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -17,12 +18,14 @@ namespace Course_Work_Editoria.Controllers
             _newspaperRepository = newspaperRepository;
         }
 
+        [Authorize(Policy = "UserPolicy")]
         public IActionResult Index()
         {
             var newspaperList = _newspaperRepository.GetAllNewspapers();
             return View(newspaperList);
         }
 
+        [Authorize(Policy = "ModeratorPolicy")]
         public IActionResult Upsert(int? newspaperId)
         {
             var viewModel = new NewspaperVM
@@ -40,6 +43,7 @@ namespace Course_Work_Editoria.Controllers
         }
 
         [HttpPost]
+        [Authorize(Policy = "ModeratorPolicy")]
         public IActionResult Upsert(NewspaperVM viewModel)
         {
             if (ModelState.IsValid)
@@ -72,6 +76,7 @@ namespace Course_Work_Editoria.Controllers
             return View(viewModel);
         }
 
+        [Authorize(Policy = "AdminPolicy")]
         public IActionResult Delete(int newspaperId)
         {
             var newspaper = _newspaperRepository.GetNewspaperById(newspaperId);
@@ -85,6 +90,7 @@ namespace Course_Work_Editoria.Controllers
         }
 
         [HttpPost, ActionName("Delete")]
+        [Authorize(Policy = "AdminPolicy")]
         public IActionResult DeletePOST(int newspaperId)
         {
             _newspaperRepository.DeleteNewspaper(newspaperId);

@@ -1,6 +1,7 @@
 ﻿using Editoria.Data.Context;
 using Editoria.Data.Repository.IRepository;
 using Editoria.Models.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Course_Work_Editoria.Controllers
@@ -12,11 +13,15 @@ namespace Course_Work_Editoria.Controllers
         {
             _categoryRepository = categoryRepository;
         }
+
+        [Authorize(Policy = "UserPolicy")]
         public IActionResult Index()
         {
             var categoryList = _categoryRepository.GetAllCategories();
             return View(categoryList);
         }
+
+        [Authorize(Policy = "ModeratorPolicy")]
         public IActionResult Upsert(int? categoryId)
         {
             var category = categoryId.HasValue ?
@@ -31,6 +36,7 @@ namespace Course_Work_Editoria.Controllers
         }
 
         [HttpPost]
+        [Authorize(Policy = "ModeratorPolicy")]
         public IActionResult Upsert(Category category)
         {
             if (ModelState.IsValid)
@@ -50,6 +56,7 @@ namespace Course_Work_Editoria.Controllers
             return View(category);
         }
 
+        [Authorize(Policy = "AdminPolicy")]
         public IActionResult Delete(int categoryId)
         {
             var category = _categoryRepository.GetCategoryById(categoryId);
@@ -61,7 +68,9 @@ namespace Course_Work_Editoria.Controllers
 
             return View(category);
         }
+
         [HttpPost, ActionName("Delete")]
+        [Authorize(Policy = "AdminPolicy")]
         public IActionResult DeletePOST(int categoryId)
         {
             _categoryRepository.DeleteCategory(categoryId);

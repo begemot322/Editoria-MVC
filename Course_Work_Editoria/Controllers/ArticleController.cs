@@ -3,6 +3,7 @@ using Editoria.Data.Repository.IRepository;
 using Editoria.Models;
 using Editoria.Models.Entities;
 using Editoria.Models.ViewModel ;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -18,11 +19,14 @@ namespace Course_Work_Editoria.Controllers
             _articleRepository = articleRepository;
         }
 
+        [Authorize(Policy = "UserPolicy")]
         public IActionResult Index()
         {
             var articles = _articleRepository.GetAllArticles();
             return View(articles);
         }
+
+        [Authorize(Policy = "UserPolicy")]
         public IActionResult Details(int articleId)
         {
             var article = _articleRepository.GetArticleById(articleId);
@@ -33,6 +37,7 @@ namespace Course_Work_Editoria.Controllers
             return View(article);
         }
 
+        [Authorize(Policy = "ModeratorPolicy")]
         public IActionResult Upsert(int? articleId)
         {
             var viewModel = new ArticleVM
@@ -56,6 +61,7 @@ namespace Course_Work_Editoria.Controllers
         }
 
         [HttpPost]
+        [Authorize(Policy = "ModeratorPolicy")]
         public IActionResult Upsert(ArticleVM viewModel)
         {
             if (ModelState.IsValid)
@@ -81,6 +87,7 @@ namespace Course_Work_Editoria.Controllers
             return View(viewModel);
         }
 
+        [Authorize(Policy = "AdminPolicy")]
         public IActionResult Delete(int articleId)
         {
             var article = _articleRepository.GetArticleById(articleId);
@@ -92,6 +99,7 @@ namespace Course_Work_Editoria.Controllers
         }
 
         [HttpPost, ActionName("Delete")]
+        [Authorize(Policy = "AdminPolicy")]
         public IActionResult DeletePOST(int articleId)
         {
            _articleRepository.DeleteArticle(articleId);

@@ -2,6 +2,7 @@
 using Editoria.Data.Repository.IRepository;
 using Editoria.Models.Entities;
 using Editoria.Models.ViewModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Course_Work_Editoria.Controllers
@@ -15,6 +16,7 @@ namespace Course_Work_Editoria.Controllers
             _editorRepository = editorRepository;
         }
 
+        [Authorize(Policy = "UserPolicy")]
         public IActionResult Index(string name, string email)
         {
             var editors = _editorRepository.GetFilteredEditors(name, email);
@@ -29,6 +31,7 @@ namespace Course_Work_Editoria.Controllers
             return View(viewModel);
         }
 
+        [Authorize(Policy = "ModeratorPolicy")]
         public IActionResult Upsert(int? editorId)
         {
             var editor = editorId.HasValue ?
@@ -42,6 +45,7 @@ namespace Course_Work_Editoria.Controllers
         }
 
         [HttpPost]
+        [Authorize(Policy = "ModeratorPolicy")]
         public IActionResult Upsert(Editor editor)
         {
             if (ModelState.IsValid)
@@ -61,7 +65,7 @@ namespace Course_Work_Editoria.Controllers
             return View(editor);
         }
 
-
+        [Authorize(Policy = "AdminPolicy")]
         public IActionResult Delete(int editorId)
         {
             var editor = _editorRepository.GetEditorById(editorId);
@@ -74,6 +78,7 @@ namespace Course_Work_Editoria.Controllers
         }
 
         [HttpPost, ActionName("Delete")]
+        [Authorize(Policy = "AdminPolicy")]
         public IActionResult DeletePOST(int editorId)
         {
             _editorRepository.DeleteEditor(editorId);

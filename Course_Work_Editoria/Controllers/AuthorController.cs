@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Course_Work_Editoria.Controllers
 {
-    [Authorize]
     public class AuthorController : Controller
     {
 
@@ -15,13 +14,14 @@ namespace Course_Work_Editoria.Controllers
             _authorRepository = authorRepository;
         }
 
-        [Authorize]
+        [Authorize(Policy = "UserPolicy")]
         public IActionResult Index()
         {
             var authorList = _authorRepository.GetAllAuthors();
             return View(authorList);
         }
 
+        [Authorize(Policy = "ModeratorPolicy")]
         public IActionResult Upsert(int? authorId)
         {
             var author = authorId.HasValue?
@@ -36,6 +36,7 @@ namespace Course_Work_Editoria.Controllers
         }
 
         [HttpPost]
+        [Authorize(Policy = "ModeratorPolicy")]
         public IActionResult Upsert(Author author)
         {
             if (ModelState.IsValid)
@@ -55,6 +56,7 @@ namespace Course_Work_Editoria.Controllers
             return View(author);
         }
 
+        [Authorize(Policy = "AdminPolicy")]
         public IActionResult Delete(int AuthorId)
         {
            var author = _authorRepository.GetAuthorById(AuthorId);
@@ -67,6 +69,7 @@ namespace Course_Work_Editoria.Controllers
         }
 
         [HttpPost, ActionName("Delete")]
+        [Authorize(Policy = "AdminPolicy")]
         public IActionResult DeletePOST(int AuthorId)
         {
             _authorRepository.DeleteAuthor(AuthorId);

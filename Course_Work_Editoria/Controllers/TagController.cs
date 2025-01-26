@@ -1,5 +1,6 @@
 ﻿using Editoria.Data.Repository.IRepository;
 using Editoria.Models.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Course_Work_Editoria.Controllers
@@ -11,12 +12,15 @@ namespace Course_Work_Editoria.Controllers
         {
             _tagRepository = tagRepository;
         }
+
+        [Authorize(Policy = "UserPolicy")]
         public IActionResult Index()
         {
             var tagList = _tagRepository.GetAllTags();
             return View(tagList);
         }
 
+        [Authorize(Policy = "ModeratorPolicy")]
         public IActionResult Upsert(int? tagId)
         {
             var tag = tagId.HasValue ?
@@ -31,6 +35,7 @@ namespace Course_Work_Editoria.Controllers
         }
 
         [HttpPost]
+        [Authorize(Policy = "ModeratorPolicy")]
         public IActionResult Upsert(Tag tag)
         {
             if (ModelState.IsValid)
@@ -50,6 +55,7 @@ namespace Course_Work_Editoria.Controllers
             return View(tag);
         }
 
+        [Authorize(Policy = "AdminPolicy")]
         public IActionResult Delete(int tagId)
         {
             var tag = _tagRepository.GetTagById(tagId);
@@ -63,6 +69,7 @@ namespace Course_Work_Editoria.Controllers
         }
 
         [HttpPost, ActionName("Delete")]
+        [Authorize(Policy = "AdminPolicy")]
         public IActionResult DeletePOST(int tagId)
         {
             _tagRepository.DeleteTag(tagId);

@@ -6,6 +6,7 @@ using Editoria.Models.ViewModel;
 using Editoria.Data.Context;
 using Editoria.Data.Repository.IRepository;
 using Editoria.Models.Entities;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Course_Work_Editoria.Controllers
 {
@@ -18,6 +19,7 @@ namespace Course_Work_Editoria.Controllers
             _advertisementRepository = advertisementRepository;
         }
 
+        [Authorize(Policy = "UserPolicy")]
         public IActionResult Index(string typeFilter, int? issueFilter)
         {
             var advertisementList = _advertisementRepository.GetFilteredAdvertisements(typeFilter, issueFilter);
@@ -33,6 +35,7 @@ namespace Course_Work_Editoria.Controllers
             return View(viewModel);
         }
 
+        [Authorize(Policy = "ModeratorPolicy")]
         public IActionResult Upsert(int? advertisementId)
         {
             var viewModel = new AdvertisementVM()
@@ -51,6 +54,7 @@ namespace Course_Work_Editoria.Controllers
         }
 
         [HttpPost]
+        [Authorize(Policy = "ModeratorPolicy")]
         public IActionResult Upsert(AdvertisementVM viewModel)
         {
             if (ModelState.IsValid)
@@ -71,6 +75,7 @@ namespace Course_Work_Editoria.Controllers
             return View(viewModel);
         }
 
+        [Authorize(Policy = "AdminPolicy")]
         public IActionResult Delete(int advertisementId)
         {
            var advertisement = _advertisementRepository.GetAdvertisementWithIssue(advertisementId);
@@ -82,6 +87,7 @@ namespace Course_Work_Editoria.Controllers
         }
 
         [HttpPost, ActionName("Delete")]
+        [Authorize(Policy = "AdminPolicy")]
         public IActionResult DeletePOST(int advertisementId)
         {
             _advertisementRepository.DeleteAdvertisement(advertisementId);
