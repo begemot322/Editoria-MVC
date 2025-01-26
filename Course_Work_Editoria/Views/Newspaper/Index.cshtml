@@ -6,7 +6,7 @@
             <h2 class="text-primary">Список газет</h2>
         </div>
         <div class="col-6 text-end">
-            <a asp-controller="Newspaper" asp-action="Upsert" class="btn btn-primary">
+            <a asp-controller="Newspaper" asp-action="Upsert" class="btn btn-primary" policy="ModeratorPolicy">
                 <i class="bi bi-plus-circle"></i> Добавить газету
             </a>
         </div>
@@ -32,10 +32,10 @@
                     <td>@newspaper.Editor.Name @newspaper.Editor.Surname</td>
                     <td>
                         <div class="btn-group">
-                            <a asp-controller="Newspaper" asp-action="Upsert" asp-route-newspaperId="@newspaper.NewspaperId" class="btn btn-primary mx-2">
+                            <a asp-controller="Newspaper" asp-action="Upsert" asp-route-newspaperId="@newspaper.NewspaperId" class="btn btn-primary mx-2" policy="ModeratorPolicy">
                                 <i class="bi bi-pencil-square"></i> Изменить
                             </a>
-                            <a asp-controller="Newspaper" asp-action="Delete" asp-route-newspaperId="@newspaper.NewspaperId" class="btn btn-danger mx-2">
+                            <a asp-controller="Newspaper" asp-action="Delete" asp-route-newspaperId="@newspaper.NewspaperId" class="btn btn-danger mx-2" policy="AdminPolicy">
                                 <i class="bi bi-trash-fill"></i> Удалить
                             </a>
                         </div>

@@ -4,6 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Editoria</title>
+    <link rel="icon" href="~/images/free-icon-newspaper-2567498.png" />
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Course_Work_Editoria.styles.css" asp-append-version="true" />
@@ -21,31 +22,28 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
+                        <li class="nav-item" policy="UserPolicy">
                             <a class="nav-link" asp-controller="Category" asp-action="Index">Category</a>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item" policy="UserPolicy">
                             <a class="nav-link" asp-controller="Author" asp-action="Index">Author</a>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item" policy="UserPolicy">
                             <a class="nav-link" asp-controller="Editor" asp-action="Index">Editor</a>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item" policy="UserPolicy">
                             <a class="nav-link" asp-controller="Newspaper" asp-action="Index">Newspaper</a>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item" policy="UserPolicy">
                             <a class="nav-link" asp-controller="Issue"  asp-action="Index">Issue</a>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item" policy="UserPolicy">
                             <a class="nav-link" asp-controller="Advertisement" asp-action="Index">Advertisement</a>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item" policy="UserPolicy">
                             <a class="nav-link" asp-controller="Article" asp-action="Index">Article</a>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item" policy="UserPolicy">
                             <a class="nav-link" asp-controller="Tag" asp-action="Index">Tag</a>
                         </li>
                     </ul>
