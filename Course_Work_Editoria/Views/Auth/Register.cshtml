@@ -4,7 +4,7 @@
     <div class="card-header bg-secondary bg-black ml-0 py-4">
         <div class="row">
             <div class="col-12 text-center">
-                <h2 class="text-white mt-1">Register</h2>
+                <h2 class="text-white mt-1">Регистрация</h2>
             </div>
         </div>
     </div>
@@ -14,12 +14,12 @@
                 <section>
                     <form id="register" method="post" enctype="multipart/form-data">
                         <h3 class="border-bottom pb-3 mb-4 text-secondary text-center">
-                            Create a new account.
+                            Создать новый аккаунт
                         </h3>
                         <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
                         <div class="form-floating mb-3">
                             <input asp-for="RegisterUserRequest.UserName" class="form-control" placeholder="Username" />
-                            <label asp-for="RegisterUserRequest.UserName" class="form-label">Username</label>
+                            <label asp-for="RegisterUserRequest.UserName" class="form-label">Имя</label>
                             <span asp-validation-for="RegisterUserRequest.UserName" class="text-danger"></span>
                         </div>
                         <div class="form-floating mb-3">
