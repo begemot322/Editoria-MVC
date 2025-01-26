@@ -6,10 +6,12 @@ namespace Course_Work_Editoria.Controllers.Users
     public class ProfileController : Controller
     {
         private readonly UserService _userService;
+        private readonly ProfileService _profileService;
 
-        public ProfileController(UserService userService)
+        public ProfileController(UserService userService, ProfileService profileService)
         {
             _userService = userService;
+            _profileService = profileService;
         }
 
         [HttpGet]
@@ -38,7 +40,7 @@ namespace Course_Work_Editoria.Controllers.Users
 
             try
             {
-                _userService.ChangePassword(Guid.Parse(userId), currentPassword, newPassword, confirmPassword);
+                _profileService.ChangePassword(Guid.Parse(userId), currentPassword, newPassword, confirmPassword);
                 TempData["success"] = "Пароль успешно изменён.";
                 return RedirectToAction("Index");
             }
