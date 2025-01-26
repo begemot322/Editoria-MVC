@@ -46,9 +46,11 @@ namespace Course_Work_Editoria.Extensions
         public static WebApplicationBuilder AddApplicationServices(this WebApplicationBuilder builder)
         {
             builder.Services.AddScoped<UserService>();
+            builder.Services.AddScoped<ProfileService>();
             builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
 
             builder.Services.AddHttpContextAccessor();
+            builder.Services.AddMemoryCache();
 
             return builder;
         }
