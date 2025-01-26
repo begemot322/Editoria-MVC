@@ -2,6 +2,7 @@
 using Editoria.Data.Repository.IRepository;
 using Editoria.Models;
 using Editoria.Models.Entities;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Data;
 
 namespace Course_Work_Editoria.Authentication.Services
@@ -22,7 +23,7 @@ namespace Course_Work_Editoria.Authentication.Services
             _webHostEnvironment = webHostEnvironment;
         }
 
-        public void Register(string userName, string email, string password, string phoneNumber, IFormFile? imageFile)
+        public void Register(string userName, string email, string password, string phoneNumber,string role, IFormFile? imageFile)
         {
             var hashedPassword = _passwordHasher.Generate(password);
 
@@ -52,6 +53,7 @@ namespace Course_Work_Editoria.Authentication.Services
                 PasswordHash = hashedPassword,
                 PhoneNumber = phoneNumber,
                 ImageUrl = imageUrl,
+                Role = role,
             };
 
             _userRepository.Add(user);
@@ -115,6 +117,15 @@ namespace Course_Work_Editoria.Authentication.Services
             user.PasswordHash = newHashedPassword;
 
             _userRepository.Update(user);
+        }
+        public List<SelectListItem> GetRoles()
+        {
+            return new List<SelectListItem>
+            {
+                new SelectListItem { Value = "User", Text = "User" },
+                new SelectListItem { Value = "Admin", Text = "Admin" },
+                new SelectListItem { Value = "Moderator", Text = "Moderator" }
+            };
         }
     }
 }
