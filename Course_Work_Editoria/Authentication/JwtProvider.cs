@@ -21,6 +21,7 @@ namespace Course_Work_Editoria.Authentication
             {
                 new Claim("userId", user.Id.ToString()),
                 new Claim(ClaimTypes.Name, user.UserName),
+                new Claim(ClaimTypes.Role, user.Role),
             };
 
             var signingCredentials = new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_options.SecretKey)),
