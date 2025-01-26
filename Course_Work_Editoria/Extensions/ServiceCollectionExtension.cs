@@ -48,6 +48,8 @@ namespace Course_Work_Editoria.Extensions
             builder.Services.AddScoped<UserService>();
             builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
 
+            builder.Services.AddHttpContextAccessor();
+
             return builder;
         }
         public static WebApplicationBuilder AddAuthenticationServices(this WebApplicationBuilder builder)
@@ -63,8 +65,6 @@ namespace Course_Work_Editoria.Extensions
                 })
                 .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
                 {
-                    options.SaveToken = true;
-
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateIssuer = false,
@@ -85,7 +85,20 @@ namespace Course_Work_Editoria.Extensions
                     };
                 });
 
-            builder.Services.AddAuthorization();
+            builder.Services.AddAuthorization(options =>
+            {
+                options.AddPolicy("AdminPolicy", policy =>
+                    policy.RequireRole("Admin"));
+
+                options.AddPolicy("ModeratorPolicy", policy =>
+                    policy.RequireRole("Admin", "Moderator"));
+
+                options.AddPolicy("UserPolicy", policy =>
+                    policy.RequireRole("User", "Admin", "Moderator"));
+
+                options.AddPolicy("GuestPolicy", policy => policy.RequireAssertion(context =>
+                    !context.User.Identity.IsAuthenticated));  
+            });
 
             return builder;
 
