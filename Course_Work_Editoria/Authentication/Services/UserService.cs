@@ -91,40 +91,13 @@ namespace Course_Work_Editoria.Authentication.Services
 
             return user;
         }
-        public void ChangePassword(Guid userId, string currentPassword, string newPassword, string confirmPassword)
-        {
-            if (newPassword != confirmPassword)
-            {
-                throw new Exception("Ваши пароли не совпадают.");
-            }
-
-            var user = _userRepository.GetById(userId);
-
-            if (user == null)
-            {
-                throw new Exception("Пользователь не найден.");
-            }
-
-            var isPasswordValid = _passwordHasher.Verify(currentPassword, user.PasswordHash);
-
-            if(isPasswordValid == false)
-            {
-                throw new Exception("Неверный текущий пароль.");
-            }
-
-            var newHashedPassword = _passwordHasher.Generate(newPassword);
-
-            user.PasswordHash = newHashedPassword;
-
-            _userRepository.Update(user);
-        }
         public List<SelectListItem> GetRoles()
         {
             return new List<SelectListItem>
             {
                 new SelectListItem { Value = "User", Text = "User" },
+                new SelectListItem { Value = "Moderator", Text = "Moderator" },
                 new SelectListItem { Value = "Admin", Text = "Admin" },
-                new SelectListItem { Value = "Moderator", Text = "Moderator" }
             };
         }
     }
