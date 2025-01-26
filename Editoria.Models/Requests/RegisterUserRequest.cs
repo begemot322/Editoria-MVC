@@ -21,6 +21,7 @@ namespace Editoria.Models.Requests
         [Required(ErrorMessage = "Телефон обязателен.")]
         [Phone(ErrorMessage = "Введите корректный номер телефона.")]
         public string PhoneNumber { get; set; }
+        public string Role { get; set; }
         public string? ImageUrl { get; set; }
     }
 }
