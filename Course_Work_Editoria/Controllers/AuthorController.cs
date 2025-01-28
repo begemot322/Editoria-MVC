@@ -1,4 +1,5 @@
-﻿using Editoria.Data.Repository.IRepository;
+﻿using Editoria.Data.Repository;
+using Editoria.Data.Repository.IRepository;
 using Editoria.Models.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -20,6 +21,18 @@ namespace Course_Work_Editoria.Controllers
             var authorList = _authorRepository.GetAllAuthors();
             return View(authorList);
         }
+
+        [Authorize(Policy = "UserPolicy")]
+        public IActionResult Details(int AuthorId)
+        {
+            var author = _authorRepository.GetAuthorById(AuthorId);
+            if (author == null)
+            {
+                return NotFound();
+            }
+            return View(author);
+        }
+
 
         [Authorize(Policy = "ModeratorPolicy")]
         public IActionResult Upsert(int? authorId)

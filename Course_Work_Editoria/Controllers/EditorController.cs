@@ -1,4 +1,5 @@
 ﻿using Editoria.Data.Context;
+using Editoria.Data.Repository;
 using Editoria.Data.Repository.IRepository;
 using Editoria.Models.Entities;
 using Editoria.Models.ViewModel;
@@ -29,6 +30,18 @@ namespace Course_Work_Editoria.Controllers
             };
 
             return View(viewModel);
+        }
+
+        [Authorize(Policy = "UserPolicy")]
+        public IActionResult Details(int editorId)
+        {
+            var editor = _editorRepository.GetEditorById(editorId);
+
+            if (editor == null)
+            {
+                return NotFound();
+            }
+            return View(editor);
         }
 
         [Authorize(Policy = "ModeratorPolicy")]
