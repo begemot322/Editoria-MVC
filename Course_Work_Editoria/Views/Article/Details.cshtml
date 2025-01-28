@@ -9,9 +9,19 @@
     </div>
 
     <div class="mb-3 row p-1">
-        <label asp-for="Text" class="p-0">Текст</label>
         <textarea asp-for="Text" disabled class="form-control" rows="5"></textarea>
     </div>
+
+    <div class="row pb-2 mt-4">
+        <h2 class="text-secondary fs-4">
+            <i class="bi bi-chat-square-text"></i> Мнение автора
+        </h2>
+        <div class="mb-3 row">
+            <p class="form-control bg-white">@Model.AuthorComment</p>
+        </div>
+    </div>
+
+
 
     <a asp-controller="Article" asp-action="Index" class="btn btn-secondary border border-dark">
         <i class="bi bi-arrow-left"></i> Назад

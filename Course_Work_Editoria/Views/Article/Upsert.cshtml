@@ -50,6 +50,12 @@
         </div>
 
         <div class="mb-3 row p-1">
+            <label asp-for="Article.AuthorComment" class="p-0">Мнение автора</label>
+            <input asp-for="Article.AuthorComment" class="form-control" />
+            <span asp-validation-for="Article.AuthorComment" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3 row p-1">
             <label asp-for="SelectedTags" class="p-0">Теги</label>
             <select asp-for="SelectedTags" asp-items="Model.Tags" class="form-control" multiple>
             </select>
