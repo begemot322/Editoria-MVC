@@ -20,7 +20,7 @@
         </div>
 
         <div class="mb-3 row p-1">
-            <label for="Priority" class="form-label">Приоритет (от 1 до 5)</label>
+            <label asp-for="Priority" class="form-label">Приоритет (от 1 до 5)</label>
             <input asp-for="Priority" class="form-control" type="number" min="1" max="5" />
             <span asp-validation-for="Priority" class="text-danger"></span>
         </div>
