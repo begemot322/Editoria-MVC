@@ -16,7 +16,6 @@ namespace Editoria.Models.Entities
 
         [Required(ErrorMessage = "Укажите дату публикации")]
         [DataType(DataType.Date, ErrorMessage = "Неверный формат даты")]
-        [Display(Name = "Дата публикации")]
         public DateTime PublicationDate { get; set; }
 
         // Связь с выпуском
