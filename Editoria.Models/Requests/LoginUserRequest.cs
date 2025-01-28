@@ -15,6 +15,5 @@ namespace Editoria.Models.Requests
         [Required]
         public string Password { get; set; }
 
-
     }
 }
