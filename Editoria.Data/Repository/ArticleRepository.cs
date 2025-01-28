@@ -91,7 +91,7 @@ namespace Editoria.Data.Repository
         public List<SelectListItem> GetIssueSelectList()
         {
             return _db.Issues
-                .Where(i=>i.IsActive)
+                .Where(i=>!i.IsActive)
                 .Select(i => new SelectListItem
             {
                 Text = $"Номер выпуска: {i.IssueId.ToString()} - {i.Information}",
