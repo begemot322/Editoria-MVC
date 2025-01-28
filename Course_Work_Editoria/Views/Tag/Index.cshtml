@@ -22,7 +22,9 @@
                 <th>
                     Описание
                 </th>
-                <th></th>
+                <th>
+                    Популярность
+                </th>
             </tr>
         </thead>
         <tbody>
@@ -31,6 +33,7 @@
                 <tr>
                     <td>@tag.Name</td>
                     <td>@tag.Description</td>
+                    <td>@tag.Popularity</td>
                     <td>
                         <div class="w-90 btn-group">
                             <a asp-controller="Tag" asp-action="Upsert" asp-route-tagId="@tag.TagId" class="btn btn-primary mx-2" policy="ModeratorPolicy">

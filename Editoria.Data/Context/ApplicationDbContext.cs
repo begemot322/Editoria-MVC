@@ -304,11 +304,11 @@ namespace Editoria.Data.Context
              );
 
             modelBuilder.Entity<Tag>().HasData(
-                new Tag { TagId = 1, Name = "Программирование", Description = "Все, что связано с кодированием, языками программирования и разработкой ПО" },
-                new Tag { TagId = 2, Name = "Наука", Description = "Научные достижения, открытия и исследования" },
-                new Tag { TagId = 3, Name = "Здоровье", Description = "Советы по здоровью, медицина и здоровый образ жизни" },
-                new Tag { TagId = 4, Name = "Бизнес", Description = "Предпринимательство, управление и финансы" },
-                new Tag { TagId = 5, Name = "Образование", Description = "Учеба, курсы, саморазвитие и обучение" }
+                new Tag { TagId = 1, Name = "Программирование", Description = "Все, что связано с кодированием, языками программирования и разработкой ПО", Popularity = 4 },
+                new Tag { TagId = 2, Name = "Наука", Description = "Научные достижения, открытия и исследования", Popularity =3 },
+                new Tag { TagId = 3, Name = "Здоровье", Description = "Советы по здоровью, медицина и здоровый образ жизни", Popularity = 5 },
+                new Tag { TagId = 4, Name = "Бизнес", Description = "Предпринимательство, управление и финансы", Popularity = 3 },
+                new Tag { TagId = 5, Name = "Образование", Description = "Учеба, курсы, саморазвитие и обучение", Popularity = 2 }
             );
 
             modelBuilder.Entity<ArticleTag>().HasData(

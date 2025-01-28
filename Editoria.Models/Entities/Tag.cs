@@ -15,6 +15,9 @@ namespace Editoria.Models.Entities
         [Required]
         public string Name { get; set; }
         public string Description { get; set; } = "Без описания";
+        [Required]
+        [Range(1,5, ErrorMessage = "Приоритет должен быть от 1 до 5.")]
+        public int Popularity { get; set; }
 
         // Связь многие-ко-многим со статьями
         [ValidateNever]
