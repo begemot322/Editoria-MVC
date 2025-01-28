@@ -65,14 +65,14 @@ namespace Editoria.Data.Context
                 .HasForeignKey(at => at.TagId);
 
             modelBuilder.Entity<Category>().HasData(
-                new Category { CategoryId = 1, Name = "Политика", Description = "Новости о политике" },
-                new Category { CategoryId = 2, Name = "Экономика", Description = "Новости экономики и финансов" },
-                new Category { CategoryId = 3, Name = "Культура", Description = "Новости о культуре и искусстве" },
-                new Category { CategoryId = 4, Name = "Спорт", Description = "Спортивные события и новости" },
-                new Category { CategoryId = 5, Name = "Технологии", Description = "Новости технологий и инноваций" },
-                new Category { CategoryId = 6, Name = "Здоровье", Description = "Новости о здоровье и медицинских исследованиях" },
-                new Category { CategoryId = 7, Name = "Образование", Description = "Новости образования и науки" }
-
+                new Category { CategoryId = 1, Name = "Политика", Description = "Новости о политике", IsActive = true, Priority = 5 },
+                new Category { CategoryId = 2, Name = "Экономика", Description = "Новости экономики и финансов", IsActive = true, Priority = 5 },
+                new Category { CategoryId = 3, Name = "Культура", Description = "Новости о культуре и искусстве", IsActive = true, Priority = 3 },
+                new Category { CategoryId = 4, Name = "Спорт", Description = "Спортивные события и новости", IsActive = true, Priority = 4 },
+                new Category { CategoryId = 5, Name = "Технологии", Description = "Новости технологий и инноваций", IsActive = true, Priority = 4 },
+                new Category { CategoryId = 6, Name = "Здоровье", Description = "Новости о здоровье и медицинских исследованиях", IsActive = true, Priority = 3 },
+                new Category { CategoryId = 7, Name = "Образование", Description = "Новости образования и науки", IsActive = true, Priority = 2 },
+                new Category { CategoryId = 8, Name = "Киберспорт", Description = "Новости о киберспорте", IsActive = false, Priority = 1 } 
             );
 
             modelBuilder.Entity<Author>().HasData(
@@ -155,13 +155,13 @@ namespace Editoria.Data.Context
             );
 
             modelBuilder.Entity<Issue>().HasData(
-                new Issue { IssueId = 1, PublicationDate = new DateTime(2024, 12, 1), Content = "Новости Москвы", NewspaperId = 1 },
-                new Issue { IssueId = 2, PublicationDate = new DateTime(2024, 12, 2), Content = "Обзор бизнеса", NewspaperId = 2 },
-                new Issue { IssueId = 3, PublicationDate = new DateTime(2024, 12, 3), Content = "Новые технологии", NewspaperId = 3 },
-                new Issue { IssueId = 4, PublicationDate = new DateTime(2024, 12, 4), Content = "Новости села", NewspaperId = 4 },
-                new Issue { IssueId = 5, PublicationDate = new DateTime(2024, 12, 5), Content = "Искусство и культура", NewspaperId = 5 },
-                new Issue { IssueId = 6, PublicationDate = new DateTime(2024, 12, 6), Content = "Научные открытия", NewspaperId = 6 },
-                new Issue { IssueId = 7, PublicationDate = new DateTime(2024, 12, 7), Content = "Спортивные события", NewspaperId = 7 }
+                new Issue { IssueId = 1, PublicationDate = new DateTime(2024, 12, 1), Information = "Новости Москвы", NewspaperId = 1, IsActive = true },
+                new Issue { IssueId = 2, PublicationDate = new DateTime(2024, 12, 2), Information = "Обзор бизнеса", NewspaperId = 2, IsActive = true },
+                new Issue { IssueId = 3, PublicationDate = new DateTime(2024, 12, 3), Information = "Новые технологии", NewspaperId = 3, IsActive = true },
+                new Issue { IssueId = 4, PublicationDate = new DateTime(2024, 12, 4), Information = "Новости села", NewspaperId = 4, IsActive = true },
+                new Issue { IssueId = 5, PublicationDate = new DateTime(2024, 12, 5), Information = "Искусство и культура", NewspaperId = 5, IsActive = true },
+                new Issue { IssueId = 6, PublicationDate = new DateTime(2024, 12, 6), Information = "Научные открытия", NewspaperId = 6, IsActive = true },
+                new Issue { IssueId = 7, PublicationDate = new DateTime(2024, 12, 7), Information = "Спортивные события", NewspaperId = 7, IsActive = true }
             );
 
             modelBuilder.Entity<Article>().HasData(

@@ -4,6 +4,7 @@ using Editoria.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Editoria.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250127052528_addTableToCategory")]
+    partial class addTableToCategory
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -409,7 +412,7 @@ namespace Editoria.Data.Migrations
                             Description = "Новости о политике",
                             IsActive = true,
                             Name = "Политика",
-                            Priority = 5
+                            Priority = 0
                         },
                         new
                         {
@@ -417,7 +420,7 @@ namespace Editoria.Data.Migrations
                             Description = "Новости экономики и финансов",
                             IsActive = true,
                             Name = "Экономика",
-                            Priority = 5
+                            Priority = 0
                         },
                         new
                         {
@@ -425,7 +428,7 @@ namespace Editoria.Data.Migrations
                             Description = "Новости о культуре и искусстве",
                             IsActive = true,
                             Name = "Культура",
-                            Priority = 3
+                            Priority = 0
                         },
                         new
                         {
@@ -433,7 +436,7 @@ namespace Editoria.Data.Migrations
                             Description = "Спортивные события и новости",
                             IsActive = true,
                             Name = "Спорт",
-                            Priority = 4
+                            Priority = 0
                         },
                         new
                         {
@@ -441,7 +444,7 @@ namespace Editoria.Data.Migrations
                             Description = "Новости технологий и инноваций",
                             IsActive = true,
                             Name = "Технологии",
-                            Priority = 4
+                            Priority = 0
                         },
                         new
                         {
@@ -449,7 +452,7 @@ namespace Editoria.Data.Migrations
                             Description = "Новости о здоровье и медицинских исследованиях",
                             IsActive = true,
                             Name = "Здоровье",
-                            Priority = 3
+                            Priority = 0
                         },
                         new
                         {
@@ -457,15 +460,7 @@ namespace Editoria.Data.Migrations
                             Description = "Новости образования и науки",
                             IsActive = true,
                             Name = "Образование",
-                            Priority = 2
-                        },
-                        new
-                        {
-                            CategoryId = 8,
-                            Description = "Новости о киберспорте",
-                            IsActive = false,
-                            Name = "Киберспорт",
-                            Priority = 1
+                            Priority = 0
                         });
                 });
 
@@ -556,13 +551,10 @@ namespace Editoria.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IssueId"));
 
-                    b.Property<string>("Information")
+                    b.Property<string>("Content")
                         .IsRequired()
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
 
                     b.Property<int>("NewspaperId")
                         .HasColumnType("int");
@@ -580,56 +572,49 @@ namespace Editoria.Data.Migrations
                         new
                         {
                             IssueId = 1,
-                            Information = "Новости Москвы",
-                            IsActive = true,
+                            Content = "Новости Москвы",
                             NewspaperId = 1,
                             PublicationDate = new DateTime(2024, 12, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
                             IssueId = 2,
-                            Information = "Обзор бизнеса",
-                            IsActive = true,
+                            Content = "Обзор бизнеса",
                             NewspaperId = 2,
                             PublicationDate = new DateTime(2024, 12, 2, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
                             IssueId = 3,
-                            Information = "Новые технологии",
-                            IsActive = true,
+                            Content = "Новые технологии",
                             NewspaperId = 3,
                             PublicationDate = new DateTime(2024, 12, 3, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
                             IssueId = 4,
-                            Information = "Новости села",
-                            IsActive = true,
+                            Content = "Новости села",
                             NewspaperId = 4,
                             PublicationDate = new DateTime(2024, 12, 4, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
                             IssueId = 5,
-                            Information = "Искусство и культура",
-                            IsActive = true,
+                            Content = "Искусство и культура",
                             NewspaperId = 5,
                             PublicationDate = new DateTime(2024, 12, 5, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
                             IssueId = 6,
-                            Information = "Научные открытия",
-                            IsActive = true,
+                            Content = "Научные открытия",
                             NewspaperId = 6,
                             PublicationDate = new DateTime(2024, 12, 6, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
                             IssueId = 7,
-                            Information = "Спортивные события",
-                            IsActive = true,
+                            Content = "Спортивные события",
                             NewspaperId = 7,
                             PublicationDate = new DateTime(2024, 12, 7, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         });
