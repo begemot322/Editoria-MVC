@@ -18,6 +18,9 @@ namespace Editoria.Models.Entities
         [DataType(DataType.Date, ErrorMessage = "Неверный формат даты")]
         public DateTime PublicationDate { get; set; }
 
+        [StringLength(500, ErrorMessage = "Комментарий автора не должен превышать 500 символов")]
+        public string AuthorComment { get; set; } = "Без комментария";
+
         // Связь с выпуском
         public int IssueId { get; set; }
         [ValidateNever]

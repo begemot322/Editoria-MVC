@@ -25,6 +25,16 @@ namespace Editoria.Models.Entities
         [Phone(ErrorMessage = "Введите корректный номер телефона.")]
         public string Phone { get; set; }
 
+        [StringLength(1000, ErrorMessage = "Биография не должна превышать 1000 символов.")]
+        public string Biography { get; set; }
+
+        [Required(ErrorMessage = "Дата рождения обязательна к заполнению.")]
+        public DateTime DateOfBirth { get; set; }
+
+        [Required(ErrorMessage = "Опыт работы обязателен к заполнению")]
+        public string WorkExperience { get; set; } = "Без опыта работы";
+
+
         // Связь со статьями
         [ValidateNever]
         public ICollection<Article> Articles { get; set; }
