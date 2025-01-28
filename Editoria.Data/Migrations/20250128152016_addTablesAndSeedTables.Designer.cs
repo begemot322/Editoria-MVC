@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Editoria.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250128103515_addAndSeedTables")]
-    partial class addAndSeedTables
+    [Migration("20250128152016_addTablesAndSeedTables")]
+    partial class addTablesAndSeedTables
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -122,6 +122,11 @@ namespace Editoria.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ArticleId"));
 
+                    b.Property<string>("AuthorComment")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
                     b.Property<int>("AuthorId")
                         .HasColumnType("int");
 
@@ -157,6 +162,7 @@ namespace Editoria.Data.Migrations
                         new
                         {
                             ArticleId = 1,
+                            AuthorComment = "Эта статья посвящена эволюции и значению Dota 2 в киберспорте, её влиянию на индустрию и популярность среди игроков.",
                             AuthorId = 1,
                             CategoryId = 1,
                             IssueId = 1,
@@ -167,6 +173,7 @@ namespace Editoria.Data.Migrations
                         new
                         {
                             ArticleId = 2,
+                            AuthorComment = "Аниме Наруто вдохновляет многих зрителей, пропагандируя важность дружбы и силы духа в преодолении трудностей.",
                             AuthorId = 2,
                             CategoryId = 2,
                             IssueId = 1,
@@ -177,6 +184,7 @@ namespace Editoria.Data.Migrations
                         new
                         {
                             ArticleId = 3,
+                            AuthorComment = "Статья поможет начинающим разработчикам разобраться в основах языка C# и его применении для различных проектов.",
                             AuthorId = 3,
                             CategoryId = 3,
                             IssueId = 2,
@@ -187,6 +195,7 @@ namespace Editoria.Data.Migrations
                         new
                         {
                             ArticleId = 4,
+                            AuthorComment = "React — отличная библиотека для создания гибких и производительных пользовательских интерфейсов в современных веб-приложениях.",
                             AuthorId = 4,
                             CategoryId = 1,
                             IssueId = 2,
@@ -197,6 +206,7 @@ namespace Editoria.Data.Migrations
                         new
                         {
                             ArticleId = 5,
+                            AuthorComment = "Unity — это отличная платформа для начинающих, которая позволяет легко создавать игры благодаря интуитивно понятному редактору и огромному сообществу разработчиков.",
                             AuthorId = 5,
                             CategoryId = 2,
                             IssueId = 3,
@@ -207,6 +217,7 @@ namespace Editoria.Data.Migrations
                         new
                         {
                             ArticleId = 6,
+                            AuthorComment = "Counter-Strike 2 продолжает революционизировать многопользовательские шутеры, предлагая игрокам увлекательный и тактический опыт.",
                             AuthorId = 6,
                             CategoryId = 1,
                             IssueId = 3,
@@ -217,6 +228,7 @@ namespace Editoria.Data.Migrations
                         new
                         {
                             ArticleId = 7,
+                            AuthorComment = "Detroit: Become Human задаёт важные вопросы о будущем технологий и этике искусственного интеллекта, создавая уникальный опыт для игроков.",
                             AuthorId = 7,
                             CategoryId = 1,
                             IssueId = 4,
@@ -296,6 +308,14 @@ namespace Editoria.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AuthorId"));
 
+                    b.Property<string>("Biography")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<DateTime>("DateOfBirth")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -314,6 +334,10 @@ namespace Editoria.Data.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<string>("WorkExperience")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("AuthorId");
 
                     b.ToTable("Authors");
@@ -322,58 +346,79 @@ namespace Editoria.Data.Migrations
                         new
                         {
                             AuthorId = 1,
+                            Biography = "Алексей Иванов — опытный журналист с более чем 10-летним стажем работы в различных СМИ. Он освещал важные политические события, а также занимается аналитическими расследованиями. Алексей — автор нескольких книг и статей, которые стали знаковыми в своей области.",
+                            DateOfBirth = new DateTime(1980, 5, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "alexey.ivanov@example.com",
                             Name = "Алексей",
                             Phone = "123-456-7890",
-                            Surname = "Иванов"
+                            Surname = "Иванов",
+                            WorkExperience = "Работа в газете 'Вести' (2008-2015), журнал 'Мир новостей' (2016-2020), автор статей на различные темы."
                         },
                         new
                         {
                             AuthorId = 2,
+                            Biography = "Мария Петрова — редактор с сильными навыками работы с контентом и журналистскими расследованиями. Она активно сотрудничает с ведущими СМИ и ведет образовательные курсы по редактированию. Мария также является экспертом в области цифровых медиа и новых форматов журналистики.",
+                            DateOfBirth = new DateTime(1990, 3, 22, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "maria.petrova@example.com",
                             Name = "Мария",
                             Phone = "234-567-8901",
-                            Surname = "Петрова"
+                            Surname = "Петрова",
+                            WorkExperience = "Опыт работы в интернет-издании 'ТехноНовости' (2015-2018), автор статей в журнале 'Бизнес и технологии' (2019-2021)."
                         },
                         new
                         {
                             AuthorId = 3,
+                            Biography = "Иван Сидоров — опытный редактор с фокусом на научные и технические публикации. Он работает с высококвалифицированными экспертами в области технологий и науки, обеспечивая точность и ясность материалов. Иван также активно участвует в редакторских советах научных журналов и конференций.",
+                            DateOfBirth = new DateTime(1985, 7, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "ivan.sidorov@example.com",
                             Name = "Иван",
                             Phone = "345-678-9012",
-                            Surname = "Сидоров"
+                            Surname = "Сидоров",
+                            WorkExperience = "Работа в журнале 'Наука и технологии' (2010-2017), редактор в научном отделе газеты 'Техник'."
                         },
                         new
                         {
                             AuthorId = 4,
+                            Biography = "Елена Кузнецова — журналист и редактор, специализирующаяся на культурных событиях и социальных вопросах. Она активно освещает темы, связанные с современным искусством, общественными движениями и правами человека. Елена также организует общественные проекты, направленные на развитие культурных инициатив.",
+                            DateOfBirth = new DateTime(1992, 11, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "elena.kuznetsova@example.com",
                             Name = "Елена",
                             Phone = "456-789-0123",
-                            Surname = "Кузнецова"
+                            Surname = "Кузнецова",
+                            WorkExperience = "Опыт работы в журнале 'Культура и искусство' (2014-2018), автор статей в новостном портале 'Свет культуры'."
                         },
                         new
                         {
                             AuthorId = 5,
+                            Biography = "Дмитрий Смирнов — редактор с опытом работы в новостных и политических изданиях. Он специализируется на анализе политических событий и подготовке репортажей с горячих точек. Дмитрий также активно работает с экспертами и политическими аналитиками для создания глубоких и объективных материалов.",
+                            DateOfBirth = new DateTime(1988, 9, 18, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "dmitry.smirnov@example.com",
                             Name = "Дмитрий",
                             Phone = "567-890-1234",
-                            Surname = "Смирнов"
+                            Surname = "Смирнов",
+                            WorkExperience = "Работа в газете 'Политика сегодня' (2012-2017), редактор в новостном агентстве 'Мир сегодня'."
                         },
                         new
                         {
                             AuthorId = 6,
+                            Biography = "Ольга Фёдорова — начинающий редактор с большим потенциалом и интересом к культурным и образовательным темам. Она активно участвует в создании контента, освещающего важные события в сфере образования и культуры. Ольга также стремится развивать свои навыки в области журналистских расследований и аналитики.",
+                            DateOfBirth = new DateTime(1995, 1, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "olga.fedorova@example.com",
                             Name = "Ольга",
                             Phone = "678-901-2345",
-                            Surname = "Фёдорова"
+                            Surname = "Фёдорова",
+                            WorkExperience = "Работа в стартап-издании 'Культурная эволюция' (2017-2020)."
                         },
                         new
                         {
                             AuthorId = 7,
+                            Biography = "Сергей Михайлов — эксперт по экономическим и политическим темам, работающий в крупных новостных агентствах. Он анализирует ключевые экономические тренды и политические процессы, предлагая экспертные оценки и прогнозы. Сергей также ведет лекции и семинары для профессионалов в области журналистики и аналитики.",
+                            DateOfBirth = new DateTime(1983, 12, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "sergey.mikhailov@example.com",
                             Name = "Сергей",
                             Phone = "789-012-3456",
-                            Surname = "Михайлов"
+                            Surname = "Михайлов",
+                            WorkExperience = "Работа в агентстве 'Новости России' (2009-2014), автор статей в международном новостном агентстве 'World News'."
                         });
                 });
 
@@ -480,6 +525,14 @@ namespace Editoria.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("EditorId"));
 
+                    b.Property<string>("Biography")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<DateTime>("DateOfBirth")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -490,10 +543,18 @@ namespace Editoria.Data.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<string>("Phone")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Surname")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("WorkExperience")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("EditorId");
 
@@ -503,51 +564,79 @@ namespace Editoria.Data.Migrations
                         new
                         {
                             EditorId = 1,
+                            Biography = "Анна Иванова — опытный редактор с многолетним стажем работы в различных изданиях. Она специализируется на редактуре материалов по вопросам политики и международных отношений. Анна участвовала в создании множества успешных проектов и редакционных материалов, известных на региональном уровне.",
+                            DateOfBirth = new DateTime(1985, 7, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "anna.ivanova@example.com",
                             Name = "Анна",
-                            Surname = "Иванова"
+                            Phone = "123-456-7890",
+                            Surname = "Иванова",
+                            WorkExperience = "Работа в редакции газеты 'Молодёжный вестник' (2008-2015), в журнале 'Женская точка зрения' (2016-2021)."
                         },
                         new
                         {
                             EditorId = 2,
+                            Biography = "Борис Смирнов — опытный редактор в области политики и экономики. Он работал в крупнейших политических изданиях, освещая важнейшие события в экономике и политике. Борис также автор ряда аналитических статей и материалов, которые стали основой для дискуссий в экспертных кругах.",
+                            DateOfBirth = new DateTime(1980, 4, 22, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "boris.smirnov@example.com",
                             Name = "Борис",
-                            Surname = "Смирнов"
+                            Phone = "234-567-8901",
+                            Surname = "Смирнов",
+                            WorkExperience = "Опыт работы в газете 'Политика сегодня' (2006-2015), редактор в журнале 'Экономика и бизнес' (2016-2020)."
                         },
                         new
                         {
                             EditorId = 3,
+                            Biography = "Виктор Кузнецов — редактор с опытом работы в области культуры и искусства. Он является экспертам в области театра и изобразительного искусства, и его статьи об этих темах пользовались большой популярностью. Виктор также активно участвует в культурных проектах и организует мероприятия для художников и критиков.",
+                            DateOfBirth = new DateTime(1990, 11, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "victor.kuznetsov@example.com",
                             Name = "Виктор",
-                            Surname = "Кузнецов"
+                            Phone = "345-678-9012",
+                            Surname = "Кузнецов",
+                            WorkExperience = "Работа в журнале 'Культура и искусство' (2012-2018), редактор в культурном отделе газеты 'Новости культуры'."
                         },
                         new
                         {
                             EditorId = 4,
+                            Biography = "Галина Петрова — редактор с опытом работы в сфере здравоохранения и экологии. Она специализируется на освещении экологических проблем и вопросов здравоохранения в современных условиях. Галина активно занимается развитием экологических программ и общественных инициатив в сфере охраны природы.",
+                            DateOfBirth = new DateTime(1987, 2, 19, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "galina.petrova@example.com",
                             Name = "Галина",
-                            Surname = "Петрова"
+                            Phone = "456-789-0123",
+                            Surname = "Петрова",
+                            WorkExperience = "Работа в журнале 'Зеленая планета' (2010-2016), редактор в отделе экологии газеты 'Здоровье и жизнь'."
                         },
                         new
                         {
                             EditorId = 5,
+                            Biography = "Дмитрий Сидоров — журналист и редактор с многолетним стажем работы в области науки. Он активно участвует в популяризации науки и технологий, освещая самые актуальные достижения в этих областях. Дмитрий является автором многочисленных научных публикаций и работ в области информатики и медицины.",
+                            DateOfBirth = new DateTime(1984, 9, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "dmitriy.sidorov@example.com",
                             Name = "Дмитрий",
-                            Surname = "Сидоров"
+                            Phone = "567-890-1234",
+                            Surname = "Сидоров",
+                            WorkExperience = "Опыт работы в журнале 'Наука и технологии' (2009-2017), редактор в новостном агентстве 'Мир науки'."
                         },
                         new
                         {
                             EditorId = 6,
+                            Biography = "Екатерина Соболева — молодой редактор с интересом к образовательной тематике. Она увлечена развитием цифрового образования и освещением новых подходов в обучении. Екатерина активно работает с образовательными проектами и занимается разработкой курсов для онлайн-образования.",
+                            DateOfBirth = new DateTime(1993, 8, 13, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "ekaterina.soboleva@example.com",
                             Name = "Екатерина",
-                            Surname = "Соболева"
+                            Phone = "678-901-2345",
+                            Surname = "Соболева",
+                            WorkExperience = "Работа в онлайн-издании 'Образование будущего' (2015-2019). Начинающий редактор в проекте 'Образование и технологии'."
                         },
                         new
                         {
                             EditorId = 7,
+                            Biography = "Жанна Николаева — редактор и журналист, специализирующаяся на новостях о жизни города. Она известна своими репортажами о социальных проблемах и городских инициативах. Жанна активно работает с городской администрацией и местными НКО для решения актуальных вопросов жизни в городе.",
+                            DateOfBirth = new DateTime(1991, 1, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "zhanna.nikolaeva@example.com",
                             Name = "Жанна",
-                            Surname = "Николаева"
+                            Phone = "789-012-3456",
+                            Surname = "Николаева",
+                            WorkExperience = "Работа в газете 'Городские новости' (2014-2019), редактор новостного отдела."
                         });
                 });
 
