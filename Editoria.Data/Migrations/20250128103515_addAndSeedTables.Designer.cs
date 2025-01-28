@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Editoria.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250127073722_updatetables")]
-    partial class updatetables
+    [Migration("20250128103515_addAndSeedTables")]
+    partial class addAndSeedTables
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -753,6 +753,9 @@ namespace Editoria.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("Popularity")
+                        .HasColumnType("int");
+
                     b.HasKey("TagId");
 
                     b.ToTable("Tags");
@@ -762,31 +765,36 @@ namespace Editoria.Data.Migrations
                         {
                             TagId = 1,
                             Description = "Все, что связано с кодированием, языками программирования и разработкой ПО",
-                            Name = "Программирование"
+                            Name = "Программирование",
+                            Popularity = 4
                         },
                         new
                         {
                             TagId = 2,
                             Description = "Научные достижения, открытия и исследования",
-                            Name = "Наука"
+                            Name = "Наука",
+                            Popularity = 3
                         },
                         new
                         {
                             TagId = 3,
                             Description = "Советы по здоровью, медицина и здоровый образ жизни",
-                            Name = "Здоровье"
+                            Name = "Здоровье",
+                            Popularity = 5
                         },
                         new
                         {
                             TagId = 4,
                             Description = "Предпринимательство, управление и финансы",
-                            Name = "Бизнес"
+                            Name = "Бизнес",
+                            Popularity = 3
                         },
                         new
                         {
                             TagId = 5,
                             Description = "Учеба, курсы, саморазвитие и обучение",
-                            Name = "Образование"
+                            Name = "Образование",
+                            Popularity = 2
                         });
                 });
 

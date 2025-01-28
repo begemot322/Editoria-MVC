@@ -36,7 +36,9 @@ namespace Editoria.Data.Migrations
                     CategoryId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(25)", maxLength: 25, nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
+                    Description = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Priority = table.Column<int>(type: "int", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -65,7 +67,8 @@ namespace Editoria.Data.Migrations
                     TagId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Popularity = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -81,6 +84,7 @@ namespace Editoria.Data.Migrations
                     PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Role = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
@@ -118,7 +122,8 @@ namespace Editoria.Data.Migrations
                     IssueId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     PublicationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Content = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
+                    Information = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
                     NewspaperId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -230,16 +235,17 @@ namespace Editoria.Data.Migrations
 
             migrationBuilder.InsertData(
                 table: "Categories",
-                columns: new[] { "CategoryId", "Description", "Name" },
+                columns: new[] { "CategoryId", "Description", "IsActive", "Name", "Priority" },
                 values: new object[,]
                 {
-                    { 1, "Новости о политике", "Политика" },
-                    { 2, "Новости экономики и финансов", "Экономика" },
-                    { 3, "Новости о культуре и искусстве", "Культура" },
-                    { 4, "Спортивные события и новости", "Спорт" },
-                    { 5, "Новости технологий и инноваций", "Технологии" },
-                    { 6, "Новости о здоровье и медицинских исследованиях", "Здоровье" },
-                    { 7, "Новости образования и науки", "Образование" }
+                    { 1, "Новости о политике", true, "Политика", 5 },
+                    { 2, "Новости экономики и финансов", true, "Экономика", 5 },
+                    { 3, "Новости о культуре и искусстве", true, "Культура", 3 },
+                    { 4, "Спортивные события и новости", true, "Спорт", 4 },
+                    { 5, "Новости технологий и инноваций", true, "Технологии", 4 },
+                    { 6, "Новости о здоровье и медицинских исследованиях", true, "Здоровье", 3 },
+                    { 7, "Новости образования и науки", true, "Образование", 2 },
+                    { 8, "Новости о киберспорте", false, "Киберспорт", 1 }
                 });
 
             migrationBuilder.InsertData(
@@ -258,14 +264,14 @@ namespace Editoria.Data.Migrations
 
             migrationBuilder.InsertData(
                 table: "Tags",
-                columns: new[] { "TagId", "Description", "Name" },
+                columns: new[] { "TagId", "Description", "Name", "Popularity" },
                 values: new object[,]
                 {
-                    { 1, "Все, что связано с кодированием, языками программирования и разработкой ПО", "Программирование" },
-                    { 2, "Научные достижения, открытия и исследования", "Наука" },
-                    { 3, "Советы по здоровью, медицина и здоровый образ жизни", "Здоровье" },
-                    { 4, "Предпринимательство, управление и финансы", "Бизнес" },
-                    { 5, "Учеба, курсы, саморазвитие и обучение", "Образование" }
+                    { 1, "Все, что связано с кодированием, языками программирования и разработкой ПО", "Программирование", 4 },
+                    { 2, "Научные достижения, открытия и исследования", "Наука", 3 },
+                    { 3, "Советы по здоровью, медицина и здоровый образ жизни", "Здоровье", 5 },
+                    { 4, "Предпринимательство, управление и финансы", "Бизнес", 3 },
+                    { 5, "Учеба, курсы, саморазвитие и обучение", "Образование", 2 }
                 });
 
             migrationBuilder.InsertData(
@@ -284,16 +290,16 @@ namespace Editoria.Data.Migrations
 
             migrationBuilder.InsertData(
                 table: "Issues",
-                columns: new[] { "IssueId", "Content", "NewspaperId", "PublicationDate" },
+                columns: new[] { "IssueId", "Information", "IsActive", "NewspaperId", "PublicationDate" },
                 values: new object[,]
                 {
-                    { 1, "Новости Москвы", 1, new DateTime(2024, 12, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
-                    { 2, "Обзор бизнеса", 2, new DateTime(2024, 12, 2, 0, 0, 0, 0, DateTimeKind.Unspecified) },
-                    { 3, "Новые технологии", 3, new DateTime(2024, 12, 3, 0, 0, 0, 0, DateTimeKind.Unspecified) },
-                    { 4, "Новости села", 4, new DateTime(2024, 12, 4, 0, 0, 0, 0, DateTimeKind.Unspecified) },
-                    { 5, "Искусство и культура", 5, new DateTime(2024, 12, 5, 0, 0, 0, 0, DateTimeKind.Unspecified) },
-                    { 6, "Научные открытия", 6, new DateTime(2024, 12, 6, 0, 0, 0, 0, DateTimeKind.Unspecified) },
-                    { 7, "Спортивные события", 7, new DateTime(2024, 12, 7, 0, 0, 0, 0, DateTimeKind.Unspecified) }
+                    { 1, "Новости Москвы", true, 1, new DateTime(2024, 12, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 2, "Обзор бизнеса", true, 2, new DateTime(2024, 12, 2, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 3, "Новые технологии", true, 3, new DateTime(2024, 12, 3, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 4, "Новости села", true, 4, new DateTime(2024, 12, 4, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 5, "Искусство и культура", true, 5, new DateTime(2024, 12, 5, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 6, "Научные открытия", true, 6, new DateTime(2024, 12, 6, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 7, "Спортивные события", true, 7, new DateTime(2024, 12, 7, 0, 0, 0, 0, DateTimeKind.Unspecified) }
                 });
 
             migrationBuilder.InsertData(
