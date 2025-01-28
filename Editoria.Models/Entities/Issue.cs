@@ -10,8 +10,11 @@ namespace Editoria.Models.Entities
         [Required]
         public DateTime PublicationDate { get; set; }
         [Required]
-        [MaxLength(500)]  // Максимальная длина для текста
-        public string Content { get; set; }
+        [MaxLength(500)] 
+        public string Information { get; set; }
+
+        [Required]
+        public bool IsActive { get; set; } = true;
 
         // Связь с газетой
         public int NewspaperId { get; set; }

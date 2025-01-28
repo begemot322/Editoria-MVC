@@ -65,9 +65,11 @@ namespace Editoria.Data.Repository
 
         public List<SelectListItem> GetIssueSelectList()
         {
-            return _db.Issues.Select(n => new SelectListItem
+            return _db.Issues
+                .Where(i=>i.IsActive)
+                .Select(n => new SelectListItem
             {
-                Text = $"Номер выпуска: {n.IssueId} - {n.PublicationDate.ToShortDateString()}",
+                Text = $"Номер выпуска: {n.IssueId} - {n.Information}",
                 Value = n.IssueId.ToString()
             }).ToList();
         }

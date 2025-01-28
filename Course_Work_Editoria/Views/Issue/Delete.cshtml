@@ -16,8 +16,13 @@
             <input asp-for="Newspaper.Name" disabled type="text" class="form-control" />
         </div>
         <div class="mb-3 row p-1">
-            <label asp-for="Content" class="p-0">Содержание</label>
-            <textarea asp-for="Content" disabled class="form-control" rows="5"></textarea>
+            <label asp-for="Information" class="p-0">Содержание</label>
+            <textarea asp-for="Information" disabled class="form-control" rows="5"></textarea>
+        </div>
+
+        <div class="mb-3 row p-1">
+            <label asp-for="IsActive" class="p-0">Статус</label>
+            <input asp-for="IsActive" disabled type="text" class="form-control" value="@(Model.IsActive ? "Активна" : "Не активна")" />
         </div>
 
         <div class="row">

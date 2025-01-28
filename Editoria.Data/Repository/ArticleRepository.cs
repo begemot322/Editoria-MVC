@@ -79,7 +79,9 @@ namespace Editoria.Data.Repository
 
         public List<SelectListItem> GetCategorySelectList()
         {
-            return _db.Categories.Select(c => new SelectListItem
+            return _db.Categories
+                .Where(c=>c.IsActive)
+                .Select(c => new SelectListItem
             {
                 Text = c.Name,
                 Value = c.CategoryId.ToString()
@@ -88,9 +90,11 @@ namespace Editoria.Data.Repository
 
         public List<SelectListItem> GetIssueSelectList()
         {
-            return _db.Issues.Select(i => new SelectListItem
+            return _db.Issues
+                .Where(i=>i.IsActive)
+                .Select(i => new SelectListItem
             {
-                Text = $"Выпуск Id:{i.IssueId.ToString()}",
+                Text = $"Номер выпуска: {i.IssueId.ToString()} - {i.Information}",
                 Value = i.IssueId.ToString()
             }).ToList();
         }

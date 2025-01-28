@@ -14,7 +14,8 @@
     <table class="table table-bordered table-striped">
         <thead>
             <tr>
-                <th>Газета</th> 
+                <th>Газета</th>
+                <th>Статус</th>
                 <th>Дата публикации</th> 
                 <th>Содержание</th> 
                 <th></th>
@@ -24,9 +25,10 @@
             @foreach (var issue in Model)
             {
                 <tr>
-                    <td>@issue.Newspaper.Name</td> 
+                    <td>@issue.Newspaper.Name</td>
+                    <td>@(issue.IsActive ? "Активна" : "Не активна")</td>
                     <td>@issue.PublicationDate.ToShortDateString()</td> 
-                    <td>@issue.Content</td> 
+                    <td>@issue.Information</td> 
                     <td>
                         <div class="btn-group">
                             <a asp-controller="Issue" asp-action="Upsert" asp-route-issueId="@issue.IssueId" class="btn btn-primary mx-2" policy="ModeratorPolicy">

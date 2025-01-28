@@ -21,8 +21,21 @@
         </div>
 
         <div class="mb-3 row p-1">
-            <label asp-for="Issue.Content" class="p-0">Содержание</label>
-            <textarea asp-for="Issue.Content" class="form-control" rows="5"></textarea>
+            <label asp-for="Issue.Information" class="p-0">Содержание</label>
+            <textarea asp-for="Issue.Information" class="form-control" rows="5"></textarea>
+        </div>
+
+        <div class="mb-3 row p-1">
+            <label class="form-label">Статус</label>
+            <div>
+                <input asp-for="Issue.IsActive" type="radio" value="true" class="form-check-input" />
+                <label class="form-check-label">Активна</label>
+            </div>
+            <div>
+                <input asp-for="Issue.IsActive" type="radio" value="false" class="form-check-input" />
+                <label class="form-check-label">Не активна</label>
+            </div>
+            <span asp-validation-for="Issue.IsActive" class="text-danger"></span>
         </div>
 
         <div class="row">
