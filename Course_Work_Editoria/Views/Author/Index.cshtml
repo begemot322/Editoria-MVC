@@ -14,26 +14,24 @@
     <table class="table table-bordered table-striped">
         <thead>
             <tr>
-                <th>
-                    Имя
-                </th>
-                <th>
-                    Фамилия
-                </th>
-                <th>
-                    Email
-                </th>
-                <th>
-                    Телефон
-                </th>
+                <th>ФИО</th>
+                <th>Возраст</th>
+                <th>Email</th>
+                <th>Телефон</th>
             </tr>
         </thead>
         <tbody>
             @foreach (var author in Model)
             {
                 <tr>
-                    <td>@author.Name</td>
-                    <td>@author.Surname</td>
+                    <td>
+                        <a asp-controller="Author" asp-action="Details" asp-route-AuthorId="@author.AuthorId">
+                            @author.Name @author.Surname
+                        </a>
+                    </td>
+                    <td>
+                        @((DateTime.Now.Year - author.DateOfBirth.Year) - (DateTime.Now.DayOfYear < author.DateOfBirth.DayOfYear ? 1 : 0)) лет
+                    </td>
                     <td>@author.Email</td>
                     <td>@author.Phone</td>
                     <td>

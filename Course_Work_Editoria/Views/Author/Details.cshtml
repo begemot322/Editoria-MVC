@@ -1,0 +1,30 @@
+﻿@model Author
+
+<div class="border p-3 mt-4">
+    <div class="row pb-2">
+        <h2 class="text-primary">
+            <i class="bi bi-person-badge-fill"></i> Биография автора @Model.Name
+        </h2>
+        <hr />
+    </div>
+
+    <div class="mb-3 row p-1">
+        <textarea asp-for="Biography" disabled class="form-control" rows="5"></textarea>
+    </div>
+
+    <div class="row pb-2 mt-4">
+        <h2 class="text-secondary fs-4">
+             Опыт работы
+        </h2>
+        <div class="mb-3 row">
+            <p class="form-control bg-white border-0">@Model.WorkExperience</p>
+        </div>
+    </div>
+
+
+
+    <a asp-controller="Author" asp-action="Index" class="btn btn-secondary border border-dark">
+        <i class="bi bi-arrow-left"></i> Назад
+    </a>
+
+</div>
