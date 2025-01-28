@@ -9,14 +9,33 @@
         </div>
 
         <div class="mb-3 row p-1">
-            <label asp-for="Name" class="form-label"></label>
+            <label asp-for="Name" class="form-label">Имя</label>
             <input asp-for="Name" class="form-control" />
             <span asp-validation-for="Name" class="text-danger"></span>
         </div>
 
         <div class="mb-3 row p-1">
-            <label asp-for="Description" class="form-label"></label>
+            <label asp-for="Description" class="form-label">Описание</label>
             <textarea asp-for="Description" class="form-control"></textarea>
+        </div>
+
+        <div class="mb-3 row p-1">
+            <label for="Priority" class="form-label">Приоритет (от 1 до 5)</label>
+            <input asp-for="Priority" class="form-control" type="number" min="1" max="5" />
+            <span asp-validation-for="Priority" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3 row p-1">
+            <label class="form-label">Статус</label>
+            <div>
+                <input asp-for="IsActive" type="radio" value="true" class="form-check-input" />
+                <label class="form-check-label">Активна</label>
+            </div>
+            <div>
+                <input asp-for="IsActive" type="radio" value="false" class="form-check-input" />
+                <label class="form-check-label">Не активна</label>
+            </div>
+            <span asp-validation-for="IsActive" class="text-danger"></span>
         </div>
 
         <div class="row">

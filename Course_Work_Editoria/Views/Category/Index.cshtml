@@ -22,7 +22,12 @@
                 <th>
                     Описание
                 </th>
-                <th></th>
+                <th>
+                    Приоритет
+                </th>
+                <th>
+                    Статус
+                </th>
             </tr>
         </thead>
         <tbody>
@@ -31,6 +36,8 @@
                 <tr>
                     <td>@category.Name</td>
                     <td>@category.Description</td>
+                    <td>@category.Priority</td>
+                    <td>@(category.IsActive ? "Активна" : "Не активна")</td>
                     <td>
                         <div class="btn-group" >
                             <a asp-controller="Category" asp-action="Upsert" asp-route-CategoryId="@category.CategoryId" class="btn btn-primary mx-2" policy="ModeratorPolicy">

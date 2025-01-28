@@ -8,12 +8,20 @@
             <hr />
         </div>
         <div class="mb-3 row p-1">
-            <label asp-for="Name" class="p-0"></label>
+            <label asp-for="Name" class="p-0">Имя</label>
             <input asp-for="Name" disabled type="text" class="form-control" />
         </div>
         <div class="mb-3 row p-1">
-            <label asp-for="Description" class="p-0"></label>
+            <label asp-for="Description" class="p-0">Описание</label>
             <input asp-for="Description" disabled type="text" class="form-control" />
+        </div>
+        <div class="mb-3 row p-1">
+            <label asp-for="IsActive" class="p-0">Статус</label>
+            <input asp-for="IsActive" disabled type="text" class="form-control" value="@(Model.IsActive ? "Активна" : "Не активна")" />
+        </div>
+        <div class="mb-3 row p-1">
+            <label asp-for="Priority" class="p-0">Приоритет </label>
+            <input asp-for="Priority" disabled type="text" class="form-control" />
         </div>
 
         <div class="row">
