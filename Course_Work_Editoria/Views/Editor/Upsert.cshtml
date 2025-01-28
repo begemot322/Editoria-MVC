@@ -3,8 +3,10 @@
 <form asp-action="Upsert" method="post">
     <input asp-for="EditorId" hidden />
     <div class="border p-3 mt-4">
-        <h2 class="text-primary">@((Model.EditorId != 0) ? "Обновить редактора" : "Добавить редактора")</h2>
-        <hr />
+        <div class="row pb-2">
+            <h2 class="text-primary">@((Model.EditorId != 0) ? "Обновить редактора" : "Добавить редактора")</h2>
+            <hr />
+        </div>
 
         <div class="mb-3">
             <label asp-for="Name" class="form-label">Имя</label>
@@ -19,9 +21,33 @@
         </div>
 
         <div class="mb-3">
-            <label asp-for="Email" class="form-label"></label>
+            <label asp-for="Email" class="form-label">Email</label>
             <input asp-for="Email" class="form-control" type="email" />
             <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Phone" class="form-label">Телефон</label>
+            <input asp-for="Phone" class="form-control" />
+            <span asp-validation-for="Phone" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Biography" class="form-label">Биография</label>
+            <textarea asp-for="Biography" class="form-control" rows="5"></textarea>
+            <span asp-validation-for="Biography" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="DateOfBirth" class="form-label">Дата рождения</label>
+            <input asp-for="DateOfBirth" class="form-control" type="date" />
+            <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="WorkExperience" class="form-label">Опыт работы</label>
+            <input asp-for="WorkExperience" class="form-control" />
+            <span asp-validation-for="WorkExperience" class="text-danger"></span>
         </div>
 
         <div class="row">

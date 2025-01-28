@@ -19,6 +19,22 @@
             <label asp-for="Email" class="p-0"></label>
             <input asp-for="Email" disabled type="email" class="form-control" />
         </div>
+        <div class="mb-3 row p-1">
+            <label asp-for="Phone" class="p-0">Телефон</label>
+            <input asp-for="Phone" disabled type="text" class="form-control" />
+        </div>
+        <div class="mb-3 row p-1">
+            <label asp-for="Biography" class="p-0">Биография</label>
+            <textarea asp-for="Biography" disabled class="form-control" rows="5"></textarea>
+        </div>
+        <div class="mb-3 row p-1">
+            <label asp-for="DateOfBirth" class="p-0">Дата рождения</label>
+            <input asp-for="DateOfBirth" disabled type="date" class="form-control" />
+        </div>
+        <div class="mb-3 row p-1">
+            <label asp-for="WorkExperience" class="p-0">Опыт работы</label>
+            <textarea asp-for="WorkExperience" disabled class="form-control" rows="2"></textarea>
+        </div>
 
         <div class="row">
             <div class="col-3">
@@ -31,8 +47,3 @@
     </div>
 </form>
 
-@section Scripts {
-    @{
-        <partial name="_ValidationScriptsPartial" />
-    }
-}

@@ -29,18 +29,26 @@
     <table class="table table-bordered table-striped">
         <thead>
             <tr>
-                <th>Имя</th>
-                <th>Фамилия</th>
+                <th>ФИО</th>
+                <th>Возраст</th>
                 <th>Email</th>
+                <th>Телефон</th>
             </tr>
         </thead>
         <tbody>
             @foreach (var editor in Model.Editors)
             {
                 <tr>
-                    <td>@editor.Name</td>
-                    <td>@editor.Surname</td>
+                    <td>
+                        <a asp-controller="Editor" asp-action="Details" asp-route-EditorId="@editor.EditorId">
+                            @editor.Name @editor.Surname
+                        </a>
+                    </td>
+                    <td>
+                        @((DateTime.Now.Year - @editor.DateOfBirth.Year) - (DateTime.Now.DayOfYear < @editor.DateOfBirth.DayOfYear ? 1 : 0)) лет
+                    </td>
                     <td>@editor.Email</td>
+                    <td>@editor.Phone</td>
                     <td>
                         <div class="btn-group">
                             <a asp-controller="Editor" asp-action="Upsert" asp-route-EditorId="@editor.EditorId" class="btn btn-primary mx-2" policy="ModeratorPolicy">
