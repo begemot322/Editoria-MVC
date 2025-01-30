@@ -1,4 +1,5 @@
-﻿using Editoria.Data.Context;
+﻿using Course_Work_Editoria.Services.File;
+using Editoria.Data.Context;
 using Editoria.Data.Repository.IRepository;
 using Editoria.Models;
 using Editoria.Models.Entities;
@@ -13,10 +14,12 @@ namespace Course_Work_Editoria.Controllers
     public class ArticleController : Controller
     {
         private readonly IArticleRepository _articleRepository;
+        private readonly FileService _fileService;
 
-        public ArticleController(IArticleRepository articleRepository)
+        public ArticleController(IArticleRepository articleRepository, FileService fileService)
         {
             _articleRepository = articleRepository;
+            _fileService = fileService;
         }
 
         [Authorize(Policy = "UserPolicy")]
@@ -62,20 +65,33 @@ namespace Course_Work_Editoria.Controllers
 
         [HttpPost]
         [Authorize(Policy = "ModeratorPolicy")]
-        public IActionResult Upsert(ArticleVM viewModel)
+        public IActionResult Upsert(ArticleVM viewModel, IFormFile? imageFile)
         {
             if (ModelState.IsValid)
             {
+                if (imageFile != null)
+                {
+                    string imageUrl = _fileService.SaveFile(imageFile, "images/articles");
+
+                    if (!string.IsNullOrEmpty(viewModel.Article.ImageUrl))
+                    {
+                        _fileService.DeleteFile(viewModel.Article.ImageUrl);
+                    }
+                    viewModel.Article.ImageUrl = imageUrl;
+                }
+
                 if (viewModel.Article.ArticleId == 0)
                 {
                     _articleRepository.AddArticle(viewModel.Article, viewModel.SelectedTags);
                     TempData["success"] = "Статья успешно добавлена";
                 }
+
                 else
                 {
                     _articleRepository.UpdateArticle(viewModel.Article, viewModel.SelectedTags);
                     TempData["success"] = "Статья успешно обновлена";
                 }
+
                 return RedirectToAction("Index");
             }
 
@@ -102,7 +118,17 @@ namespace Course_Work_Editoria.Controllers
         [Authorize(Policy = "AdminPolicy")]
         public IActionResult DeletePOST(int articleId)
         {
-           _articleRepository.DeleteArticle(articleId);
+            var article = _articleRepository.GetArticleById(articleId);
+
+            if (article != null)
+            {
+                if (!string.IsNullOrEmpty(article.ImageUrl))
+                {
+                    _fileService.DeleteFile(article.ImageUrl);
+                }
+                _articleRepository.DeleteArticle(articleId);
+            }
+
 
             TempData["success"] = "Статья успешно удалена";
             return RedirectToAction("Index");
