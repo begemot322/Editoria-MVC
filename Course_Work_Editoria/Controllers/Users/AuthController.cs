@@ -1,4 +1,4 @@
-﻿using Course_Work_Editoria.Authentication.Services;
+﻿using Course_Work_Editoria.Services.Auth;
 using Editoria.Models.Requests;
 using Editoria.Models.ViewModel;
 using Microsoft.AspNetCore.Mvc;
