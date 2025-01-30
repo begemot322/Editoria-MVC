@@ -1,29 +1,30 @@
 ﻿using Course_Work_Editoria.Authentication.Interfaces;
+using Course_Work_Editoria.Services.File;
 using Editoria.Data.Repository.IRepository;
 using Editoria.Models;
 using Editoria.Models.Entities;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Data;
 
-namespace Course_Work_Editoria.Authentication.Services
+namespace Course_Work_Editoria.Services.Auth
 {
     public class UserService
     {
         private readonly IPasswordHasher _passwordHasher;
         private readonly IUserRepository _userRepository;
         private readonly IJwtProvider _jwtProvider;
-        private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly FileService _fileService;
 
         public UserService(IPasswordHasher passwordHasher, IUserRepository userRepository,
-            IJwtProvider jwtProvider, IWebHostEnvironment webHostEnvironment)
+            IJwtProvider jwtProvider, FileService fileService)
         {
             _passwordHasher = passwordHasher;
             _userRepository = userRepository;
             _jwtProvider = jwtProvider;
-            _webHostEnvironment = webHostEnvironment;
+            _fileService = fileService;
         }
 
-        public void Register(string userName, string email, string password, string phoneNumber,string role, IFormFile? imageFile)
+        public void Register(string userName, string email, string password, string phoneNumber, string role, IFormFile? imageFile)
         {
             var hashedPassword = _passwordHasher.Generate(password);
 
@@ -31,18 +32,7 @@ namespace Course_Work_Editoria.Authentication.Services
 
             if (imageFile != null)
             {
-                string fileName = Guid.NewGuid().ToString() + Path.GetExtension(imageFile.FileName);
-
-                string ImageFolder = Path.Combine(_webHostEnvironment.WebRootPath, "images", "users");
-
-                string filePath = Path.Combine(ImageFolder, fileName);
-
-                using(var fileStream = new FileStream(filePath, FileMode.Create))
-                {
-                    imageFile.CopyTo(fileStream);
-                }
-
-                imageUrl = $"/images/users/{fileName}";
+                imageUrl = _fileService.SaveFile(imageFile, "images/users");
             };
 
             var user = new User
@@ -61,7 +51,7 @@ namespace Course_Work_Editoria.Authentication.Services
 
         public string Login(string email, string password)
         {
-            var user =  _userRepository.GetByEmail(email);
+            var user = _userRepository.GetByEmail(email);
 
             if (user == null)
             {
