@@ -4,11 +4,12 @@ using Editoria.Data.Repository;
 using Microsoft.EntityFrameworkCore;
 using Course_Work_Editoria.Authentication.Interfaces;
 using Course_Work_Editoria.Authentication;
-using Course_Work_Editoria.Authentication.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.Security.Claims;
+using Course_Work_Editoria.Services.Auth;
+using Course_Work_Editoria.Services.File;
 
 namespace Course_Work_Editoria.Extensions
 {
@@ -48,6 +49,8 @@ namespace Course_Work_Editoria.Extensions
             builder.Services.AddScoped<UserService>();
             builder.Services.AddScoped<ProfileService>();
             builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
+
+            builder.Services.AddScoped<FileService>();
 
             builder.Services.AddHttpContextAccessor();
             builder.Services.AddMemoryCache();
