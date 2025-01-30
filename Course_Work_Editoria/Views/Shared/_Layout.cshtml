@@ -34,17 +34,16 @@
                         <li class="nav-item" policy="UserPolicy">
                             <a class="nav-link" asp-controller="Article" asp-action="Index">Article</a>
                         </li>
-                        <li class="nav-item" policy="UserPolicy">
-                            <a class="nav-link" asp-controller="Author" asp-action="Index">Author</a>
-                        </li>
-                        <li class="nav-item" policy="UserPolicy">
-                            <a class="nav-link" asp-controller="Category" asp-action="Index">Category</a>
-                        </li>
-                        <li class="nav-item" policy="UserPolicy">
-                            <a class="nav-link" asp-controller="Tag" asp-action="Index">Tag</a>
-                        </li>
-                        <li class="nav-item" policy="UserPolicy">
-                            <a class="nav-link" asp-controller="Advertisement" asp-action="Index">Advertisement</a>
+                        <li class="nav-item dropdown" policy="UserPolicy">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                More
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <li><a class="dropdown-item" asp-controller="Author" asp-action="Index">Author</a></li>
+                                <li><a class="dropdown-item" asp-controller="Category" asp-action="Index">Category</a></li>
+                                <li><a class="dropdown-item" asp-controller="Tag" asp-action="Index">Tag</a></li>
+                                <li><a class="dropdown-item" asp-controller="Advertisement" asp-action="Index">Advertisement</a></li>
+                            </ul>
                         </li>
                     </ul>
                     <partial name="_LoginPartial" />

@@ -17,7 +17,8 @@
                 <th>Газета</th>
                 <th>Статус</th>
                 <th>Дата публикации</th> 
-                <th>Содержание</th> 
+                <th>Содержание</th>
+                <th>Тираж</th>
                 <th></th>
             </tr>
         </thead>
@@ -29,6 +30,7 @@
                     <td>@(issue.IsActive ? "Активна" : "Не активна")</td>
                     <td>@issue.PublicationDate.ToShortDateString()</td> 
                     <td>@issue.Information</td> 
+                    <td>@issue.Circulation</td>
                     <td>
                         <div class="btn-group">
                             <a asp-controller="Issue" asp-action="Upsert" asp-route-issueId="@issue.IssueId" class="btn btn-primary mx-2" policy="ModeratorPolicy">

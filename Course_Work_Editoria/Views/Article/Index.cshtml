@@ -16,7 +16,6 @@
             <tr>
                 <th>Заголовок</th>
                 <th>Дата публикации</th>
-                <th>Номер выпуска</th>
                 <th>Категория</th>
                 <th>Автор</th>
                 <th>Теги</th>
@@ -33,7 +32,6 @@
                         </a>
                     </td>
                     <td>@article.PublicationDate.ToString("dd.MM.yyyy")</td>
-                        <td>@article.Issue.IssueId</td>
                         <td>@article.Category.Name</td>
                         <td>@article.Author.Name @article.Author.Surname</td>
                         <td>

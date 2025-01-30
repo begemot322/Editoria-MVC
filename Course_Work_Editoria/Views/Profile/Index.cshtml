@@ -14,6 +14,12 @@
             <div class="col-md-4 text-center">
                 <img src="@(string.IsNullOrEmpty(Model.ImageUrl)? "/images/users/free-icon-user-1077114.png": @Model.ImageUrl)"
                  alt="User Image" class="img-fluid rounded" style="height: 200px;" />
+                <form method="post" asp-controller="Profile" asp-action="ChangeImage" enctype="multipart/form-data" id="imageForm">
+                    <div class="text-center mb-3">
+                        <input type="file" name="image" accept="image/*" class="form-control" id="fileInput" style="display:none" onchange="this.form.submit()">
+                    </div>
+                    <a href="javascript:void(0);" onclick="document.getElementById('fileInput').click();" class="btn btn-link">Сменить аватар</a>
+                </form>
             </div>
             <div class="col-md-8">
                 <h3 class="text-secondary border-bottom pb-3 mb-3">

@@ -25,6 +25,11 @@
             <input asp-for="IsActive" disabled type="text" class="form-control" value="@(Model.IsActive ? "Активна" : "Не активна")" />
         </div>
 
+        <div class="mb-3 row p-1">
+            <label asp-for="Circulation" class="p-0">Тираж</label>
+            <input asp-for="Circulation" disabled type="number" class="form-control" />
+        </div>
+
         <div class="row">
             <div class="col-3">
                 <button type="submit" class="btn btn-danger form-control">Удалить</button>
@@ -35,7 +40,3 @@
         </div>
     </div>
 </form>
-
-@section Scripts {
-    <partial name="_ValidationScriptsPartial" />
-}
