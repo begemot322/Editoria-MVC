@@ -1,4 +1,4 @@
-﻿using Course_Work_Editoria.Authentication.Services;
+﻿using Course_Work_Editoria.Services.Auth;
 using Editoria.Models.Entities;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.Extensions.Caching.Memory;
