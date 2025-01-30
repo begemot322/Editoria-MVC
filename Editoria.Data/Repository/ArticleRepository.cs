@@ -47,6 +47,8 @@ namespace Editoria.Data.Repository
         {
             return _db.Articles
                 .Include(a => a.Issue)
+                .ThenInclude(i => i.Newspaper)
+                    .ThenInclude(n => n.Editor)
                 .Include(a => a.Category)
                 .Include(a => a.Author)
                 .Include(a => a.ArticleTags) 
@@ -58,6 +60,8 @@ namespace Editoria.Data.Repository
         {
             var article = _db.Articles
                 .Include(a => a.Issue)
+                .ThenInclude(i => i.Newspaper)
+                    .ThenInclude(n => n.Editor)
                 .Include(a => a.Category)
                 .Include(a => a.Author)
                 .Include(a => a.ArticleTags)
@@ -91,7 +95,7 @@ namespace Editoria.Data.Repository
         public List<SelectListItem> GetIssueSelectList()
         {
             return _db.Issues
-                .Where(i=>!i.IsActive)
+                .Where(i=>i.IsActive)
                 .Select(i => new SelectListItem
             {
                 Text = $"Номер выпуска: {i.IssueId.ToString()} - {i.Information}",
