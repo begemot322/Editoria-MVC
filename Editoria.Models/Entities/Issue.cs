@@ -16,10 +16,14 @@ namespace Editoria.Models.Entities
         [Required]
         public bool IsActive { get; set; } = true;
 
+        [Required]
+        public int Circulation { get; set; }
+
         // Связь с газетой
         public int NewspaperId { get; set; }
         [ValidateNever]
         public Newspaper Newspaper { get; set; }
+
 
         // Связь со статьями
         [ValidateNever]

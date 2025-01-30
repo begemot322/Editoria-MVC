@@ -10,7 +10,7 @@ namespace Editoria.Models.Entities
         public int CategoryId { get; set; }
 
         [Required]
-        [MaxLength(25)]
+        [MaxLength(35)]
         public string Name { get; set; }
 
         [Required]

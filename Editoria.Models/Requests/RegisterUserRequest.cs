@@ -22,7 +22,7 @@ namespace Editoria.Models.Requests
         [Phone(ErrorMessage = "Введите корректный номер телефона.")]
         public string PhoneNumber { get; set; }
 
-        public string Role { get; set; } = "User";  
+        public string Role { get; set; }
 
         public string? ImageUrl { get; set; }
     }

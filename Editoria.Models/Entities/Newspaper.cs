@@ -10,8 +10,6 @@ namespace Editoria.Models.Entities
         [Required]
         public string Name { get; set; }
         [Required]
-        public int Circulation { get; set; }
-        [Required]
         public string Type { get; set; }
         [Required]
         public string Region { get; set; }
