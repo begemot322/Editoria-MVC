@@ -1,30 +1,30 @@
-﻿using Editoria.Data.Repository.IRepository;
-using Editoria.Models.Entities;
+﻿using Editoria.Application.Services.Services;
+using Editoria.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Course_Work_Editoria.Controllers
+namespace Editoria.Web.Controllers
 {
     public class TagController : Controller
     {
-        private readonly ITagRepository _tagRepository;
-        public TagController(ITagRepository tagRepository)
+        private readonly ITagService _tagService;
+        public TagController(ITagService tagService)
         {
-            _tagRepository = tagRepository;
+            _tagService = tagService;
         }
 
         [Authorize(Policy = "UserPolicy")]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var tagList = _tagRepository.GetAllTags();
+            var tagList = await _tagService.GetAllTagsAsync();
             return View(tagList);
         }
 
         [Authorize(Policy = "ModeratorPolicy")]
-        public IActionResult Upsert(int? tagId)
+        public async Task<IActionResult> Upsert(int? tagId)
         {
             var tag = tagId.HasValue ?
-                _tagRepository.GetTagById(tagId.Value) : new Tag();
+                await _tagService.GetTagByIdAsync(tagId.Value) : new Tag();
 
             if (tagId.HasValue && tag == null)
             {
@@ -36,18 +36,18 @@ namespace Course_Work_Editoria.Controllers
 
         [HttpPost]
         [Authorize(Policy = "ModeratorPolicy")]
-        public IActionResult Upsert(Tag tag)
+        public async Task<IActionResult> Upsert(Tag tag)
         {
             if (ModelState.IsValid)
             {
                 if (tag.TagId == 0)
                 {
-                    _tagRepository.AddTag(tag);
+                    await _tagService.CreateTagAsync(tag);
                     TempData["success"] = "Тег создан успешно!";
                 }
                 else
                 {
-                    _tagRepository.UpdateTag(tag);
+                    await _tagService.UpdateTagAsync(tag);
                     TempData["success"] = "Тег обновлён успешно!";
                 }
                 return RedirectToAction("Index");
@@ -56,9 +56,9 @@ namespace Course_Work_Editoria.Controllers
         }
 
         [Authorize(Policy = "AdminPolicy")]
-        public IActionResult Delete(int tagId)
+        public async Task<IActionResult> Delete(int tagId)
         {
-            var tag = _tagRepository.GetTagById(tagId);
+            var tag = await _tagService.GetTagByIdAsync(tagId);
 
             if (tag == null)
             {
@@ -70,9 +70,9 @@ namespace Course_Work_Editoria.Controllers
 
         [HttpPost, ActionName("Delete")]
         [Authorize(Policy = "AdminPolicy")]
-        public IActionResult DeletePOST(int tagId)
+        public async Task<IActionResult> DeletePOST(int tagId)
         {
-            _tagRepository.DeleteTag(tagId);
+            await _tagService.DeleteTagAsync(tagId);
 
             TempData["success"] = "Тег удалён успешно!";
             return RedirectToAction("Index");

@@ -1,39 +1,41 @@
-﻿using Editoria.Models;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Editoria.Models.ViewModel;
-using Editoria.Data.Context;
-using Editoria.Data.Repository.IRepository;
-using Editoria.Models.Entities;
 using Microsoft.AspNetCore.Authorization;
+using Editoria.Domain.Entities;
+using Editoria.Application.Services.Services;
+using Editoria.Application.Services.Implementation;
+using Editoria.Web.ViewModel;
 
-namespace Course_Work_Editoria.Controllers
+namespace Editoria.Web.Controllers
 {
     public class IssueController : Controller
     {
-        private readonly IIssueRepository _issueRepository;
+        private readonly IIssueService _issueService;
+        private readonly DropdownDataService _dropdownService;
 
-        public IssueController(IIssueRepository issueRepository)
+        public IssueController(IIssueService issueService,
+            DropdownDataService dropdownService)
         {
-            _issueRepository = issueRepository;
+            _issueService = issueService;
+            _dropdownService = dropdownService;
         }
 
         [Authorize(Policy = "UserPolicy")]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var issueList = _issueRepository.GetAllIssues();
+            var issueList = await _issueService.GetAllIssuesAsync();
             return View(issueList);
         }
 
         [Authorize(Policy = "ModeratorPolicy")]
-        public IActionResult Upsert(int? issueId)
+        public async Task<IActionResult> Upsert(int? issueId)
         {
             var viewModel = new IssueVM
             {
-                Newspapers = _issueRepository.GetNewspaperList(),
+                Newspapers = await _dropdownService.GetNewspaperSelectListAsync(),
                 Issue = issueId.HasValue ?
-                    _issueRepository.GetIssueById(issueId.Value) : new Issue() 
+                    await _issueService.GetIssueByIdAsync(issueId.Value) : new Issue()
             };
 
             if (issueId.HasValue && viewModel.Issue == null)
@@ -45,31 +47,31 @@ namespace Course_Work_Editoria.Controllers
 
         [HttpPost]
         [Authorize(Policy = "ModeratorPolicy")]
-        public IActionResult Upsert(IssueVM viewModel)
+        public async Task<IActionResult> Upsert(IssueVM viewModel)
         {
             if (ModelState.IsValid)
             {
                 if (viewModel.Issue.IssueId == 0)
                 {
-                    _issueRepository.AddIssue(viewModel.Issue);
+                    await _issueService.CreateIssueAsync(viewModel.Issue);
                     TempData["success"] = "Выпуск успешно добавлен";
                 }
                 else
                 {
-                    _issueRepository.UpdateIssue(viewModel.Issue);
+                    await _issueService.UpdateIssueAsync(viewModel.Issue);
                     TempData["success"] = "Выпуск успешно обновлён";
                 }
                 return RedirectToAction("Index");
             }
 
-            viewModel.Newspapers = _issueRepository.GetNewspaperList();
+            viewModel.Newspapers = await _dropdownService.GetNewspaperSelectListAsync();
             return View(viewModel);
         }
 
         [Authorize(Policy = "AdminPolicy")]
-        public IActionResult Delete(int issueId)
+        public async Task<IActionResult> Delete(int issueId)
         {
-            var issue = _issueRepository.GetIssueById(issueId);
+            var issue = await _issueService.GetIssueByIdAsync(issueId);
 
             if (issue == null)
             {
@@ -81,9 +83,9 @@ namespace Course_Work_Editoria.Controllers
 
         [HttpPost, ActionName("Delete")]
         [Authorize(Policy = "AdminPolicy")]
-        public IActionResult DeletePOST(int issueId)
+        public async Task<IActionResult> DeletePOST(int issueId)
         {
-            _issueRepository.DeleteIssue(issueId);
+            await _issueService.DeleteIssueAsync(issueId);
 
             TempData["success"] = "Выпуск успешно удалён";
             return RedirectToAction("Index");

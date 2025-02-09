@@ -1,25 +1,27 @@
 ﻿using Course_Work_Editoria.Services.Auth;
 using Course_Work_Editoria.Services.File;
+using Editoria.Application.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 
-namespace Course_Work_Editoria.Controllers.Users
+namespace Editoria.Web.Controllers.Users
 {
     public class ProfileController : Controller
     {
-        private readonly UserService _userService;
-        private readonly ProfileService _profileService;
-        private readonly FileService _fileService;
+        private readonly IUserService _userService;
+        private readonly IProfileService _profileService;
+        private readonly IFileService _fileService;
 
-        public ProfileController(UserService userService, ProfileService profileService, FileService fileService)
+        public ProfileController(IUserService userService, IProfileService profileService,
+            IFileService fileService)
         {
             _userService = userService;
             _profileService = profileService;
-            _fileService = fileService;  
+            _fileService = fileService;
         }
 
         [HttpGet]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             var userId = User.FindFirst("userId")?.Value;
 
@@ -28,12 +30,12 @@ namespace Course_Work_Editoria.Controllers.Users
                 return RedirectToAction("Login", "Auth");
             }
 
-            var user = _userService.GetUserById(Guid.Parse(userId));
+            var user = await _userService.GetUserByIdAsync(Guid.Parse(userId));
 
             return View(user);
         }
         [HttpPost]
-        public IActionResult ChangePassword(string currentPassword, string newPassword, string confirmPassword)
+        public async Task<IActionResult> ChangePassword(string currentPassword, string newPassword, string confirmPassword)
         {
             var userId = User.FindFirst("userId")?.Value;
 
@@ -44,7 +46,7 @@ namespace Course_Work_Editoria.Controllers.Users
 
             try
             {
-                _profileService.ChangePassword(Guid.Parse(userId), currentPassword, newPassword, confirmPassword);
+                await _profileService.ChangePasswordAsync(Guid.Parse(userId), currentPassword, newPassword, confirmPassword);
                 TempData["success"] = "Пароль успешно изменён.";
                 return RedirectToAction("Index");
             }
@@ -53,12 +55,12 @@ namespace Course_Work_Editoria.Controllers.Users
                 ModelState.AddModelError("", ex.Message);
             }
 
-            var user = _userService.GetUserById(Guid.Parse(userId));
+            var user = await _userService.GetUserByIdAsync(Guid.Parse(userId));
             return View("Index", user);
         }
 
         [HttpPost]
-        public IActionResult ChangeImage(IFormFile image)
+        public async Task<IActionResult> ChangeImage(IFormFile image)
         {
             var userId = User.FindFirst("userId")?.Value;
 
@@ -74,7 +76,7 @@ namespace Course_Work_Editoria.Controllers.Users
                 imageUrl = _fileService.SaveFile(image, "images/users");
             };
 
-            _profileService.UpdateUserImage(Guid.Parse(userId), imageUrl);
+            await _profileService.UpdateUserImageAsync(Guid.Parse(userId), imageUrl);
             TempData["success"] = "Аватар успешно обновлён.";
 
             return RedirectToAction("Index");

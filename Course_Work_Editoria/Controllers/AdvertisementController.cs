@@ -1,33 +1,36 @@
-﻿using Editoria.Models;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Editoria.Models.ViewModel;
-using Editoria.Data.Context;
-using Editoria.Data.Repository.IRepository;
-using Editoria.Models.Entities;
 using Microsoft.AspNetCore.Authorization;
+using Editoria.Domain.Entities;
+using Editoria.Application.Services.Services;
+using Editoria.Application.Services.Implementation;
+using Editoria.Web.ViewModel;
 
-namespace Course_Work_Editoria.Controllers
+namespace Editoria.Web.Controllers
 {
     public class AdvertisementController : Controller
     {
-        private readonly IAdvertisementRepository _advertisementRepository;
+        private readonly IAdvertisementService _advertisementService;
+        private readonly DropdownDataService _dropdownService;
 
-        public AdvertisementController(IAdvertisementRepository advertisementRepository)
+        public AdvertisementController(
+            IAdvertisementService advertisementService,
+            DropdownDataService dropdownService)
         {
-            _advertisementRepository = advertisementRepository;
+            _advertisementService = advertisementService;
+            _dropdownService = dropdownService;
         }
 
         [Authorize(Policy = "UserPolicy")]
-        public IActionResult Index(string typeFilter, int? issueFilter)
+        public async Task<IActionResult> Index(string typeFilter, int? issueFilter)
         {
-            var advertisementList = _advertisementRepository.GetFilteredAdvertisements(typeFilter, issueFilter);
-            var issueSelectList = _advertisementRepository.GetIssueSelectList();
+            var advertisementList = await _advertisementService.GetAllAdvertisementsAsync(typeFilter, issueFilter);
+            var issueSelectList = await _dropdownService.GetIssueSelectListAsync();
 
             var viewModel = new AdvertisementFilterVM
             {
-                Advertisements = advertisementList.ToList(),
+                Advertisements = advertisementList,
                 TypeFilter = typeFilter,
                 IssueFilter = issueFilter,
                 IssueSelectList = issueSelectList
@@ -36,13 +39,16 @@ namespace Course_Work_Editoria.Controllers
         }
 
         [Authorize(Policy = "ModeratorPolicy")]
-        public IActionResult Upsert(int? advertisementId)
+        public async Task<IActionResult> Upsert(int? advertisementId)
         {
+            var issueSelectList = await _dropdownService.GetIssueSelectListAsync();
+
             var viewModel = new AdvertisementVM()
             {
-                Issues = _advertisementRepository.GetIssueSelectList(),
-                Advertisement = advertisementId.HasValue?
-                _advertisementRepository.GetAdvertisementById(advertisementId): new Advertisement()
+                Issues = issueSelectList,
+                Advertisement = advertisementId.HasValue
+                ? await _advertisementService.GetAdvertisementByIdAsync(advertisementId.Value)
+                : new Advertisement()
             };
 
             if (advertisementId.HasValue && viewModel.Advertisement == null)
@@ -55,42 +61,43 @@ namespace Course_Work_Editoria.Controllers
 
         [HttpPost]
         [Authorize(Policy = "ModeratorPolicy")]
-        public IActionResult Upsert(AdvertisementVM viewModel)
+        public async Task<IActionResult> Upsert(AdvertisementVM viewModel)
         {
             if (ModelState.IsValid)
             {
                 if (viewModel.Advertisement.AdvertisementId == 0)
                 {
-                    _advertisementRepository.AddAdvertisement(viewModel.Advertisement);
+                    await _advertisementService.CreateAdvertisementAsync(viewModel.Advertisement);
                     TempData["success"] = "Рекламное объявление успешно добавлено";
                 }
                 else
                 {
-                    _advertisementRepository.UpdateAdvertisement(viewModel.Advertisement);
+                    await _advertisementService.UpdateAdvertisementAsync(viewModel.Advertisement);
                     TempData["success"] = "Рекламное объявление успешно обновлено";
                 }
                 return RedirectToAction("Index");
             }
-            viewModel.Issues = _advertisementRepository.GetIssueSelectList();
+            viewModel.Issues = await _dropdownService.GetIssueSelectListAsync();
+
             return View(viewModel);
         }
 
         [Authorize(Policy = "AdminPolicy")]
-        public IActionResult Delete(int advertisementId)
+        public async Task<IActionResult> Delete(int advertisementId)
         {
-           var advertisement = _advertisementRepository.GetAdvertisementWithIssue(advertisementId);
-           if (advertisement == null)
-           {
+            var advertisement = await _advertisementService.GetAdvertisementByIdAsync(advertisementId);
+            if (advertisement == null)
+            {
                 return NotFound();
-           }
-           return View(advertisement);
+            }
+            return View(advertisement);
         }
 
         [HttpPost, ActionName("Delete")]
         [Authorize(Policy = "AdminPolicy")]
-        public IActionResult DeletePOST(int advertisementId)
+        public async Task<IActionResult> DeletePOST(int advertisementId)
         {
-            _advertisementRepository.DeleteAdvertisement(advertisementId);
+            await _advertisementService.DeleteAdvertisementAsync(advertisementId);
 
             TempData["success"] = "Рекламное объявление успешно удалено";
             return RedirectToAction("Index");

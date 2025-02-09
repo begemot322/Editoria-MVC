@@ -1,44 +1,42 @@
-﻿using Editoria.Data.Repository;
-using Editoria.Data.Repository.IRepository;
-using Editoria.Models.Entities;
+﻿using Editoria.Application.Services.Services;
+using Editoria.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Course_Work_Editoria.Controllers
+namespace Editoria.Web.Controllers
 {
     public class AuthorController : Controller
     {
 
-        private readonly IAuthorRepository _authorRepository;
-        public AuthorController(IAuthorRepository authorRepository)
+        private readonly IAuthorService _authorService;
+        public AuthorController(IAuthorService authorService)
         {
-            _authorRepository = authorRepository;
+            _authorService = authorService;
         }
 
         [Authorize(Policy = "UserPolicy")]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var authorList = _authorRepository.GetAllAuthors();
+            var authorList = await _authorService.GetAllAuthorsAsync();
+
             return View(authorList);
         }
 
         [Authorize(Policy = "UserPolicy")]
-        public IActionResult Details(int AuthorId)
+        public async Task<IActionResult> Details(int AuthorId)
         {
-            var author = _authorRepository.GetAuthorById(AuthorId);
-            if (author == null)
-            {
-                return NotFound();
-            }
+            var author = await _authorService.GetAuthorByIdAsync(AuthorId);
+
             return View(author);
         }
 
 
         [Authorize(Policy = "ModeratorPolicy")]
-        public IActionResult Upsert(int? authorId)
+        public async Task<IActionResult> Upsert(int? authorId)
         {
-            var author = authorId.HasValue?
-                _authorRepository.GetAuthorById(authorId.Value) : new Author();
+            var author = authorId.HasValue
+                ? await _authorService.GetAuthorByIdAsync(authorId.Value)
+                : new Author();
 
             if (authorId.HasValue && author == null)
             {
@@ -50,18 +48,18 @@ namespace Course_Work_Editoria.Controllers
 
         [HttpPost]
         [Authorize(Policy = "ModeratorPolicy")]
-        public IActionResult Upsert(Author author)
+        public async Task<IActionResult> Upsert(Author author)
         {
             if (ModelState.IsValid)
             {
                 if (author.AuthorId == 0)
                 {
-                    _authorRepository.AddAuthor(author);
+                    await _authorService.CreateAuthorAsync(author);
                     TempData["success"] = "Автор успешно создан";
                 }
                 else
                 {
-                    _authorRepository.UpdateAuthor(author);
+                    await _authorService.UpdateAuthorAsync(author);
                     TempData["success"] = "Автор успешно обновлён";
                 }
                 return RedirectToAction("Index");
@@ -70,10 +68,9 @@ namespace Course_Work_Editoria.Controllers
         }
 
         [Authorize(Policy = "AdminPolicy")]
-        public IActionResult Delete(int AuthorId)
+        public async Task<IActionResult> Delete(int AuthorId)
         {
-           var author = _authorRepository.GetAuthorById(AuthorId);
-
+            var author = await _authorService.GetAuthorByIdAsync(AuthorId);
             if (author == null)
             {
                 return NotFound();
@@ -83,9 +80,9 @@ namespace Course_Work_Editoria.Controllers
 
         [HttpPost, ActionName("Delete")]
         [Authorize(Policy = "AdminPolicy")]
-        public IActionResult DeletePOST(int AuthorId)
+        public async Task<IActionResult> DeletePOST(int AuthorId)
         {
-            _authorRepository.DeleteAuthor(AuthorId);
+            await _authorService.DeleteAuthorAsync(AuthorId);
 
             TempData["success"] = "Автор успешно удалён";
             return RedirectToAction("Index");

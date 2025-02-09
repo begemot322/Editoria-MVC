@@ -1,50 +1,53 @@
-﻿using Editoria.Data.Context;
-using Editoria.Data.Repository.IRepository;
-using Editoria.Models;
-using Editoria.Models.Entities;
-using Editoria.Models.ViewModel ;
+﻿using Editoria.Application.Services.Implementation;
+using Editoria.Application.Services.Services;
+using Editoria.Domain.Entities;
+using Editoria.Web.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
-namespace Course_Work_Editoria.Controllers
+namespace Editoria.Web.Controllers
 {
     public class NewspaperController : Controller
     {
-        private readonly INewspaperRepository _newspaperRepository;
-        public NewspaperController(INewspaperRepository newspaperRepository)
+        private readonly INewspaperService _newspaperService;
+        private readonly DropdownDataService _selectListService;
+
+        public NewspaperController(INewspaperService newspaperService,
+            DropdownDataService selectListService)
         {
-            _newspaperRepository = newspaperRepository;
+            _newspaperService = newspaperService;
+            _selectListService = selectListService;
         }
 
         [Authorize(Policy = "UserPolicy")]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var newspaperList = _newspaperRepository.GetAllNewspapers();
+            var newspaperList = await _newspaperService.GetAllNewspapersAsync();
             return View(newspaperList);
         }
 
         [Authorize(Policy = "ModeratorPolicy")]
-        public IActionResult Upsert(int? newspaperId)
+        public async Task<IActionResult> Upsert(int? newspaperId)
         {
             var viewModel = new NewspaperVM
             {
-                Editors = _newspaperRepository.GetEditorsList(),
-                Newspaper = newspaperId.HasValue ? 
-                    _newspaperRepository.GetNewspaperById(newspaperId.Value) : new Newspaper()
+                Editors = await _selectListService.GetEditorsSelectListAsync(),
+                Newspaper = newspaperId.HasValue ?
+                    await _newspaperService.GetNewspaperByIdAsync(newspaperId.Value) : new Newspaper()
             };
 
-            if(newspaperId.HasValue && viewModel.Newspaper == null)
+            if (newspaperId.HasValue && viewModel.Newspaper == null)
             {
                 return NotFound();
             }
-            return View(viewModel); 
+            return View(viewModel);
         }
 
         [HttpPost]
         [Authorize(Policy = "ModeratorPolicy")]
-        public IActionResult Upsert(NewspaperVM viewModel)
+        public async Task<IActionResult> Upsert(NewspaperVM viewModel)
         {
             if (ModelState.IsValid)
             {
@@ -52,12 +55,12 @@ namespace Course_Work_Editoria.Controllers
                 {
                     if (viewModel.Newspaper.NewspaperId == 0)
                     {
-                        _newspaperRepository.AddNewspaper(viewModel.Newspaper);
+                        await _newspaperService.CreateNewspaperAsync(viewModel.Newspaper);
                         TempData["success"] = "Газета успешно добавлена";
                     }
                     else
                     {
-                        _newspaperRepository.UpdateNewspaper(viewModel.Newspaper);
+                        await _newspaperService.UpdateNewspaperAsync(viewModel.Newspaper);
                         TempData["success"] = "Газета успешно обновлена";
                     }
                     return RedirectToAction("Index");
@@ -72,14 +75,14 @@ namespace Course_Work_Editoria.Controllers
                 }
             }
 
-            viewModel.Editors = _newspaperRepository.GetEditorsList();
+            viewModel.Editors = await _selectListService.GetEditorsSelectListAsync();
             return View(viewModel);
         }
 
         [Authorize(Policy = "AdminPolicy")]
-        public IActionResult Delete(int newspaperId)
+        public async Task<IActionResult> Delete(int newspaperId)
         {
-            var newspaper = _newspaperRepository.GetNewspaperById(newspaperId);
+            var newspaper = await _newspaperService.GetNewspaperByIdAsync(newspaperId);
 
             if (newspaper == null)
             {
@@ -91,9 +94,9 @@ namespace Course_Work_Editoria.Controllers
 
         [HttpPost, ActionName("Delete")]
         [Authorize(Policy = "AdminPolicy")]
-        public IActionResult DeletePOST(int newspaperId)
+        public async Task<IActionResult> DeletePOST(int newspaperId)
         {
-            _newspaperRepository.DeleteNewspaper(newspaperId);
+            await _newspaperService.DeleteNewspaperAsync(newspaperId);
 
             TempData["success"] = "Газета успешно удалена";
             return RedirectToAction("Index");

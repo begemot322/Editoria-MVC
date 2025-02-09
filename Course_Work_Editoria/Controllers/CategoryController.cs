@@ -1,31 +1,30 @@
-﻿using Editoria.Data.Context;
-using Editoria.Data.Repository.IRepository;
-using Editoria.Models.Entities;
+﻿using Editoria.Application.Services.Services;
+using Editoria.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Course_Work_Editoria.Controllers
+namespace Editoria.Web.Controllers
 {
     public class CategoryController : Controller
     {
-        private readonly ICategoryRepository _categoryRepository;
-        public CategoryController(ICategoryRepository categoryRepository)
+        private readonly ICategoryService _categoryService;
+        public CategoryController(ICategoryService categoryService)
         {
-            _categoryRepository = categoryRepository;
+            _categoryService = categoryService;
         }
 
         [Authorize(Policy = "UserPolicy")]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var categoryList = _categoryRepository.GetAllCategories();
+            var categoryList = await _categoryService.GetAllCategoriesAsync();
             return View(categoryList);
         }
 
         [Authorize(Policy = "ModeratorPolicy")]
-        public IActionResult Upsert(int? categoryId)
+        public async Task<IActionResult> Upsert(int? categoryId)
         {
             var category = categoryId.HasValue ?
-                _categoryRepository.GetCategoryById(categoryId.Value) : new Category();
+                await _categoryService.GetCategoryByIdAsync(categoryId.Value) : new Category();
 
             if (categoryId.HasValue && category == null)
             {
@@ -37,18 +36,18 @@ namespace Course_Work_Editoria.Controllers
 
         [HttpPost]
         [Authorize(Policy = "ModeratorPolicy")]
-        public IActionResult Upsert(Category category)
+        public async Task<IActionResult> Upsert(Category category)
         {
             if (ModelState.IsValid)
             {
                 if (category.CategoryId == 0)
                 {
-                    _categoryRepository.AddCategory(category);
+                    await _categoryService.CreateCategoryAsync(category);
                     TempData["success"] = "Категория создана успешно!";
                 }
                 else
                 {
-                    _categoryRepository.UpdateCategory(category);
+                    await _categoryService.UpdateCategoryAsync(category);
                     TempData["success"] = "Категория обновлена успешно!";
                 }
                 return RedirectToAction("Index");
@@ -57,9 +56,9 @@ namespace Course_Work_Editoria.Controllers
         }
 
         [Authorize(Policy = "AdminPolicy")]
-        public IActionResult Delete(int categoryId)
+        public async Task<IActionResult> Delete(int categoryId)
         {
-            var category = _categoryRepository.GetCategoryById(categoryId);
+            var category = await _categoryService.GetCategoryByIdAsync(categoryId);
 
             if (category == null)
             {
@@ -71,9 +70,9 @@ namespace Course_Work_Editoria.Controllers
 
         [HttpPost, ActionName("Delete")]
         [Authorize(Policy = "AdminPolicy")]
-        public IActionResult DeletePOST(int categoryId)
+        public async Task<IActionResult> DeletePOST(int categoryId)
         {
-            _categoryRepository.DeleteCategory(categoryId);
+            await _categoryService.DeleteCategoryAsync(categoryId);
 
             TempData["success"] = "Категория удалена успешно!";
             return RedirectToAction("Index");

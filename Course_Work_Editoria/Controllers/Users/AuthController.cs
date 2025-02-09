@@ -1,23 +1,28 @@
 ﻿using Course_Work_Editoria.Services.Auth;
-using Editoria.Models.Requests;
-using Editoria.Models.ViewModel;
+using Editoria.Application.DTOs.Authentication;
+using Editoria.Application.Services.Implementation;
+using Editoria.Application.Services.Interfaces;
+using Editoria.Web.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Course_Work_Editoria.Controllers.Users
+namespace Editoria.Web.Controllers.Users
 {
     public class AuthController : Controller
     {
-        private readonly UserService _userService;
+        private readonly IUserService _userService;
+        private readonly DropdownDataService _dropdownService;
 
-        public AuthController(UserService userService)
+        public AuthController(IUserService userService,
+            DropdownDataService dropdownService)
         {
+            _dropdownService = dropdownService;
             _userService = userService;
         }
 
         [HttpGet]
         public IActionResult Register()
         {
-            var roles = _userService.GetRoles();
+            var roles = _dropdownService.GetRolesSelectList();
 
             var registerRequest = new RegisterUserRequestVM
             {
@@ -28,18 +33,18 @@ namespace Course_Work_Editoria.Controllers.Users
         }
 
         [HttpPost]
-        public IActionResult Register(RegisterUserRequestVM viewModel, IFormFile? imageFile)
+        public async Task<IActionResult> Register(RegisterUserRequestVM viewModel, IFormFile? imageFile)
         {
             if (ModelState.IsValid)
             {
                 var request = viewModel.RegisterUserRequest;
-                _userService.Register(request.UserName, request.Email, request.Password, request.PhoneNumber, request.Role, imageFile);
+                await _userService.RegisterAsync(request.UserName, request.Email, request.Password, request.PhoneNumber, request.Role, imageFile);
 
                 TempData["success"] = "Вы успешно зарегистрировались";
                 return RedirectToAction("Index", "Home");
             }
 
-            viewModel.Roles = _userService.GetRoles();
+            viewModel.Roles = _dropdownService.GetRolesSelectList();
             return View(viewModel);
         }
 
@@ -50,13 +55,13 @@ namespace Course_Work_Editoria.Controllers.Users
         }
 
         [HttpPost]
-        public IActionResult Login(LoginUserRequest request)
+        public async Task<IActionResult> Login(LoginUserRequest request)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    string token = _userService.Login(request.Email, request.Password);
+                    string token = await _userService.LoginAsync(request.Email, request.Password);
                     Response.Cookies.Append("SecurityCookies", token);
                     TempData["success"] = "Вы успешно вошли в аккаунт";
                     return RedirectToAction("Index", "Home");
@@ -66,7 +71,7 @@ namespace Course_Work_Editoria.Controllers.Users
                     ModelState.AddModelError("", ex.Message);
                 }
             }
-            
+
             return View(request);
         }
 

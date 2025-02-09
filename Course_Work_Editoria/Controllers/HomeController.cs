@@ -1,46 +1,27 @@
- using System.Diagnostics;
-using Editoria.Data.Context;
-using Editoria.Data.Repository.IRepository;
-using Editoria.Models.Entities;
-using Editoria.Models.ViewModel;
+using System.Diagnostics;
+using Editoria.Application.Services.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace Course_Work_Editoria.Controllers
+namespace Editoria.Web.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly IArticleRepository _articleRepository;
-
-        private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger, IArticleRepository articleRepository)
+        private readonly IArticleService _articleService;
+        public HomeController(IArticleService articleService)
         {
-            _articleRepository = articleRepository;
-            _logger = logger;
+            _articleService = articleService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var articlesWithNewspapers = _articleRepository.GetAllArticles();
+            var articlesWithNewspapers = await _articleService.GetAllArticlesAsync();
             return View(articlesWithNewspapers);
         }
-        public IActionResult Details(int articleId)
+        public async Task<IActionResult> Details(int articleId)
         {
-            var article = _articleRepository.GetArticleById(articleId);
+            var article = await _articleService.GetArticleByIdAsync(articleId);
             return View(article);
-        }
-
-
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }
 }

@@ -1,30 +1,28 @@
-﻿using Editoria.Data.Context;
-using Editoria.Data.Repository;
-using Editoria.Data.Repository.IRepository;
-using Editoria.Models.Entities;
-using Editoria.Models.ViewModel;
+﻿using Editoria.Application.Services.Services;
+using Editoria.Domain.Entities;
+using Editoria.Web.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Course_Work_Editoria.Controllers
+namespace Editoria.Web.Controllers
 {
     public class EditorController : Controller
     {
-        private readonly IEditorRepository _editorRepository;
+        private readonly IEditorService _editorService;
 
-        public EditorController(IEditorRepository editorRepository)
+        public EditorController(IEditorService editorService)
         {
-            _editorRepository = editorRepository;
+            _editorService = editorService;
         }
 
         [Authorize(Policy = "UserPolicy")]
-        public IActionResult Index(string name, string email)
+        public async Task<IActionResult> Index(string name, string email)
         {
-            var editors = _editorRepository.GetFilteredEditors(name, email);
+            var editors = await _editorService.GetAllEditorsAsync(name, email);
 
             EditorFilterVM viewModel = new EditorFilterVM
             {
-                Editors = editors.ToList(),
+                Editors = editors,
                 Name = name,
                 Email = email
             };
@@ -33,9 +31,9 @@ namespace Course_Work_Editoria.Controllers
         }
 
         [Authorize(Policy = "UserPolicy")]
-        public IActionResult Details(int editorId)
+        public async Task<IActionResult> Details(int editorId)
         {
-            var editor = _editorRepository.GetEditorById(editorId);
+            var editor = await _editorService.GetEditorByIdAsync(editorId);
 
             if (editor == null)
             {
@@ -45,12 +43,12 @@ namespace Course_Work_Editoria.Controllers
         }
 
         [Authorize(Policy = "ModeratorPolicy")]
-        public IActionResult Upsert(int? editorId)
+        public async Task<IActionResult> Upsert(int? editorId)
         {
             var editor = editorId.HasValue ?
-                _editorRepository.GetEditorById(editorId.Value) : new Editor();
+                await _editorService.GetEditorByIdAsync(editorId.Value) : new Editor();
 
-            if(editorId.HasValue && editor == null)
+            if (editorId.HasValue && editor == null)
             {
                 return NotFound();
             }
@@ -59,18 +57,18 @@ namespace Course_Work_Editoria.Controllers
 
         [HttpPost]
         [Authorize(Policy = "ModeratorPolicy")]
-        public IActionResult Upsert(Editor editor)
+        public async Task<IActionResult> Upsert(Editor editor)
         {
             if (ModelState.IsValid)
             {
                 if (editor.EditorId == 0)
                 {
-                    _editorRepository.AddEditor(editor);
+                    await _editorService.CreateEditorAsync(editor);
                     TempData["success"] = "Редактор успешно добавлен!";
                 }
                 else
                 {
-                    _editorRepository.UpdateEditor(editor);
+                    await _editorService.UpdateEditorAsync(editor);
                     TempData["success"] = "Редактор успешно обновлён!";
                 }
                 return RedirectToAction("Index");
@@ -79,9 +77,9 @@ namespace Course_Work_Editoria.Controllers
         }
 
         [Authorize(Policy = "AdminPolicy")]
-        public IActionResult Delete(int editorId)
+        public async Task<IActionResult> Delete(int editorId)
         {
-            var editor = _editorRepository.GetEditorById(editorId);
+            var editor = await _editorService.GetEditorByIdAsync(editorId);
 
             if (editor == null)
             {
@@ -92,9 +90,9 @@ namespace Course_Work_Editoria.Controllers
 
         [HttpPost, ActionName("Delete")]
         [Authorize(Policy = "AdminPolicy")]
-        public IActionResult DeletePOST(int editorId)
+        public async Task<IActionResult> DeletePOST(int editorId)
         {
-            _editorRepository.DeleteEditor(editorId);
+            await _editorService.DeleteEditorAsync(editorId);
 
             TempData["success"] = "Редактор успешно удалён";
             return RedirectToAction("Index");

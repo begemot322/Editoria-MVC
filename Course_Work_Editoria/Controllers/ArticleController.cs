@@ -1,38 +1,42 @@
 ﻿using Course_Work_Editoria.Services.File;
-using Editoria.Data.Context;
-using Editoria.Data.Repository.IRepository;
-using Editoria.Models;
-using Editoria.Models.Entities;
-using Editoria.Models.ViewModel ;
+using Editoria.Application.Services.Implementation;
+using Editoria.Application.Services.Services;
+using Editoria.Domain.Entities;
+using Editoria.Web.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
-namespace Course_Work_Editoria.Controllers
+namespace Editoria.Web.Controllers
 {
     public class ArticleController : Controller
     {
-        private readonly IArticleRepository _articleRepository;
-        private readonly FileService _fileService;
+        private readonly IArticleService _articleService;
+        private readonly DropdownDataService _dropdownService;
+        private readonly IFileService _fileService;
 
-        public ArticleController(IArticleRepository articleRepository, FileService fileService)
+        public ArticleController(
+            IArticleService articleService,
+            IFileService fileService,
+            DropdownDataService dropdownService)
         {
-            _articleRepository = articleRepository;
+            _articleService = articleService;
             _fileService = fileService;
+            _dropdownService = dropdownService;
         }
 
         [Authorize(Policy = "UserPolicy")]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var articles = _articleRepository.GetAllArticles();
+            var articles = await _articleService.GetAllArticlesAsync();
             return View(articles);
         }
 
         [Authorize(Policy = "UserPolicy")]
-        public IActionResult Details(int articleId)
+        public async Task<IActionResult> Details(int articleId)
         {
-            var article = _articleRepository.GetArticleById(articleId);
+            var article = await _articleService.GetArticleByIdAsync(articleId);
             if (article == null)
             {
                 return NotFound();
@@ -41,19 +45,19 @@ namespace Course_Work_Editoria.Controllers
         }
 
         [Authorize(Policy = "ModeratorPolicy")]
-        public IActionResult Upsert(int? articleId)
+        public async Task<IActionResult> Upsert(int? articleId)
         {
             var viewModel = new ArticleVM
             {
-                Issues = _articleRepository.GetIssueSelectList(),
-                Categories = _articleRepository.GetCategorySelectList(),
-                Authors = _articleRepository.GetAuthorSelectList(),
-                Article = articleId.HasValue?
-                    _articleRepository.GetArticleById(articleId.Value):new Article(),
-                Tags = _articleRepository.GetTagSelectList(),
-                SelectedTags = articleId.HasValue?
-                    _articleRepository.GetArticleById(articleId.Value)
-                    .ArticleTags.Select(at=>at.TagId).ToList(): new List<int>()
+                Issues = await _dropdownService.GetIssueSelectListAsync(),
+                Categories = await _dropdownService.GetCategorySelectListAsync(),
+                Authors = await _dropdownService.GetAuthorSelectListAsync(),
+                Article = articleId.HasValue ?
+                    await _articleService.GetArticleByIdAsync(articleId.Value) : new Article(),
+                Tags = await _dropdownService.GetTagSelectListAsync(),
+                SelectedTags = articleId.HasValue ?
+                   (await _articleService.GetArticleByIdAsync(articleId.Value))
+                    .ArticleTags.Select(at => at.TagId).ToList() : new List<int>()
             };
 
             if (articleId.HasValue && viewModel.Article == null)
@@ -65,7 +69,7 @@ namespace Course_Work_Editoria.Controllers
 
         [HttpPost]
         [Authorize(Policy = "ModeratorPolicy")]
-        public IActionResult Upsert(ArticleVM viewModel, IFormFile? imageFile)
+        public async Task<IActionResult> Upsert(ArticleVM viewModel, IFormFile? imageFile)
         {
             if (ModelState.IsValid)
             {
@@ -82,31 +86,31 @@ namespace Course_Work_Editoria.Controllers
 
                 if (viewModel.Article.ArticleId == 0)
                 {
-                    _articleRepository.AddArticle(viewModel.Article, viewModel.SelectedTags);
+                    await _articleService.CreateArticleAsync(viewModel.Article, viewModel.SelectedTags);
                     TempData["success"] = "Статья успешно добавлена";
                 }
 
                 else
                 {
-                    _articleRepository.UpdateArticle(viewModel.Article, viewModel.SelectedTags);
+                    await _articleService.UpdateArticleAsync(viewModel.Article, viewModel.SelectedTags);
                     TempData["success"] = "Статья успешно обновлена";
                 }
 
                 return RedirectToAction("Index");
             }
 
-            viewModel.Issues = _articleRepository.GetIssueSelectList();
-            viewModel.Categories = _articleRepository.GetCategorySelectList();
-            viewModel.Authors = _articleRepository.GetAuthorSelectList();
-            viewModel.Tags = _articleRepository.GetTagSelectList();
+            viewModel.Issues = await _dropdownService.GetIssueSelectListAsync();
+            viewModel.Categories = await _dropdownService.GetCategorySelectListAsync();
+            viewModel.Authors = await _dropdownService.GetAuthorSelectListAsync();
+            viewModel.Tags = await _dropdownService.GetTagSelectListAsync();
 
             return View(viewModel);
         }
 
         [Authorize(Policy = "AdminPolicy")]
-        public IActionResult Delete(int articleId)
+        public async Task<IActionResult> Delete(int articleId)
         {
-            var article = _articleRepository.GetArticleById(articleId);
+            var article = await _articleService.GetArticleByIdAsync(articleId);
             if (article == null)
             {
                 return NotFound();
@@ -116,9 +120,9 @@ namespace Course_Work_Editoria.Controllers
 
         [HttpPost, ActionName("Delete")]
         [Authorize(Policy = "AdminPolicy")]
-        public IActionResult DeletePOST(int articleId)
+        public async Task<IActionResult> DeletePOST(int articleId)
         {
-            var article = _articleRepository.GetArticleById(articleId);
+            var article = await _articleService.GetArticleByIdAsync(articleId);
 
             if (article != null)
             {
@@ -126,7 +130,7 @@ namespace Course_Work_Editoria.Controllers
                 {
                     _fileService.DeleteFile(article.ImageUrl);
                 }
-                _articleRepository.DeleteArticle(articleId);
+                await _articleService.DeleteArticleAsync(articleId);
             }
 
 
