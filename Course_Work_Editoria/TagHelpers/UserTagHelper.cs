@@ -1,17 +1,17 @@
 ﻿using Course_Work_Editoria.Services.Auth;
-using Editoria.Models.Entities;
+using Editoria.Application.Services.Interfaces;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.Extensions.Caching.Memory;
 
-namespace Course_Work_Editoria.TagHelpers
+namespace Editoria.Web.TagHelpers
 {
-    public class UserTagHelper: TagHelper
+    public class UserTagHelper : TagHelper
     {
-        private readonly UserService _userService;
+        private readonly IUserService _userService;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IMemoryCache _cache;
 
-        public UserTagHelper(UserService userService, IHttpContextAccessor httpContextAccessor,
+        public UserTagHelper(IUserService userService, IHttpContextAccessor httpContextAccessor,
             IMemoryCache cache)
         {
             _userService = userService;
@@ -19,9 +19,9 @@ namespace Course_Work_Editoria.TagHelpers
             _cache = cache;
         }
 
-        public string DefaultImageUrl { get; set; } = "/images/users/free-icon-user-1077114.png";
+        public string DefaultImageUrl { get; set; } = "/images/users/default_user.png";
 
-        public override void Process(TagHelperContext context, TagHelperOutput output)
+        public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
             var user = _httpContextAccessor.HttpContext?.User;
 
@@ -31,9 +31,9 @@ namespace Course_Work_Editoria.TagHelpers
 
                 var cacheKey = $"User_{userId}";
 
-                if(!_cache.TryGetValue(cacheKey, out (string ImageUrl, string UserName) cachedUser))
+                if (!_cache.TryGetValue(cacheKey, out (string ImageUrl, string UserName) cachedUser))
                 {
-                    var userFromDb = _userService.GetUserById(Guid.Parse(userId));
+                    var userFromDb = await _userService.GetUserByIdAsync(Guid.Parse(userId));
 
                     cachedUser = (userFromDb.ImageUrl ?? DefaultImageUrl, userFromDb.UserName);
                     _cache.Set(cacheKey, cachedUser, TimeSpan.FromMinutes(10));

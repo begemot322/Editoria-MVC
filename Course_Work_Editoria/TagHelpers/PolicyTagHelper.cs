@@ -2,9 +2,9 @@
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using System.Security.Claims;
 
-namespace Course_Work_Editoria.TagHelpers
+namespace Editoria.Web.TagHelpers
 {
-    [HtmlTargetElement(Attributes ="policy")]
+    [HtmlTargetElement(Attributes = "policy")]
     public class PolicyTagHelper : TagHelper
     {
         private readonly IAuthorizationService _authService;
@@ -16,11 +16,11 @@ namespace Course_Work_Editoria.TagHelpers
             _principal = httpContextAccessor.HttpContext.User;
         }
         public string Policy { get; set; }
-       
+
 
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
-            if(!(await _authService.AuthorizeAsync(_principal, Policy)).Succeeded)
+            if (!(await _authService.AuthorizeAsync(_principal, Policy)).Succeeded)
                 output.SuppressOutput();
         }
     }
