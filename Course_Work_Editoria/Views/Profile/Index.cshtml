@@ -12,7 +12,7 @@
     <div class="border border-secondary p-4 rounded-bottom shadow">
         <div class="row">
             <div class="col-md-4 text-center">
-                <img src="@(string.IsNullOrEmpty(Model.ImageUrl)? "/images/users/free-icon-user-1077114.png": @Model.ImageUrl)"
+                <img src="@(string.IsNullOrEmpty(Model.ImageUrl)? "/images/users/default_user.png": @Model.ImageUrl)"
                  alt="User Image" class="img-fluid rounded" style="height: 200px;" />
                 <form method="post" asp-controller="Profile" asp-action="ChangeImage" enctype="multipart/form-data" id="imageForm">
                     <div class="text-center mb-3">
