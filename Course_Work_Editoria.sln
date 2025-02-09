@@ -3,11 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.12.35521.163
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Course_Work_Editoria", "Course_Work_Editoria\Course_Work_Editoria.csproj", "{A2FDDEE6-15F5-4196-A746-6D6247A39E8D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Editoria.Web", "Course_Work_Editoria\Editoria.Web.csproj", "{A2FDDEE6-15F5-4196-A746-6D6247A39E8D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Editoria.Data", "Editoria.Data\Editoria.Data.csproj", "{DF543CD4-0311-4B64-933D-99B6088FFF58}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Editoria.Application", "Editoria.Application\Editoria.Application.csproj", "{13A1BD67-D164-46C7-90C6-C98B5A6B3F2A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Editoria.Models", "Editoria.Models\Editoria.Models.csproj", "{B112982E-9809-443F-B94A-E4415CBE8F4A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Editoria.Domain", "Editoria.Domain\Editoria.Domain.csproj", "{F0234713-B84F-4BF2-96AC-49359ECD60A3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Editoria.Infrastructure", "Editoria.Infrastructure\Editoria.Infrastructure.csproj", "{DD56A72A-794F-44C0-9325-5EC70140E900}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,14 +21,18 @@ Global
 		{A2FDDEE6-15F5-4196-A746-6D6247A39E8D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A2FDDEE6-15F5-4196-A746-6D6247A39E8D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A2FDDEE6-15F5-4196-A746-6D6247A39E8D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DF543CD4-0311-4B64-933D-99B6088FFF58}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DF543CD4-0311-4B64-933D-99B6088FFF58}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DF543CD4-0311-4B64-933D-99B6088FFF58}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DF543CD4-0311-4B64-933D-99B6088FFF58}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B112982E-9809-443F-B94A-E4415CBE8F4A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B112982E-9809-443F-B94A-E4415CBE8F4A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B112982E-9809-443F-B94A-E4415CBE8F4A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B112982E-9809-443F-B94A-E4415CBE8F4A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{13A1BD67-D164-46C7-90C6-C98B5A6B3F2A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{13A1BD67-D164-46C7-90C6-C98B5A6B3F2A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{13A1BD67-D164-46C7-90C6-C98B5A6B3F2A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{13A1BD67-D164-46C7-90C6-C98B5A6B3F2A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F0234713-B84F-4BF2-96AC-49359ECD60A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F0234713-B84F-4BF2-96AC-49359ECD60A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F0234713-B84F-4BF2-96AC-49359ECD60A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F0234713-B84F-4BF2-96AC-49359ECD60A3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DD56A72A-794F-44C0-9325-5EC70140E900}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DD56A72A-794F-44C0-9325-5EC70140E900}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DD56A72A-794F-44C0-9325-5EC70140E900}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DD56A72A-794F-44C0-9325-5EC70140E900}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
