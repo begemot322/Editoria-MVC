@@ -1,0 +1,27 @@
+﻿@model IssueVM
+
+<div class="border p-3 mt-4">
+    <div class="row pb-2">
+        <h2 class="text-primary">
+            <i class="bi bi-journal-text"></i> Общая выручка выпуска: @Model.TotalCost
+        </h2>
+        <hr />
+    </div>
+    <div class="row pb-2">
+        @foreach (var advertisement in Model.Issue.Advertisements)
+        {
+            <div class="col-md-6 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h3 class="card-title text-primary">@advertisement.Type</h3>
+                        <p class="card-text text-muted">@advertisement.Text</p>
+                        <p class="text-end fw-bold">Цена: @advertisement.Cost.ToString("C")</p>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+    <a asp-controller="Issue" asp-action="Index" class="btn btn-secondary border border-dark">
+        <i class="bi bi-arrow-left"></i> Назад
+    </a>
+</div>
