@@ -14,17 +14,17 @@
         </div>
     </div>
 
-    <form method="get" asp-action="Index" class="mb-3">
+    <form method="get" asp-action="Index" class="my-3">
         <div class="row mb-3">
-            <div class="col-md-4">
-                <input type="number" name="minPriority" class="form-control" placeholder="Минимальный приоритет" value="@Context.Request.Query["minPriority"]" />
+            <div class="col-4">
+                <input type="number" name="minPriority" class="form-control" placeholder="Минимальный приоритет(1)" value="@Context.Request.Query["minPriority"]" />
             </div>
-            <div class="col-md-4">
-                <input type="number" name="maxPriority" class="form-control" placeholder="Максимальный приоритет" value="@Context.Request.Query["maxPriority"]" />
+            <div class="col-4">
+                <input type="number" name="maxPriority" class="form-control" placeholder="Максимальный приоритет(5)" value="@Context.Request.Query["maxPriority"]" />
             </div>
-            <div class="col-md-4">
+            <div class="col-4 text-end">
                 <button type="submit" class="btn btn-primary">
-                    <i class="bi bi-filter-circle"></i> Фильтровать
+                    <i class="bi bi-filter-circle"></i> Фильтровать категории
                 </button>
             </div>
         </div>
