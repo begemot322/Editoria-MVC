@@ -14,10 +14,10 @@
     <table class="table table-bordered table-striped">
         <thead>
             <tr>
-                <th>Газета</th>
+                <th>Содержание</th>
                 <th>Статус</th>
                 <th>Дата публикации</th> 
-                <th>Содержание</th>
+                <th>Газета</th>
                 <th>Тираж</th>
                 <th></th>
             </tr>
@@ -26,10 +26,14 @@
             @foreach (var issue in Model)
             {
                 <tr>
-                    <td>@issue.Newspaper.Name</td>
+                    <td>
+                        <a asp-controller="Issue" asp-action="Details" asp-route-issueId="@issue.IssueId" class="text-decoration-underline text-primary" policy="UserPolicy">
+                            @issue.Information
+                        </a>
+                    </td>
                     <td>@(issue.IsActive ? "Активна" : "Не активна")</td>
-                    <td>@issue.PublicationDate.ToShortDateString()</td> 
-                    <td>@issue.Information</td> 
+                    <td>@issue.PublicationDate.ToShortDateString()</td>
+                    <td>@issue.Newspaper.Name</td>
                     <td>@issue.Circulation</td>
                     <td>
                         <div class="btn-group">
