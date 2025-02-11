@@ -1,0 +1,41 @@
+﻿@model List<Article>
+
+<div class="container mt-4">
+    <form method="get" asp-action="Search" class="d-flex justify-content-center mb-4">
+        <input type="text" name="keyword" placeholder="Введите ключевое слово" class="form-control me-2" style="max-width: 400px;" />
+        <button type="submit" class="btn btn-primary">Поиск</button>
+    </form>
+
+    @if (Model.Any())
+    {
+        <div class="row">
+            @foreach (var article in Model)
+            {
+                <div class="col-md-4 mb-4">
+                    <div class="card shadow-sm">
+                        <img src="@(string.IsNullOrEmpty(article.ImageUrl) ? "/images/articles/no_image_Article.jpg" : article.ImageUrl)"
+                             class="card-img-top"
+                             alt="Изображение" style="height: 200px; object-fit: cover;" />
+                        <div class="card-body">
+                            <h5 class="card-title">@article.Title</h5>
+                            <p class="card-text">@article.Text.Substring(0, Math.Min(100, article.Text.Length))...</p>
+                            <p class="text-muted"><i>Дата публикации: @article.PublicationDate.ToShortDateString()</i></p>
+                        </div>
+                        <div class="card-footer text-center">
+                            <a href="@Url.Action("Details", new { articleId = article.ArticleId })" class="btn btn-outline-primary">Читать далее</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-warning" role="alert">
+            Статьи не найдены.
+        </div>
+    }
+    <a asp-controller="Article" asp-action="Index" class="btn btn-secondary border border-dark">
+        <i class="bi bi-arrow-left"></i> Назад
+    </a>
+</div>
