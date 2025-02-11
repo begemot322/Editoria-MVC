@@ -14,5 +14,7 @@ namespace Editoria.Application.Common.Interfaces.Repositories
         Task<IEnumerable<Article>> GetArticlesWithThenIncludesAsync();
         Task<List<ArticleTag>> GetArticleTagsAsync(int articleId);
         Task RemoveArticleTagsAsync(List<ArticleTag> articleTags);
+        Task<List<Article>> SearchArticlesAsync(string keyword);
+
     }
 }

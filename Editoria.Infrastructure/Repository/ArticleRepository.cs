@@ -59,5 +59,10 @@ namespace Editoria.Infrastructure.Repository
             _db.ArticleTags.RemoveRange(articleTags);
             await _db.SaveChangesAsync();
         }
+
+        public async Task<List<Article>> SearchArticlesAsync(string keyword)
+        {
+            return await _db.SearchArticlesByKeywordAsync(keyword);
+        }
     }
 }

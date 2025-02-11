@@ -86,5 +86,9 @@ namespace Editoria.Application.Services.Implementation
             return await _articleRepository.GetArticlesWithThenIncludesAsync();
         }
 
+        public async Task<List<Article>> SearchArticlesAsync(string keyword)
+        {
+            return await _articleRepository.SearchArticlesAsync(keyword);
+        }
     }
 }

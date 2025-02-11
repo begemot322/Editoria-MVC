@@ -9,5 +9,7 @@ namespace Editoria.Application.Services.Services
         Task<IEnumerable<Article>> GetAllArticlesAsync();
         Task<Article?> GetArticleByIdAsync(int articleId);
         Task UpdateArticleAsync(Article article, List<int> tagIds);
+        Task<List<Article>> SearchArticlesAsync(string keyword);
+
     }
 }

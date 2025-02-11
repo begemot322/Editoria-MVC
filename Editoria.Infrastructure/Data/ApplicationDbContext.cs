@@ -23,6 +23,13 @@ namespace Editoria.Infrastructure.Data
         public decimal GetAdvertisementsCost(int issueId)
         => throw new NotImplementedException();
 
+        public async Task<List<Article>> SearchArticlesByKeywordAsync(string keyword)
+        {
+            return await Articles
+                .FromSqlInterpolated($"EXEC SearchArticlesByKeyword {keyword}")
+                .ToListAsync();
+        }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasDbFunction(() => GetAdvertisementsCost(default));
