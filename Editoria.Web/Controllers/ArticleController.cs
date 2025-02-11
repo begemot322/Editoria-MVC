@@ -34,6 +34,19 @@ namespace Editoria.Web.Controllers
         }
 
         [Authorize(Policy = "UserPolicy")]
+        [HttpGet]
+        public async Task<IActionResult> Search(string keyword)
+        {
+            if (string.IsNullOrWhiteSpace(keyword))
+            {
+                return View(new List<Article>());
+            }
+
+            var articles = await _articleService.SearchArticlesAsync(keyword);
+            return View(articles);
+        }
+
+        [Authorize(Policy = "UserPolicy")]
         public async Task<IActionResult> Details(int articleId)
         {
             var article = await _articleService.GetArticleByIdAsync(articleId);
