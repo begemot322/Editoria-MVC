@@ -20,9 +20,13 @@ namespace Editoria.Infrastructure.Data
         public DbSet<Tag> Tags { get; set; }
         public DbSet<ArticleTag> ArticleTags { get; set; }
 
+        public decimal GetAdvertisementsCost(int issueId)
+        => throw new NotImplementedException();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.HasDbFunction(() => GetAdvertisementsCost(default));
+    
             modelBuilder.Entity<Editor>()
                 .HasOne(e => e.Newspaper)
                 .WithOne(n => n.Editor)

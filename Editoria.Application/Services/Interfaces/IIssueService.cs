@@ -9,5 +9,6 @@ namespace Editoria.Application.Services.Services
         Task<IEnumerable<Issue>> GetAllIssuesAsync();
         Task<Issue?> GetIssueByIdAsync(int id);
         Task UpdateIssueAsync(Issue issue);
+        Task<decimal> GetTotalCostAsync(int id);
     }
 }

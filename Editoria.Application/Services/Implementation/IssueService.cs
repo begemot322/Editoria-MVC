@@ -52,14 +52,18 @@ namespace Editoria.Application.Services.Implementation
         }
         public async Task<Issue?> GetIssueByIdAsync(int id)
         {
-            return await _issueRepository.GetAsync(a => a.IssueId == id, includeProperties: "Newspaper");
-        }
+            return await _issueRepository.GetAsync(a => a.IssueId == id, includeProperties: "Newspaper,Advertisements");
+        }   
 
         public async Task UpdateIssueAsync(Issue issue)
         {
             ArgumentNullException.ThrowIfNull(issue);
 
             await _issueRepository.UpdateAsync(issue);
+        }
+        public async Task<decimal> GetTotalCostAsync(int issueId)
+        {
+            return await _issueRepository.GetAdvertisementsCostAsync(issueId);
         }
 
 

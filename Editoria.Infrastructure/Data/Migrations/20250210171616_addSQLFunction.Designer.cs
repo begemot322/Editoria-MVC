@@ -4,6 +4,7 @@ using Editoria.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Editoria.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250210171616_addSQLFunction")]
+    partial class addSQLFunction
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -50,7 +53,7 @@ namespace Editoria.Infrastructure.Migrations
 
                     b.HasIndex("IssueId");
 
-                    b.ToTable("Advertisements", (string)null);
+                    b.ToTable("Advertisements");
 
                     b.HasData(
                         new
@@ -156,7 +159,7 @@ namespace Editoria.Infrastructure.Migrations
 
                     b.HasIndex("IssueId");
 
-                    b.ToTable("Articles", (string)null);
+                    b.ToTable("Articles");
 
                     b.HasData(
                         new
@@ -257,7 +260,7 @@ namespace Editoria.Infrastructure.Migrations
 
                     b.HasIndex("TagId");
 
-                    b.ToTable("ArticleTags", (string)null);
+                    b.ToTable("ArticleTags");
 
                     b.HasData(
                         new
@@ -362,7 +365,7 @@ namespace Editoria.Infrastructure.Migrations
 
                     b.HasKey("AuthorId");
 
-                    b.ToTable("Authors", (string)null);
+                    b.ToTable("Authors");
 
                     b.HasData(
                         new
@@ -470,7 +473,7 @@ namespace Editoria.Infrastructure.Migrations
 
                     b.HasKey("CategoryId");
 
-                    b.ToTable("Categories", (string)null);
+                    b.ToTable("Categories");
 
                     b.HasData(
                         new
@@ -580,7 +583,7 @@ namespace Editoria.Infrastructure.Migrations
 
                     b.HasKey("EditorId");
 
-                    b.ToTable("Editors", (string)null);
+                    b.ToTable("Editors");
 
                     b.HasData(
                         new
@@ -691,7 +694,7 @@ namespace Editoria.Infrastructure.Migrations
 
                     b.HasIndex("NewspaperId");
 
-                    b.ToTable("Issues", (string)null);
+                    b.ToTable("Issues");
 
                     b.HasData(
                         new
@@ -787,7 +790,7 @@ namespace Editoria.Infrastructure.Migrations
                     b.HasIndex("EditorId")
                         .IsUnique();
 
-                    b.ToTable("Newspapers", (string)null);
+                    b.ToTable("Newspapers");
 
                     b.HasData(
                         new
@@ -869,7 +872,7 @@ namespace Editoria.Infrastructure.Migrations
 
                     b.HasKey("TagId");
 
-                    b.ToTable("Tags", (string)null);
+                    b.ToTable("Tags");
 
                     b.HasData(
                         new
@@ -968,7 +971,7 @@ namespace Editoria.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("Editoria.Domain.Entities.Advertisement", b =>

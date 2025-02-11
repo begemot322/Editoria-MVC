@@ -28,6 +28,18 @@ namespace Editoria.Web.Controllers
             return View(issueList);
         }
 
+        [Authorize(Policy = "UserPolicy")]
+        public async Task<IActionResult> Details(int? issueId)
+        {
+            var viewModel = new IssueVM
+            {
+                Issue = issueId.HasValue ?
+                    await _issueService.GetIssueByIdAsync(issueId.Value) : new Issue(),
+                TotalCost = await _issueService.GetTotalCostAsync(issueId.Value)
+            };
+            return View(viewModel);
+        }
+
         [Authorize(Policy = "ModeratorPolicy")]
         public async Task<IActionResult> Upsert(int? issueId)
         {
