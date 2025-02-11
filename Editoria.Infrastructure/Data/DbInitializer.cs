@@ -72,7 +72,6 @@ public class DbInitializer
                         PhoneNumber = "987-654-3210",
                         Role = Roles.User,
                         PasswordHash = _passwordHasher.Generate("user123"), 
-                        ImageUrl = "/images/users/default_user.png"
                     },
                     new User
                     {

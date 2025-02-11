@@ -35,7 +35,7 @@ namespace Editoria.Application.Services.Implementation
                 }
                 else
                 {
-                    throw new InvalidOperationException($"Advertisement with ID {categoryId} not found.");
+                    throw new InvalidOperationException($"Category with ID {categoryId} not found.");
                 }
             }
             catch (Exception ex)
@@ -45,6 +45,12 @@ namespace Editoria.Application.Services.Implementation
 
             return false;
         }
+
+        public async Task<IEnumerable<Category>> GetCategoriesByPriorityAsync(int minPriority, int maxPriority)
+        {
+            return await _categoryRepository.GetCategoriesByPriorityAsync(minPriority, maxPriority);
+        }
+
         public async Task<IEnumerable<Category>> GetAllCategoriesAsync()
         {
             return await _categoryRepository.GetAllAsync();

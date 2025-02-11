@@ -1,7 +1,9 @@
 ﻿using Editoria.Application.Services.Services;
 using Editoria.Domain.Entities;
+using Editoria.Web.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Net.Mail;
 
 namespace Editoria.Web.Controllers
 {
@@ -14,9 +16,18 @@ namespace Editoria.Web.Controllers
         }
 
         [Authorize(Policy = "UserPolicy")]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? minPriority, int? maxPriority)
         {
-            var categoryList = await _categoryService.GetAllCategoriesAsync();
+            IEnumerable<Category> categoryList;
+
+            if (minPriority.HasValue && maxPriority.HasValue)
+            {
+                categoryList = await _categoryService.GetCategoriesByPriorityAsync(minPriority.Value, maxPriority.Value);
+            }
+            else
+            {
+                categoryList = await _categoryService.GetAllCategoriesAsync();
+            }
             return View(categoryList);
         }
 

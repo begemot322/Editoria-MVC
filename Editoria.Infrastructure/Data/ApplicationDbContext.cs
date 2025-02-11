@@ -21,7 +21,10 @@ namespace Editoria.Infrastructure.Data
         public DbSet<ArticleTag> ArticleTags { get; set; }
 
         public decimal GetAdvertisementsCost(int issueId)
-        => throw new NotImplementedException();
+            => throw new NotImplementedException();
+
+        public IQueryable<Category> GetCategoriesByPriority(int minPriority, int maxPriority)
+            => FromExpression(() => GetCategoriesByPriority(minPriority, maxPriority));
 
         public async Task<List<Article>> SearchArticlesByKeywordAsync(string keyword)
         {
@@ -33,7 +36,10 @@ namespace Editoria.Infrastructure.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasDbFunction(() => GetAdvertisementsCost(default));
-    
+
+            modelBuilder.HasDbFunction(() => GetCategoriesByPriority(default, default));
+
+
             modelBuilder.Entity<Editor>()
                 .HasOne(e => e.Newspaper)
                 .WithOne(n => n.Editor)

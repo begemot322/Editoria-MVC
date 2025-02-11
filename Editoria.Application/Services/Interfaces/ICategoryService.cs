@@ -9,5 +9,7 @@ namespace Editoria.Application.Services.Services
         Task<IEnumerable<Category>> GetAllCategoriesAsync();
         Task<Category?> GetCategoryByIdAsync(int id);
         Task UpdateCategoryAsync(Category category);
+        Task<IEnumerable<Category>> GetCategoriesByPriorityAsync(int minPriority, int maxPriority);
+
     }
 }
