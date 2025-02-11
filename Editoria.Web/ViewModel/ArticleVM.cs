@@ -6,7 +6,7 @@ namespace Editoria.Web.ViewModel
 {
     public class ArticleVM
     {
-        public Article Article { get; set; }
+        public Article? Article { get; set; }
         [ValidateNever]
         public List<SelectListItem> Issues { get; set; }
         [ValidateNever]

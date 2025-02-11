@@ -6,7 +6,7 @@ namespace Editoria.Web.ViewModel
 {
     public class NewspaperVM
     {
-        public Newspaper Newspaper { get; set; }
+        public Newspaper? Newspaper { get; set; }
         [ValidateNever]
         public IEnumerable<SelectListItem> Editors { get; set; }
     }
