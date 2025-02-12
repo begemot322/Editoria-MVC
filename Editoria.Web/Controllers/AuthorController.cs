@@ -32,39 +32,46 @@ namespace Editoria.Web.Controllers
 
 
         [Authorize(Policy = "ModeratorPolicy")]
-        public async Task<IActionResult> Upsert(int? authorId)
+        public IActionResult Create()
         {
-            var author = authorId.HasValue
-                ? await _authorService.GetAuthorByIdAsync(authorId.Value)
-                : new Author();
-
-            if (authorId.HasValue && author == null)
-            {
-                return NotFound();
-            }
-
-            return View(author);
+            return View("Upsert", new Author());
         }
 
         [HttpPost]
         [Authorize(Policy = "ModeratorPolicy")]
-        public async Task<IActionResult> Upsert(Author author)
+        public async Task<IActionResult> Create(Author author)
         {
             if (ModelState.IsValid)
             {
-                if (author.AuthorId == 0)
-                {
-                    await _authorService.CreateAuthorAsync(author);
-                    TempData["success"] = "Автор успешно создан";
-                }
-                else
-                {
-                    await _authorService.UpdateAuthorAsync(author);
-                    TempData["success"] = "Автор успешно обновлён";
-                }
+                await _authorService.CreateAuthorAsync(author);
+                TempData["success"] = "Автор успешно создан";
                 return RedirectToAction("Index");
             }
-            return View(author);
+            return View("Upsert", author);
+        }
+
+        [Authorize(Policy = "ModeratorPolicy")]
+        public async Task<IActionResult> Update(int authorId)
+        {
+            var author = await _authorService.GetAuthorByIdAsync(authorId);
+            if (author == null)
+            {
+                return NotFound();
+            }
+            return View("Upsert", author);
+        }
+
+        [HttpPost]
+        [Authorize(Policy = "ModeratorPolicy")]
+        public async Task<IActionResult> Update(Author author)
+        {
+            if (ModelState.IsValid)
+            {
+                await _authorService.UpdateAuthorAsync(author);
+                TempData["success"] = "Автор успешно обновлён";
+                return RedirectToAction("Index");
+            }
+            return View("Upsert",author);
         }
 
         [Authorize(Policy = "AdminPolicy")]
