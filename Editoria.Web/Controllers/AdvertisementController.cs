@@ -39,47 +39,60 @@ namespace Editoria.Web.Controllers
         }
 
         [Authorize(Policy = "ModeratorPolicy")]
-        public async Task<IActionResult> Upsert(int? advertisementId)
+        public async Task<IActionResult> Create()
         {
-            var issueSelectList = await _dropdownService.GetIssueSelectListAsync();
-
-            var viewModel = new AdvertisementVM()
+            var viewModel = new AdvertisementVM
             {
-                Issues = issueSelectList,
-                Advertisement = advertisementId.HasValue
-                ? await _advertisementService.GetAdvertisementByIdAsync(advertisementId.Value)
-                : new Advertisement()
+                Issues = await _dropdownService.GetIssueSelectListAsync(),
+                Advertisement = new Advertisement()
             };
 
-            if (advertisementId.HasValue && viewModel.Advertisement == null)
-            {
-                return NotFound();
-            }
-            return View(viewModel);
-
+            return View("Upsert", viewModel);
         }
 
         [HttpPost]
         [Authorize(Policy = "ModeratorPolicy")]
-        public async Task<IActionResult> Upsert(AdvertisementVM viewModel)
+        public async Task<IActionResult> Create(AdvertisementVM viewModel)
         {
             if (ModelState.IsValid)
             {
-                if (viewModel.Advertisement.AdvertisementId == 0)
-                {
-                    await _advertisementService.CreateAdvertisementAsync(viewModel.Advertisement);
-                    TempData["success"] = "Рекламное объявление успешно добавлено";
-                }
-                else
-                {
-                    await _advertisementService.UpdateAdvertisementAsync(viewModel.Advertisement);
-                    TempData["success"] = "Рекламное объявление успешно обновлено";
-                }
+                await _advertisementService.CreateAdvertisementAsync(viewModel.Advertisement);
+                TempData["success"] = "Рекламное объявление успешно добавлено";
                 return RedirectToAction("Index");
             }
-            viewModel.Issues = await _dropdownService.GetIssueSelectListAsync();
 
-            return View(viewModel);
+            viewModel.Issues = await _dropdownService.GetIssueSelectListAsync();
+            return View("Upsert", viewModel);
+        }
+
+        [Authorize(Policy = "ModeratorPolicy")]
+        public async Task<IActionResult> Update(int advertisementId)
+        {
+            var advertisement = await _advertisementService.GetAdvertisementByIdAsync(advertisementId);
+            if (advertisement == null) return NotFound();
+
+            var viewModel = new AdvertisementVM
+            {
+                Issues = await _dropdownService.GetIssueSelectListAsync(),
+                Advertisement = advertisement
+            };
+
+            return View("Upsert", viewModel);
+        }
+
+        [HttpPost]
+        [Authorize(Policy = "ModeratorPolicy")]
+        public async Task<IActionResult> Update(AdvertisementVM viewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                await _advertisementService.UpdateAdvertisementAsync(viewModel.Advertisement);
+                TempData["success"] = "Рекламное объявление успешно обновлено";
+                return RedirectToAction("Index");
+            }
+
+            viewModel.Issues = await _dropdownService.GetIssueSelectListAsync();
+            return View("Upsert",viewModel);
         }
 
         [Authorize(Policy = "AdminPolicy")]
