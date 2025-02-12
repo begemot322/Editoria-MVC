@@ -41,43 +41,61 @@ namespace Editoria.Web.Controllers
         }
 
         [Authorize(Policy = "ModeratorPolicy")]
-        public async Task<IActionResult> Upsert(int? issueId)
+        public async Task<IActionResult> Create()
         {
             var viewModel = new IssueVM
             {
                 Newspapers = await _dropdownService.GetNewspaperSelectListAsync(),
-                Issue = issueId.HasValue ?
-                    await _issueService.GetIssueByIdAsync(issueId.Value) : new Issue()
+                Issue = new Issue()
             };
-
-            if (issueId.HasValue && viewModel.Issue == null)
-            {
-                return NotFound();
-            }
-            return View(viewModel);
+            return View("Upsert", viewModel);
         }
 
         [HttpPost]
         [Authorize(Policy = "ModeratorPolicy")]
-        public async Task<IActionResult> Upsert(IssueVM viewModel)
+        public async Task<IActionResult> Create(IssueVM viewModel)
         {
             if (ModelState.IsValid)
             {
-                if (viewModel.Issue.IssueId == 0)
-                {
-                    await _issueService.CreateIssueAsync(viewModel.Issue);
-                    TempData["success"] = "Выпуск успешно добавлен";
-                }
-                else
-                {
-                    await _issueService.UpdateIssueAsync(viewModel.Issue);
-                    TempData["success"] = "Выпуск успешно обновлён";
-                }
+                await _issueService.CreateIssueAsync(viewModel.Issue);
+                TempData["success"] = "Выпуск успешно добавлен";
                 return RedirectToAction("Index");
             }
 
             viewModel.Newspapers = await _dropdownService.GetNewspaperSelectListAsync();
-            return View(viewModel);
+            return View("Upsert", viewModel);
+        }
+
+        [Authorize(Policy = "ModeratorPolicy")]
+        public async Task<IActionResult> Update(int issueId)
+        {
+            var issue = await _issueService.GetIssueByIdAsync(issueId);
+            if (issue == null)
+            {
+                return NotFound();
+            }
+
+            var viewModel = new IssueVM
+            {
+                Newspapers = await _dropdownService.GetNewspaperSelectListAsync(),
+                Issue = issue
+            };
+            return View("Upsert", viewModel);
+        }
+
+        [HttpPost]
+        [Authorize(Policy = "ModeratorPolicy")]
+        public async Task<IActionResult> Update(IssueVM viewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                await _issueService.UpdateIssueAsync(viewModel.Issue);
+                TempData["success"] = "Выпуск успешно обновлён";
+                return RedirectToAction("Index");
+            }
+
+            viewModel.Newspapers = await _dropdownService.GetNewspaperSelectListAsync();
+            return View("Upsert", viewModel);
         }
 
         [Authorize(Policy = "AdminPolicy")]

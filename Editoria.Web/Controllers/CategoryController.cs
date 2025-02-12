@@ -18,52 +18,55 @@ namespace Editoria.Web.Controllers
         [Authorize(Policy = "UserPolicy")]
         public async Task<IActionResult> Index(int? minPriority, int? maxPriority)
         {
-            IEnumerable<Category> categoryList;
+            IEnumerable<Category> categoryList = (minPriority.HasValue && maxPriority.HasValue)
+                ? await _categoryService.GetCategoriesByPriorityAsync(minPriority.Value, maxPriority.Value)
+                : await _categoryService.GetAllCategoriesAsync();
 
-            if (minPriority.HasValue && maxPriority.HasValue)
-            {
-                categoryList = await _categoryService.GetCategoriesByPriorityAsync(minPriority.Value, maxPriority.Value);
-            }
-            else
-            {
-                categoryList = await _categoryService.GetAllCategoriesAsync();
-            }
             return View(categoryList);
         }
 
+
         [Authorize(Policy = "ModeratorPolicy")]
-        public async Task<IActionResult> Upsert(int? categoryId)
+        public IActionResult Create()
         {
-            var category = categoryId.HasValue ?
-                await _categoryService.GetCategoryByIdAsync(categoryId.Value) : new Category();
-
-            if (categoryId.HasValue && category == null)
-            {
-                return NotFound();
-            }
-
-            return View(category);
+            return View("Upsert", new Category());
         }
 
         [HttpPost]
         [Authorize(Policy = "ModeratorPolicy")]
-        public async Task<IActionResult> Upsert(Category category)
+        public async Task<IActionResult> Create(Category category)
         {
             if (ModelState.IsValid)
             {
-                if (category.CategoryId == 0)
-                {
-                    await _categoryService.CreateCategoryAsync(category);
-                    TempData["success"] = "Категория создана успешно!";
-                }
-                else
-                {
-                    await _categoryService.UpdateCategoryAsync(category);
-                    TempData["success"] = "Категория обновлена успешно!";
-                }
+                await _categoryService.CreateCategoryAsync(category);
+                TempData["success"] = "Категория создана успешно!";
                 return RedirectToAction("Index");
             }
-            return View(category);
+            return View("Upsert", category);
+        }
+
+        [Authorize(Policy = "ModeratorPolicy")]
+        public async Task<IActionResult> Update(int categoryId)
+        {
+            var category = await _categoryService.GetCategoryByIdAsync(categoryId);
+            if (category == null)
+            {
+                return NotFound();
+            }
+            return View("Upsert", category);
+        }
+
+        [HttpPost]
+        [Authorize(Policy = "ModeratorPolicy")]
+        public async Task<IActionResult> Update(Category category)
+        {
+            if (ModelState.IsValid)
+            {
+                await _categoryService.UpdateCategoryAsync(category);
+                TempData["success"] = "Категория обновлена успешно!";
+                return RedirectToAction("Index");
+            }
+            return View("Upsert", category);
         }
 
         [Authorize(Policy = "AdminPolicy")]

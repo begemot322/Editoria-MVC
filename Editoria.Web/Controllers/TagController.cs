@@ -21,38 +21,46 @@ namespace Editoria.Web.Controllers
         }
 
         [Authorize(Policy = "ModeratorPolicy")]
-        public async Task<IActionResult> Upsert(int? tagId)
+        public IActionResult Create()
         {
-            var tag = tagId.HasValue ?
-                await _tagService.GetTagByIdAsync(tagId.Value) : new Tag();
-
-            if (tagId.HasValue && tag == null)
-            {
-                return NotFound();
-            }
-
-            return View(tag);
+            return View("Upsert", new Tag());
         }
 
         [HttpPost]
         [Authorize(Policy = "ModeratorPolicy")]
-        public async Task<IActionResult> Upsert(Tag tag)
+        public async Task<IActionResult> Create(Tag tag)
         {
             if (ModelState.IsValid)
             {
-                if (tag.TagId == 0)
-                {
-                    await _tagService.CreateTagAsync(tag);
-                    TempData["success"] = "Тег создан успешно!";
-                }
-                else
-                {
-                    await _tagService.UpdateTagAsync(tag);
-                    TempData["success"] = "Тег обновлён успешно!";
-                }
+                await _tagService.CreateTagAsync(tag);
+                TempData["success"] = "Тег создан успешно!";
                 return RedirectToAction("Index");
             }
-            return View(tag);
+            return View("Upsert", tag);
+        }
+
+        [Authorize(Policy = "ModeratorPolicy")]
+        public async Task<IActionResult> Update(int tagId)
+        {
+            var tag = await _tagService.GetTagByIdAsync(tagId);
+            if (tag == null)
+            {
+                return NotFound();
+            }
+            return View("Upsert", tag);
+        }
+
+        [HttpPost]
+        [Authorize(Policy = "ModeratorPolicy")]
+        public async Task<IActionResult> Update(Tag tag)
+        {
+            if (ModelState.IsValid)
+            {
+                await _tagService.UpdateTagAsync(tag);
+                TempData["success"] = "Тег обновлён успешно!";
+                return RedirectToAction("Index");
+            }
+            return View("Upsert", tag);
         }
 
         [Authorize(Policy = "AdminPolicy")]

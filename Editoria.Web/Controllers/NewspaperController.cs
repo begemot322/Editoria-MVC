@@ -29,43 +29,29 @@ namespace Editoria.Web.Controllers
         }
 
         [Authorize(Policy = "ModeratorPolicy")]
-        public async Task<IActionResult> Upsert(int? newspaperId)
+        public async Task<IActionResult> Create()
         {
             var viewModel = new NewspaperVM
             {
                 Editors = await _selectListService.GetEditorsSelectListAsync(),
-                Newspaper = newspaperId.HasValue ?
-                    await _newspaperService.GetNewspaperByIdAsync(newspaperId.Value) : new Newspaper()
+                Newspaper = new Newspaper()
             };
-
-            if (newspaperId.HasValue && viewModel.Newspaper == null)
-            {
-                return NotFound();
-            }
-            return View(viewModel);
+            return View("Upsert", viewModel);
         }
 
         [HttpPost]
         [Authorize(Policy = "ModeratorPolicy")]
-        public async Task<IActionResult> Upsert(NewspaperVM viewModel)
+        public async Task<IActionResult> Create(NewspaperVM viewModel)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    if (viewModel.Newspaper.NewspaperId == 0)
-                    {
-                        await _newspaperService.CreateNewspaperAsync(viewModel.Newspaper);
-                        TempData["success"] = "Газета успешно добавлена";
-                    }
-                    else
-                    {
-                        await _newspaperService.UpdateNewspaperAsync(viewModel.Newspaper);
-                        TempData["success"] = "Газета успешно обновлена";
-                    }
+                    await _newspaperService.CreateNewspaperAsync(viewModel.Newspaper);
+                    TempData["success"] = "Газета успешно добавлена";
                     return RedirectToAction("Index");
                 }
-                catch (DbUpdateException ex)
+                catch (DbUpdateException)
                 {
                     ModelState.AddModelError(string.Empty, "Ошибка при сохранении данных. Нарушена связь с редактором.");
                 }
@@ -74,9 +60,49 @@ namespace Editoria.Web.Controllers
                     ModelState.AddModelError(string.Empty, "Произошла неизвестная ошибка: " + ex.Message);
                 }
             }
-
             viewModel.Editors = await _selectListService.GetEditorsSelectListAsync();
-            return View(viewModel);
+            return View("Upsert",viewModel);
+        }
+
+        [Authorize(Policy = "ModeratorPolicy")]
+        public async Task<IActionResult> Update(int newspaperId)
+        {
+            var newspaper = await _newspaperService.GetNewspaperByIdAsync(newspaperId);
+            if (newspaper == null)
+            {
+                return NotFound();
+            }
+            var viewModel = new NewspaperVM
+            {
+                Editors = await _selectListService.GetEditorsSelectListAsync(),
+                Newspaper = newspaper
+            };
+            return View("Upsert", viewModel);
+        }
+
+        [HttpPost]
+        [Authorize(Policy = "ModeratorPolicy")]
+        public async Task<IActionResult> Update(NewspaperVM viewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    await _newspaperService.UpdateNewspaperAsync(viewModel.Newspaper);
+                    TempData["success"] = "Газета успешно обновлена";
+                    return RedirectToAction("Index");
+                }
+                catch (DbUpdateException)
+                {
+                    ModelState.AddModelError(string.Empty, "Ошибка при обновлении данных. Нарушена связь с редактором.");
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError(string.Empty, "Произошла неизвестная ошибка: " + ex.Message);
+                }
+            }
+            viewModel.Editors = await _selectListService.GetEditorsSelectListAsync();
+            return View("Upsert",viewModel);
         }
 
         [Authorize(Policy = "AdminPolicy")]

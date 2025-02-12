@@ -1,4 +1,5 @@
-﻿using Editoria.Application.Services.Services;
+﻿using Editoria.Application.Services.Implementation;
+using Editoria.Application.Services.Services;
 using Editoria.Domain.Entities;
 using Editoria.Web.ViewModel;
 using Microsoft.AspNetCore.Authorization;
@@ -43,37 +44,46 @@ namespace Editoria.Web.Controllers
         }
 
         [Authorize(Policy = "ModeratorPolicy")]
-        public async Task<IActionResult> Upsert(int? editorId)
+        public IActionResult Create()
         {
-            var editor = editorId.HasValue ?
-                await _editorService.GetEditorByIdAsync(editorId.Value) : new Editor();
-
-            if (editorId.HasValue && editor == null)
-            {
-                return NotFound();
-            }
-            return View(editor);
+            return View("Upsert", new Editor());
         }
 
         [HttpPost]
         [Authorize(Policy = "ModeratorPolicy")]
-        public async Task<IActionResult> Upsert(Editor editor)
+        public async Task<IActionResult> Create(Editor editor)
         {
             if (ModelState.IsValid)
             {
-                if (editor.EditorId == 0)
-                {
-                    await _editorService.CreateEditorAsync(editor);
-                    TempData["success"] = "Редактор успешно добавлен!";
-                }
-                else
-                {
-                    await _editorService.UpdateEditorAsync(editor);
-                    TempData["success"] = "Редактор успешно обновлён!";
-                }
+                await _editorService.CreateEditorAsync(editor);
+                TempData["success"] = "Редактор добавлен успешно!";
                 return RedirectToAction("Index");
             }
-            return View(editor);
+            return View("Upsert", editor);
+        }
+
+        [Authorize(Policy = "ModeratorPolicy")]
+        public async Task<IActionResult> Update(int editorId)
+        {
+            var editor = await _editorService.GetEditorByIdAsync(editorId);
+            if (editor == null)
+            {
+                return NotFound();
+            }
+            return View("Upsert", editor);
+        }
+
+        [HttpPost]
+        [Authorize(Policy = "ModeratorPolicy")]
+        public async Task<IActionResult> Update(Editor editor)
+        {
+            if (ModelState.IsValid)
+            {
+                await _editorService.UpdateEditorAsync(editor);
+                TempData["success"] = "Редактор успешно обновлён!";
+                return RedirectToAction("Index");
+            }
+            return View("Upsert", editor);
         }
 
         [Authorize(Policy = "AdminPolicy")]

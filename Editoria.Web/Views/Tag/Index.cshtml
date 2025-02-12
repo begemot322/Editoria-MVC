@@ -8,7 +8,7 @@
             </h2>
         </div>
         <div class="col-6 text-end">
-            <a asp-controller="Tag" asp-action="Upsert" class="btn btn-primary" policy="ModeratorPolicy">
+            <a asp-controller="Tag" asp-action="Create" class="btn btn-primary" policy="ModeratorPolicy">
                 <i class="bi bi-plus-circle"></i> Создать тег
             </a>
         </div>
@@ -36,7 +36,7 @@
                     <td>@tag.Popularity</td>
                     <td>
                         <div class="w-90 btn-group">
-                            <a asp-controller="Tag" asp-action="Upsert" asp-route-tagId="@tag.TagId" class="btn btn-primary mx-2" policy="ModeratorPolicy">
+                            <a asp-controller="Tag" asp-action="Update" asp-route-tagId="@tag.TagId" class="btn btn-primary mx-2" policy="ModeratorPolicy">
                                 <i class="bi bi-pencil-square"></i> Изменить
                             </a>
                             <a asp-controller="Tag" asp-action="Delete" asp-route-tagId="@tag.TagId" class="btn btn-danger mx-2" policy="AdminPolicy">
