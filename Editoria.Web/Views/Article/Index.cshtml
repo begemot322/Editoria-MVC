@@ -21,7 +21,7 @@
             <h2 class="text-primary">Список статей</h2>
         </div>
         <div class="col-6 text-end">
-            <a asp-controller="Article" asp-action="Upsert" class="btn btn-primary" policy="ModeratorPolicy">
+            <a asp-controller="Article" asp-action="Create" class="btn btn-primary" policy="ModeratorPolicy">
                 <i class="bi bi-plus-circle"></i> Добавить статью
             </a>
         </div>
@@ -56,7 +56,7 @@
                         </td>
                         <td>
                             <div class="btn-group">
-                                <a asp-controller="Article" asp-action="Upsert" asp-route-articleId="@article.ArticleId" class="btn btn-primary mx-2 " policy="ModeratorPolicy">
+                                <a asp-controller="Article" asp-action="Update" asp-route-articleId="@article.ArticleId" class="btn btn-primary mx-2 " policy="ModeratorPolicy">
                                     <i class="bi bi-pencil-square"></i> Изменить
                                 </a>
                             <a asp-controller="Article" asp-action="Delete" asp-route-articleId="@article.ArticleId" class="btn btn-danger mx-2" policy="AdminPolicy">

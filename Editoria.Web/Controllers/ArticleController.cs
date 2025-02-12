@@ -34,7 +34,6 @@ namespace Editoria.Web.Controllers
         }
 
         [Authorize(Policy = "UserPolicy")]
-        [HttpGet]
         public async Task<IActionResult> Search(string keyword)
         {
             if (string.IsNullOrWhiteSpace(keyword))
@@ -58,67 +57,86 @@ namespace Editoria.Web.Controllers
         }
 
         [Authorize(Policy = "ModeratorPolicy")]
-        public async Task<IActionResult> Upsert(int? articleId)
+        public async Task<IActionResult> Create()
         {
             var viewModel = new ArticleVM
             {
                 Issues = await _dropdownService.GetIssueSelectListAsync(),
                 Categories = await _dropdownService.GetCategorySelectListAsync(),
                 Authors = await _dropdownService.GetAuthorSelectListAsync(),
-                Article = articleId.HasValue ?
-                    await _articleService.GetArticleByIdAsync(articleId.Value) : new Article(),
                 Tags = await _dropdownService.GetTagSelectListAsync(),
-                SelectedTags = articleId.HasValue ?
-                   (await _articleService.GetArticleByIdAsync(articleId.Value))
-                    .ArticleTags.Select(at => at.TagId).ToList() : new List<int>()
+                Article = new Article(),
+                SelectedTags = new List<int>()
             };
 
-            if (articleId.HasValue && viewModel.Article == null)
-            {
-                return NotFound();
-            }
             return View(viewModel);
         }
 
-        [HttpPost]
         [Authorize(Policy = "ModeratorPolicy")]
-        public async Task<IActionResult> Upsert(ArticleVM viewModel, IFormFile? imageFile)
+        [HttpPost]
+        public async Task<IActionResult> Create(ArticleVM viewModel, IFormFile? imageFile)
         {
             if (ModelState.IsValid)
             {
                 if (imageFile != null)
                 {
-                    string imageUrl = _fileService.SaveFile(imageFile, "images/articles");
+                    viewModel.Article.ImageUrl = _fileService.SaveFile(imageFile, "images/articles");
+                }
 
+                await _articleService.CreateArticleAsync(viewModel.Article, viewModel.SelectedTags);
+                TempData["success"] = "Статья успешно добавлена";
+                return RedirectToAction("Index");
+            }
+
+            await ReloadDropdowns(viewModel);
+
+            return View(viewModel);
+        }
+
+        [Authorize(Policy = "ModeratorPolicy")]
+        public async Task<IActionResult> Update(int articleId)
+        {
+            var article = await _articleService.GetArticleByIdAsync(articleId);
+            if (article == null) return NotFound();
+
+            var viewModel = new ArticleVM
+            {
+                Issues = await _dropdownService.GetIssueSelectListAsync(),
+                Categories = await _dropdownService.GetCategorySelectListAsync(),
+                Authors = await _dropdownService.GetAuthorSelectListAsync(),
+                Tags = await _dropdownService.GetTagSelectListAsync(),
+                Article = article,
+                SelectedTags = article.ArticleTags.Select(at => at.TagId).ToList()
+            };
+
+            return View(viewModel);
+        }
+
+        [Authorize(Policy = "ModeratorPolicy")]
+        [HttpPost]
+        public async Task<IActionResult> Update(ArticleVM viewModel, IFormFile? imageFile)
+        {
+            if (ModelState.IsValid)
+            {
+                if (imageFile != null)
+                {
                     if (!string.IsNullOrEmpty(viewModel.Article.ImageUrl))
                     {
                         _fileService.DeleteFile(viewModel.Article.ImageUrl);
                     }
-                    viewModel.Article.ImageUrl = imageUrl;
+                    viewModel.Article.ImageUrl = _fileService.SaveFile(imageFile, "images/articles");
                 }
 
-                if (viewModel.Article.ArticleId == 0)
-                {
-                    await _articleService.CreateArticleAsync(viewModel.Article, viewModel.SelectedTags);
-                    TempData["success"] = "Статья успешно добавлена";
-                }
-
-                else
-                {
-                    await _articleService.UpdateArticleAsync(viewModel.Article, viewModel.SelectedTags);
-                    TempData["success"] = "Статья успешно обновлена";
-                }
-
+                await _articleService.UpdateArticleAsync(viewModel.Article, viewModel.SelectedTags);
+                TempData["success"] = "Статья успешно обновлена";
                 return RedirectToAction("Index");
             }
 
-            viewModel.Issues = await _dropdownService.GetIssueSelectListAsync();
-            viewModel.Categories = await _dropdownService.GetCategorySelectListAsync();
-            viewModel.Authors = await _dropdownService.GetAuthorSelectListAsync();
-            viewModel.Tags = await _dropdownService.GetTagSelectListAsync();
+            await ReloadDropdowns(viewModel);
 
             return View(viewModel);
         }
+
 
         [Authorize(Policy = "AdminPolicy")]
         public async Task<IActionResult> Delete(int articleId)
@@ -146,9 +164,15 @@ namespace Editoria.Web.Controllers
                 await _articleService.DeleteArticleAsync(articleId);
             }
 
-
             TempData["success"] = "Статья успешно удалена";
             return RedirectToAction("Index");
+        }
+        private async Task ReloadDropdowns(ArticleVM viewModel)
+        {
+            viewModel.Issues = await _dropdownService.GetIssueSelectListAsync();
+            viewModel.Categories = await _dropdownService.GetCategorySelectListAsync();
+            viewModel.Authors = await _dropdownService.GetAuthorSelectListAsync();
+            viewModel.Tags = await _dropdownService.GetTagSelectListAsync();
         }
 
     }
