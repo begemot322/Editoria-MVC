@@ -5,7 +5,7 @@
     <input asp-for="Article.ImageUrl" hidden />
     <div class="border p-3 mt-4">
         <div class="row pb-2">
-            <h2 class="text-primary">Обновить статью</h2>
+            <h2 class="text-primary">@((Model.Article.ArticleId != 0) ? "Обновить статью" : "Добавить статью")</h2>
             <hr />
         </div>
 
@@ -65,13 +65,15 @@
 
         <hr />
         <div class="form-floating mb-4">
-            <input type="file" name="imageFile" accept="image/*" class="form-control border-0 shadow w-50" />
-            <label class="ms-2">Фотография статьи</label>
+            <input type="file" name="imageFile" asp-for="Article.ImageUrl" accept="image/*" class="form-control border-0 shadow w-50" />
+            <label asp-for="Article.ImageUrl" class="ms-2">Фотография статьи</label>
         </div>
 
         <div class="row">
             <div class="col-3">
-                <button type="submit" class="btn btn-primary form-control">Обновить</button>
+                <button type="submit" class="btn btn-primary form-control">
+                    @((Model.Article.ArticleId != 0) ? "Обновить" : "Добавить")
+                </button>
             </div>
             <div class="col-3">
                 <a asp-controller="Article" asp-action="Index" class="btn btn-outline-secondary form-control">Вернуться назад</a>
@@ -81,5 +83,6 @@
 </form>
 
 @section Scripts {
-        <partial name="_ValidationScriptsPartial" />
+    <partial name="_ValidationScriptsPartial" />
 }
+

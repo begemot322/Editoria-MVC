@@ -69,7 +69,7 @@ namespace Editoria.Web.Controllers
                 SelectedTags = new List<int>()
             };
 
-            return View(viewModel);
+            return View("Upsert",viewModel);
         }
 
         [Authorize(Policy = "ModeratorPolicy")]
@@ -90,7 +90,7 @@ namespace Editoria.Web.Controllers
 
             await ReloadDropdowns(viewModel);
 
-            return View(viewModel);
+            return View("Upsert", viewModel);
         }
 
         [Authorize(Policy = "ModeratorPolicy")]
@@ -109,7 +109,7 @@ namespace Editoria.Web.Controllers
                 SelectedTags = article.ArticleTags.Select(at => at.TagId).ToList()
             };
 
-            return View(viewModel);
+            return View("Upsert", viewModel);
         }
 
         [Authorize(Policy = "ModeratorPolicy")]
@@ -134,7 +134,7 @@ namespace Editoria.Web.Controllers
 
             await ReloadDropdowns(viewModel);
 
-            return View(viewModel);
+            return View("Upsert", viewModel);
         }
 
 
