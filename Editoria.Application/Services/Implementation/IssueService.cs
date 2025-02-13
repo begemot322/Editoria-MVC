@@ -66,6 +66,9 @@ namespace Editoria.Application.Services.Implementation
             return await _issueRepository.GetAdvertisementsCostAsync(issueId);
         }
 
-
+        public async Task<decimal> GetNetProfitAsync(int issueId)
+        {
+            return await _issueRepository.GetNetProfitAsync(issueId);
+        }
     }
 }

@@ -10,5 +10,8 @@ namespace Editoria.Application.Common.Interfaces.Repositories
     public interface IIssueRepository : IRepository<Issue>
     {
         Task<decimal> GetAdvertisementsCostAsync(int issueId);
+        Task<decimal> GetNetProfitAsync(int issueId);
+
+
     }
 }
