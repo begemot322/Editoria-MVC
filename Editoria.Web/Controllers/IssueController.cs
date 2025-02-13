@@ -35,7 +35,8 @@ namespace Editoria.Web.Controllers
             {
                 Issue = issueId.HasValue ?
                     await _issueService.GetIssueByIdAsync(issueId.Value) : new Issue(),
-                TotalCost = await _issueService.GetTotalCostAsync(issueId.Value)
+                TotalCost = await _issueService.GetTotalCostAsync(issueId.Value),
+                NetProfit = await _issueService.GetNetProfitAsync(issueId.Value),
             };
             return View(viewModel);
         }

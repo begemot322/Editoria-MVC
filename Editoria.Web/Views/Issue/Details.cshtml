@@ -1,12 +1,13 @@
 ﻿@model IssueVM
 
-<div class="border p-3 mt-4">
-    <div class="row pb-2">
+<div class="border p-4 mt-4 rounded shadow-sm bg-light">
+    <div class="row pb-3 text-center">
         <h2 class="text-primary">
-            <i class="bi bi-journal-text"></i> Общая выручка выпуска: @Model.TotalCost
+            Общая выручка:@Model.TotalCost
         </h2>
-        <hr />
     </div>
+
+
     <div class="row pb-2">
         @foreach (var advertisement in Model.Issue.Advertisements)
         {
@@ -21,7 +22,15 @@
             </div>
         }
     </div>
-    <a asp-controller="Issue" asp-action="Index" class="btn btn-secondary border border-dark">
+
+    @if(Model.NetProfit != 0)
+    {
+        <div class="row pb-3 mt-2">
+            <h4 class="text-dark fw-bold ">Чистая прибыль: @Model.NetProfit  <i class="bi bi-wallet2"></i></h4>
+            <hr />
+        </div>
+    }
+    <a asp-controller="Issue" asp-action="Index" class="btn btn-secondary border border-dark w-25">
         <i class="bi bi-arrow-left"></i> Назад
     </a>
 </div>

@@ -12,5 +12,7 @@ namespace Editoria.Web.ViewModel
         public IEnumerable<SelectListItem>? Newspapers { get; set; }
         [ValidateNever]
         public decimal? TotalCost { get; set; }
+        [ValidateNever]
+        public decimal? NetProfit { get; set; }
     }
 }
