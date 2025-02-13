@@ -28,5 +28,15 @@ namespace Editoria.Infrastructure.Repository
 
             return result;
         }
+
+        public async Task<decimal> GetNetProfitAsync(int issueId)
+        {
+            var result =  await _db.Issues
+               .Where(i => i.IssueId == issueId)
+               .Select(i => _db.GetNetProfit(i.IssueId))
+               .FirstOrDefaultAsync();
+
+            return result;
+        }
     }
 }

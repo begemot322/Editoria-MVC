@@ -23,6 +23,9 @@ namespace Editoria.Infrastructure.Data
         public decimal GetAdvertisementsCost(int issueId)
             => throw new NotImplementedException();
 
+        public decimal GetNetProfit(int issueId)
+            => throw new NotImplementedException();
+
         public IQueryable<Category> GetCategoriesByPriority(int minPriority, int maxPriority)
             => FromExpression(() => GetCategoriesByPriority(minPriority, maxPriority));
 
@@ -39,6 +42,7 @@ namespace Editoria.Infrastructure.Data
 
             modelBuilder.HasDbFunction(() => GetCategoriesByPriority(default, default));
 
+            modelBuilder.HasDbFunction(()=> GetNetProfit(default));
 
             modelBuilder.Entity<Editor>()
                 .HasOne(e => e.Newspaper)
