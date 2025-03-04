@@ -27,9 +27,6 @@ namespace Editoria.Application
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IProfileService, ProfileService>();
 
-            services.AddScoped<DropdownDataService>();
-
-
             return services;
         }
     }
