@@ -1,4 +1,6 @@
-﻿namespace Editoria.Web
+﻿using Editoria.Web.Services;
+
+namespace Editoria.Web
 {
     public static class DependencyInjection
     {
@@ -6,6 +8,8 @@
         {
             services.AddControllersWithViews();
             services.AddHttpContextAccessor();
+
+            services.AddScoped<DropdownDataService>();
 
             return services;
         }
