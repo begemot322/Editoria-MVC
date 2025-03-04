@@ -1,6 +1,5 @@
 ﻿using Editoria.Domain.Entities;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Editoria.Application.Services.Interfaces
 {
