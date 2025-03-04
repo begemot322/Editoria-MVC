@@ -6,6 +6,7 @@ using Editoria.Domain.Entities;
 using Editoria.Application.Services.Services;
 using Editoria.Application.Services.Implementation;
 using Editoria.Web.ViewModel;
+using Editoria.Web.Services;
 
 namespace Editoria.Web.Controllers
 {

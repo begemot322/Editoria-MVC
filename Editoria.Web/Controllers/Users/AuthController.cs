@@ -2,6 +2,7 @@
 using Editoria.Application.DTOs.Authentication;
 using Editoria.Application.Services.Implementation;
 using Editoria.Application.Services.Interfaces;
+using Editoria.Web.Services;
 using Editoria.Web.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 
