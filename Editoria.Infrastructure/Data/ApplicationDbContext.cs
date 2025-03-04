@@ -49,30 +49,30 @@ namespace Editoria.Infrastructure.Data
                 .WithOne(n => n.Editor)
                 .HasForeignKey<Newspaper>(e => e.EditorId);
 
-            modelBuilder.Entity<Issue>()
-                .HasOne(i => i.Newspaper)
-                .WithMany(n => n.Issues)
-                .HasForeignKey(i => i.NewspaperId);
+            //modelBuilder.Entity<Issue>()
+            //    .HasOne(i => i.Newspaper)
+            //    .WithMany(n => n.Issues)
+            //    .HasForeignKey(i => i.NewspaperId);
 
-            modelBuilder.Entity<Article>()
-                .HasOne(a => a.Issue)
-                .WithMany(a => a.Articles)
-                .HasForeignKey(i => i.IssueId);
+            //modelBuilder.Entity<Article>()
+            //    .HasOne(a => a.Issue)
+            //    .WithMany(a => a.Articles)
+            //    .HasForeignKey(i => i.IssueId);
 
-            modelBuilder.Entity<Article>()
-                .HasOne(a => a.Category)
-                .WithMany(c => c.Articles)
-                .HasForeignKey(a => a.CategoryId);
+            //modelBuilder.Entity<Article>()
+            //    .HasOne(a => a.Category)
+            //    .WithMany(c => c.Articles)
+            //    .HasForeignKey(a => a.CategoryId);
 
-            modelBuilder.Entity<Article>()
-                .HasOne(a => a.Author)
-                .WithMany(a => a.Articles)
-                .HasForeignKey(a => a.AuthorId);
+            //modelBuilder.Entity<Article>()
+            //    .HasOne(a => a.Author)
+            //    .WithMany(a => a.Articles)
+            //    .HasForeignKey(a => a.AuthorId);
 
-            modelBuilder.Entity<Advertisement>()
-               .HasOne(a => a.Issue)
-               .WithMany(i => i.Advertisements)
-               .HasForeignKey(a => a.IssueId);
+            //modelBuilder.Entity<Advertisement>()
+            //   .HasOne(a => a.Issue)
+            //   .WithMany(i => i.Advertisements)
+            //   .HasForeignKey(a => a.IssueId);
 
             modelBuilder.Entity<ArticleTag>()
                 .HasKey(at => new { at.ArticleId, at.TagId });
