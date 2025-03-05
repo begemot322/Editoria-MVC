@@ -16,6 +16,7 @@ namespace Editoria.Web.ViewModel
         [ValidateNever]
         public List<SelectListItem> Tags { get; set; }
         public List<int> SelectedTags { get; set; }
+        //test
 
     }
 }
