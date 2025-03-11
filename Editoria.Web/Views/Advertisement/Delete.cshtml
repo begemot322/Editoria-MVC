@@ -9,23 +9,23 @@
         </div>
 
         <div class="mb-3 row p-1">
-            <label asp-for="Type" class="p-0">Тип</label>
-            <input asp-for="Type" disabled class="form-control" />
+            @Html.LabelFor(model => model.Type, "Тип", new { @class = "p-0" })
+            @Html.TextBoxFor(model => model.Type, new { @class = "form-control", disabled = "disabled" })
         </div>
 
         <div class="mb-3 row p-1">
-            <label asp-for="Text" class="p-0">Текст объявления</label>
-            <textarea asp-for="Text" disabled class="form-control" rows="5"></textarea>
+            @Html.LabelFor(model => model.Text, "Текст объявления", new { @class = "p-0" })
+            @Html.TextAreaFor(model => model.Text, new { @class = "form-control", rows = 5, disabled = "disabled" })
         </div>
 
         <div class="mb-3 row p-1">
-            <label asp-for="Cost" class="p-0">Стоимость</label>
-            <input asp-for="Cost" disabled class="form-control" />
+            @Html.LabelFor(model => model.Cost, "Стоимость", new { @class = "p-0" })
+            @Html.TextBoxFor(model => model.Cost, new { @class = "form-control", disabled = "disabled" })
         </div>
 
         <div class="mb-3 row p-1">
-            <label asp-for="Issue.IssueId" class="p-0">Номер выпуска</label>
-            <input asp-for="Issue.IssueId" disabled class="form-control" />
+            @Html.LabelFor(model => model.Issue.IssueId, "Номер выпуска", new { @class = "p-0" })
+            @Html.TextBoxFor(model => model.Issue.IssueId, new { @class = "form-control", disabled = "disabled" })
         </div>
 
         <div class="row">
@@ -33,7 +33,7 @@
                 <button type="submit" class="btn btn-danger form-control">Удалить</button>
             </div>
             <div class="col-3">
-                <a asp-controller="Advertisement" asp-action="Index" class="btn btn-outline-secondary form-control">Вернуться назад</a>
+                @Html.ActionLink("Вернуться назад", "Index", "Advertisement", null, new { @class = "btn btn-outline-secondary form-control" })
             </div>
         </div>
     </div>

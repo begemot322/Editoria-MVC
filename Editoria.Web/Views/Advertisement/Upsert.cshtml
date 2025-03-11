@@ -1,7 +1,7 @@
 ﻿@model AdvertisementVM
 
 <form method="post">
-    <input asp-for="Advertisement.AdvertisementId" hidden />
+    @Html.HiddenFor(model => model.Advertisement.AdvertisementId)
     <div class="border p-3 mt-4">
         <div class="row pb-2">
             <h2 class="text-primary">@((Model.Advertisement.AdvertisementId != 0) ? "Обновить объявление" : "Добавить объявление")</h2>
@@ -9,20 +9,20 @@
         </div>
 
         <div class="mb-3 row p-1">
-            <label asp-for="Advertisement.Type" class="p-0">Тип</label>
-            <input asp-for="Advertisement.Type" class="form-control" />
-            <span asp-validation-for="Advertisement.Type" class="text-danger"></span>
+            @Html.LabelFor(model => model.Advertisement.Type, "Тип", new { @class = "p-0" })
+            @Html.TextBoxFor(model => model.Advertisement.Type, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Advertisement.Type, "", new { @class = "text-danger" })
         </div>
 
         <div class="mb-3 row p-1">
-            <label asp-for="Advertisement.Text" class="p-0">Текст объявления</label>
-            <textarea asp-for="Advertisement.Text" class="form-control" rows="5"></textarea>
+            @Html.LabelFor(model => model.Advertisement.Text, "Текст объявления", new { @class = "p-0" })
+            @Html.TextAreaFor(model => model.Advertisement.Text, new { @class = "form-control", rows = 5 })
         </div>
 
         <div class="mb-3 row p-1">
-            <label asp-for="Advertisement.Cost" class="p-0">Стоимость</label>
-            <input asp-for="Advertisement.Cost" class="form-control" />
-            <span asp-validation-for="Advertisement.Cost" class="text-danger"></span>
+            @Html.LabelFor(model => model.Advertisement.Cost, "Стоимость", new { @class = "p-0" })
+            @Html.TextBoxFor(model => model.Advertisement.Cost, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Advertisement.Cost, "", new { @class = "text-danger" })
         </div>
 
         <div class="mb-3 row p-1">
@@ -40,7 +40,7 @@
                 </button>
             </div>
             <div class="col-3">
-                <a asp-controller="Advertisement" asp-action="Index" class="btn btn-outline-secondary form-control">Вернуться назад</a>
+                @Html.ActionLink("Вернуться назад", "Index", "Advertisement", null, new { @class = "btn btn-outline-secondary form-control" })
             </div>
         </div>
     </div>
