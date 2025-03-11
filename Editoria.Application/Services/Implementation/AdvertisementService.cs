@@ -74,7 +74,7 @@ namespace Editoria.Application.Services.Implementation
 
         public async Task<Advertisement?> GetAdvertisementByIdAsync(int id)
         {
-            return await _advertisementRepository.GetAsync(u => u.AdvertisementId == id);
+            return await _advertisementRepository.GetAsync(u => u.AdvertisementId == id, includeProperties: "Issue");
         }
 
         public async Task UpdateAdvertisementAsync(Advertisement advertisement)
