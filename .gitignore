@@ -63,6 +63,12 @@ project.lock.json
 project.fragment.lock.json
 artifacts/
 
+# JetBrains IDE (IntelliJ, PyCharm, WebStorm, etc.)
+.idea/
+*.iml
+*.ipr
+*.iws
+
 # ASP.NET Scaffolding
 ScaffoldingReadMe.txt
 
