@@ -1,4 +1,5 @@
 ﻿using Course_Work_Editoria.Services.Auth;
+using Editoria.Application.Common.Interfaces.Services;
 using Editoria.Application.Services.Interfaces;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.Extensions.Caching.Memory;
@@ -9,14 +10,13 @@ namespace Editoria.Web.TagHelpers
     {
         private readonly IUserService _userService;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly IMemoryCache _cache;
-
+        private readonly ICacheService _cacheService;
         public UserTagHelper(IUserService userService, IHttpContextAccessor httpContextAccessor,
-            IMemoryCache cache)
+             ICacheService cacheService)
         {
             _userService = userService;
             _httpContextAccessor = httpContextAccessor;
-            _cache = cache;
+            _cacheService = cacheService;
         }
 
         public string DefaultImageUrl { get; set; } = "/images/users/default_user.png";
@@ -31,12 +31,15 @@ namespace Editoria.Web.TagHelpers
 
                 var cacheKey = $"User_{userId}";
 
-                if (!_cache.TryGetValue(cacheKey, out (string ImageUrl, string UserName) cachedUser))
+                var cachedUser = _cacheService.Get<(string ImageUrl, string UserName)>(cacheKey);
+
+                if (cachedUser == default) // Если в кэше нет данных
                 {
                     var userFromDb = await _userService.GetUserByIdAsync(Guid.Parse(userId));
-
                     cachedUser = (userFromDb.ImageUrl ?? DefaultImageUrl, userFromDb.UserName);
-                    _cache.Set(cacheKey, cachedUser, TimeSpan.FromMinutes(10));
+
+                    // Кэшируем на 10 минут
+                    _cacheService.Set(cacheKey, cachedUser, TimeSpan.FromMinutes(10));
                 }
 
                 var imageUrl = cachedUser.ImageUrl;
